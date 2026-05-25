@@ -17,18 +17,6 @@ export default function ProductModal({ product, onClose, onAddToStack, isInStack
     }
   }
 
-  // Get series specific color classes for text/background badges
-  const getSeriesBadge = (series) => {
-    switch (series) {
-      case 'Core Series':
-        return 'bg-sage/10 text-sage border-sage/20'
-      case 'Liposomal Series':
-        return 'bg-slate-teal/10 text-slate-teal border-slate-teal/20'
-      default: // Wellness Series
-        return 'bg-champagne/20 text-charcoal border-champagne/40'
-    }
-  }
-
   return (
     <div 
       id="modal-backdrop"
@@ -53,9 +41,6 @@ export default function ProductModal({ product, onClose, onAddToStack, isInStack
           </div>
           
           <div className="mt-8 text-center z-10">
-            <span className={`px-3 py-1 rounded-full border text-xs uppercase font-mono tracking-widest font-semibold ${getSeriesBadge(product.series)}`}>
-              {product.series}
-            </span>
             <h2 className="font-serif text-2xl font-bold text-primary-green mt-3">{product.name}</h2>
             <p className="font-mono text-sm font-semibold text-charcoal/60 mt-1">₹{product.price} • {product.servings} Servings</p>
           </div>

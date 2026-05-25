@@ -19,18 +19,6 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
     return name.substring(0, 2).toUpperCase()
   }
 
-  // Get series specific color classes for text/background badges
-  const getSeriesBadge = (series) => {
-    switch (series) {
-      case 'Core Series':
-        return 'bg-sage/10 text-sage border-sage/20'
-      case 'Liposomal Series':
-        return 'bg-slate-teal/10 text-slate-teal border-slate-teal/20'
-      default: // Wellness Series
-        return 'bg-champagne/20 text-charcoal border-champagne/40'
-    }
-  }
-
   // Get series-specific background for image area
   const getImageBg = (series) => {
     switch (series) {
@@ -105,11 +93,8 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
       <div className="flex-grow flex flex-col justify-between">
         <div className="space-y-2 text-left">
           
-          {/* Series & Servings Info */}
-          <div className="flex items-center justify-between text-xs">
-            <span className={`px-2 py-0.5 rounded-full border text-[10px] uppercase font-mono tracking-wider font-semibold ${getSeriesBadge(product.series)}`}>
-              {product.series}
-            </span>
+          {/* Servings Info */}
+          <div className="flex items-center justify-end text-xs">
             <span className="text-charcoal/50 font-mono text-[9px] uppercase">{product.form}</span>
           </div>
 

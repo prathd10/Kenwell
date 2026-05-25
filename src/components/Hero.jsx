@@ -1,358 +1,623 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { PRODUCTS } from '../data'
 
-export default function Hero({ setCurrentSection, onQuickView }) {
-  // Select top 3 products for homepage bestsellers section
-  const bestsellers = PRODUCTS.filter(p => [1, 2, 19].includes(p.id))
+/* ── Image map ─────────────────────────────────────────────────── */
+const LOCAL_BOTTLE_MAP = {
+  1: '/bottle_multivitamin.png',
+  2: '/bottle_magnesium.png',
+  3: '/bottle_vitamin_d3.png',
+  4: '/bottle_zinc_magnesium.png',
+  5: '/bottle_fish_oil.png',
+  6: '/bottle_fish_oil.png',
+  7: '/bottle_fish_oil.png',
+  8: '/bottle_joint_support.png',
+  9: '/bottle_milk_thistle.png',
+  10: '/bottle_nac.png',
+  11: '/bottle_tudca.png',
+  12: '/bottle_nad.png',
+  13: '/bottle_milk_thistle.png',
+  14: '/bottle_vitamin_c.png',
+  15: '/bottle_glutathione.png',
+  16: '/bottle_vitamin_d3.png',
+  17: '/bottle_coq10.png',
+  18: '/bottle_melatonin.png',
+  19: '/bottle_ashwagandha.png',
+  20: '/bottle_berberine.png',
+  21: '/bottle_probiotics.png',
+}
 
-  // Helper to draw SVG stars for review ratings without emojis
-  const renderSvgStars = () => {
-    return (
-      <div className="flex space-x-1 justify-center sm:justify-start">
-        {[1, 2, 3, 4, 5].map((s) => (
-          <svg key={s} className="w-4.5 h-4.5 text-amber-500 fill-current" viewBox="0 0 24 24">
-            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-          </svg>
-        ))}
-      </div>
-    )
-  }
+/* ── Constants ─────────────────────────────────────────────────── */
+const HERO_SLIDES = [
+  {
+    id: 19,
+    headline: 'Clinically-Backed Stress Relief',
+    sub: 'KSM-66 Ashwagandha · Lowers cortisol up to 27%',
+    badge: 'Core Series',
+    cta: 'Shop Ashwagandha',
+    accent: '#7A8C5A',
+    bg: 'from-sage/10 via-cream-dark/40 to-bg-primary',
+    bgImage: 'https://images.unsplash.com/photo-1618220179428-22790b46a014?q=80&w=2000&auto=format&fit=crop',
+  },
+  {
+    id: 12,
+    headline: 'Advanced Cellular Rejuvenation',
+    sub: 'NAD+ Precursor Complex · Powers mitochondrial energy',
+    badge: 'Liposomal Series',
+    cta: 'Shop NAD+',
+    accent: '#4A8B8C',
+    bg: 'from-slate-teal/10 via-cream-dark/40 to-bg-primary',
+    bgImage: 'https://images.unsplash.com/photo-1600170311833-c2cf5280ce49?q=80&w=2000&auto=format&fit=crop',
+  },
+  {
+    id: 15,
+    headline: 'The Master Antioxidant',
+    sub: 'Reduced L-Glutathione · Cellular detox & skin clarity',
+    badge: 'Liposomal Series',
+    cta: 'Shop Glutathione',
+    accent: '#4A8B8C',
+    bg: 'from-slate-teal/8 via-cream-dark/30 to-bg-primary',
+    bgImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2000&auto=format&fit=crop',
+  },
+]
+
+const CAT_ICON_CLS = 'w-6 h-6'
+const CATEGORIES = [
+  {
+    label: 'Daily Core', goal: 'Energy', desc: '7 products',
+    color: 'bg-sage/8 border-sage/20 hover:bg-sage/16', text: 'text-primary-green',
+    icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+  },
+  {
+    label: 'Sleep & Stress', goal: 'Sleep', desc: '4 products',
+    color: 'bg-slate-teal/8 border-slate-teal/20 hover:bg-slate-teal/16', text: 'text-slate-teal',
+    icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>,
+  },
+  {
+    label: 'Immunity', goal: 'Immunity', desc: '6 products',
+    color: 'bg-sage/8 border-sage/20 hover:bg-sage/16', text: 'text-primary-green',
+    icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
+  },
+  {
+    label: 'Gut Health', goal: 'Gut Health', desc: '3 products',
+    color: 'bg-champagne/20 border-champagne/40 hover:bg-champagne/35', text: 'text-primary-green',
+    icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>,
+  },
+  {
+    label: 'Detox & Liver', goal: 'Detox', desc: '5 products',
+    color: 'bg-slate-teal/8 border-slate-teal/20 hover:bg-slate-teal/16', text: 'text-slate-teal',
+    icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>,
+  },
+  {
+    label: 'Performance', goal: 'Performance', desc: '5 products',
+    color: 'bg-champagne/20 border-champagne/40 hover:bg-champagne/35', text: 'text-primary-green',
+    icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>,
+  },
+]
+
+const BESTSELLER_IDS = [19, 2, 12, 15, 6, 1]
+
+const TRUST_SVG_CLS = 'w-6 h-6 text-sage'
+const TRUST_POINTS = [
+  {
+    title: 'Clinical Doses',
+    body: 'Every ingredient at peer-reviewed efficacy levels. No proprietary blends hiding underdosed actives.',
+    icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" /></svg>,
+  },
+  {
+    title: 'Zero Fillers',
+    body: 'No silicon dioxide, talc, or chemical glazes. We disclose every inactive ingredient on the open label.',
+    icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>,
+  },
+  {
+    title: 'GMP Certified',
+    body: 'Manufactured under Good Manufacturing Practice standards. Every batch tested for purity and potency.',
+    icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>,
+  },
+  {
+    title: 'Lab Verified',
+    body: 'Third-party Certificate of Analysis for every product. Scan the QR on the bottle to verify batch purity.',
+    icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>,
+  },
+]
+
+/* ── Helpers ───────────────────────────────────────────────────── */
+function Stars({ n = 5 }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} className={`w-3.5 h-3.5 ${i < n ? 'text-gold-accent fill-current' : 'text-charcoal/15 fill-current'}`} viewBox="0 0 24 24">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+        </svg>
+      ))}
+    </div>
+  )
+}
+
+function getLocalSrc(product) {
+  return LOCAL_BOTTLE_MAP[product.id] || '/bottle_multivitamin.png'
+}
+
+/* ── Small product card for the bestseller shelf ───────────────── */
+function ShelfCard({ product, onQuickView, onAddToCart, onToggleWishlist, isInWishlist }) {
+  const [err, setErr] = useState(false)
+  const mrp = Math.round(product.price * 1.25)
+  const rating = (4.5 + (product.id % 5) * 0.1).toFixed(1)
+  const reviews = 74 + (product.id * 17) % 180
 
   return (
-    <div className="relative overflow-hidden divide-y divide-cream-dark/30">
-      
-      {/* SECTION 1: HERO INTRO */}
-      <section className="relative pt-0 pb-16 md:pt-0 md:pb-20">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-sage/10 via-transparent to-transparent blur-3xl pointer-events-none -z-10"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Text Content */}
-            <div className="lg:col-span-7 space-y-6 text-left py-1">
-              
-              <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif text-primary-green leading-[1.08] tracking-tight">
-                Feel Good.<br />
-                <span className="italic font-light text-sage">Live Well.</span>
+    <div className="group flex flex-col bg-white/80 backdrop-blur-sm rounded-2xl border border-white/70 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden min-w-[200px] flex-shrink-0 sm:min-w-0">
+      {/* Image */}
+      <div className="relative h-52 bg-gradient-to-b from-cream-dark/20 to-cream-dark/50 flex items-center justify-center overflow-hidden">
+        <button
+          onClick={() => onToggleWishlist(product)}
+          className={`absolute top-2.5 right-2.5 z-10 p-1.5 rounded-full border transition-all cursor-pointer ${
+            isInWishlist ? 'bg-sage/10 border-sage/40 text-sage' : 'bg-white/80 border-white/60 text-charcoal/30 hover:text-sage'
+          }`}
+        >
+          <svg className={`w-3.5 h-3.5 ${isInWishlist ? 'fill-current' : ''}`} fill={isInWishlist ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+        <img
+          src={err ? getLocalSrc(product) : (product.image || getLocalSrc(product))}
+          alt={product.name}
+          onError={() => setErr(true)}
+          className="h-44 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform duration-500"
+        />
+      </div>
+      {/* Info */}
+      <div className="p-4 flex flex-col flex-grow">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <Stars n={5} />
+          <span className="text-[10px] text-charcoal/45">({reviews})</span>
+        </div>
+        <h3 onClick={() => onQuickView(product)} className="font-serif text-[15px] font-bold text-primary-green hover:text-sage transition-colors cursor-pointer line-clamp-1 mb-0.5">
+          {product.name}
+        </h3>
+        <p className="text-[11px] text-charcoal/55 line-clamp-2 leading-relaxed mb-3 flex-grow">{product.tagline}</p>
+        <div className="flex items-center justify-between pt-3 border-t border-cream-dark/50 mt-auto">
+          <div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="font-mono font-bold text-primary-green">₹{product.price}</span>
+              <span className="font-mono text-[10px] text-charcoal/35 line-through">₹{mrp}</span>
+            </div>
+            <span className="text-[9px] text-sage font-semibold">20% OFF</span>
+          </div>
+          <button
+            onClick={() => onAddToCart(product)}
+            className="flex items-center gap-1.5 bg-primary-green hover:bg-sage text-white text-[11px] font-semibold px-3.5 py-2 rounded-full transition-all cursor-pointer shadow-sm"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN EXPORT
+═══════════════════════════════════════════════════════════════ */
+export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onToggleWishlist, wishlistItems }) {
+  const [slide, setSlide] = useState(0)
+  const [fading, setFading] = useState(false)
+  const [heroImgErr, setHeroImgErr] = useState(false)
+  const intervalRef = useRef(null)
+
+  const goTo = useCallback((i) => {
+    setFading(true)
+    setTimeout(() => {
+      setSlide(i)
+      setHeroImgErr(false)
+      setFading(false)
+    }, 280)
+  }, [])
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setSlide(s => {
+        const next = (s + 1) % HERO_SLIDES.length
+        goTo(next)
+        return s // actual change happens inside goTo
+      })
+    }, 4000)
+    return () => clearInterval(intervalRef.current)
+  }, [goTo])
+
+  const activeSlide = HERO_SLIDES[slide]
+  const activeProduct = PRODUCTS.find(p => p.id === activeSlide.id)
+
+  const nextSlide = HERO_SLIDES[(slide + 1) % HERO_SLIDES.length]
+  const nextProduct = PRODUCTS.find(p => p.id === nextSlide.id)
+
+  const nextNextSlide = HERO_SLIDES[(slide + 2) % HERO_SLIDES.length]
+  const nextNextProduct = PRODUCTS.find(p => p.id === nextNextSlide.id)
+
+  const bestsellers = BESTSELLER_IDS.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean)
+
+  const filterGoal = (goal) => window.dispatchEvent(new CustomEvent('kenwell:filterGoal', { detail: goal }))
+  const filterSeries = (series) => window.dispatchEvent(new CustomEvent('kenwell:filterSeries', { detail: series }))
+
+  return (
+    <div className="w-full">
+
+      {/* ══════════════════════════════════════════════
+          1. FULL-BLEED HERO BANNER  (PS Nutrition style)
+      ══════════════════════════════════════════════ */}
+      <section
+        className={`relative min-h-[60vh] flex items-center bg-[#F4F1EA] overflow-hidden transition-all duration-700`}
+      >
+        {/* Full-width Lifestyle Background Image */}
+        {activeSlide.bgImage && (
+          <div className="absolute inset-0 z-0 transition-opacity duration-1000">
+            <img 
+              src={activeSlide.bgImage} 
+              alt="Lifestyle Background" 
+              className="w-full h-full object-cover opacity-80 mix-blend-multiply" 
+            />
+            {/* Gradient overlay to ensure text readability on the left */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#F4F1EA] via-[#F4F1EA]/90 to-transparent w-[70%]" />
+          </div>
+        )}
+
+        {/* Decorative grid */}
+        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#3D4A2B_1px,transparent_1px),linear-gradient(to_bottom,#3D4A2B_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none z-0" />
+
+
+        {/* --- FULL BLEED RIGHT HALF BACKGROUND --- */}
+        <div 
+          className="absolute right-0 top-0 bottom-0 w-[70%] lg:w-[65%] pointer-events-none overflow-hidden"
+          style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 40%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 40%)' }}
+        >
+          {/* Glow disc behind bottle */}
+          <div
+            className="absolute inset-0 blur-3xl opacity-30"
+            style={{ background: `radial-gradient(circle at center, ${activeSlide.accent}, transparent 80%)` }}
+          />
+
+          {/* Blurred Background Product 2 */}
+          <img
+            key={`bg2-${nextNextSlide.id}`}
+            src={nextNextProduct?.image || getLocalSrc(nextNextProduct)}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover object-center translate-x-12 scale-[1.15] opacity-[0.15] blur-[12px] -z-20 transition-all duration-700"
+          />
+
+          {/* Blurred Background Product 1 */}
+          <img
+            key={`bg1-${nextSlide.id}`}
+            src={nextProduct?.image || getLocalSrc(nextProduct)}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover object-center translate-x-6 scale-[1.1] opacity-[0.35] blur-[6px] -z-10 transition-all duration-700"
+          />
+
+          {/* Front Active Product */}
+          <img
+            key={slide}
+            src={heroImgErr ? getLocalSrc(activeProduct) : (activeProduct?.image || getLocalSrc(activeProduct))}
+            alt=""
+            onError={() => setHeroImgErr(true)}
+            className="absolute inset-0 w-full h-full object-cover object-center scale-[1.05] drop-shadow-2xl z-10 transition-all duration-700"
+          />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 lg:py-16 z-10">
+          <div className="w-[55%] lg:w-1/2">
+
+            {/* ── Left text ── */}
+            <div
+              className="space-y-3 sm:space-y-5 text-left"
+              style={{ opacity: fading ? 0 : 1, transform: fading ? 'translateY(12px)' : 'translateY(0)', transition: 'opacity 0.28s ease, transform 0.28s ease' }}
+            >
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-serif text-primary-green leading-[1.1] tracking-tight">
+                {activeSlide.headline.split(' ').slice(0, -1).join(' ')}{' '}
+                <span className="italic font-light text-sage">{activeSlide.headline.split(' ').slice(-1)}</span>
               </h1>
-              
-              <p className="text-charcoal/80 text-lg md:text-xl max-w-xl leading-relaxed">
-                We engineer clean, standard-controlled wellness supplements. Bypassing synthetic fillers and raw isolates, our formulas focus on organic chelations, liposomal delivery, and clinical efficacy.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-2">
+
+              <p className="text-charcoal/70 text-xs sm:text-lg leading-relaxed max-w-lg pr-2">{activeSlide.sub}</p>
+
+              <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 pt-1">
+                <button
+                  onClick={() => onQuickView(activeProduct)}
+                  className="bg-primary-green hover:bg-sage text-white px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer text-center"
+                >
+                  {activeSlide.cta}
+                </button>
                 <button
                   onClick={() => setCurrentSection('shop')}
-                  className="bg-primary-green text-bg-primary hover:bg-sage hover:text-white px-8 py-4 rounded-full text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer text-center"
+                  className="border-2 border-primary-green/25 hover:border-primary-green text-primary-green bg-white/60 backdrop-blur-sm hover:bg-white/80 px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-widest font-semibold transition-all cursor-pointer text-center"
                 >
-                  Browse Shop
-                </button>
-                
-                <button
-                  onClick={() => setCurrentSection('quiz')}
-                  className="border-2 border-primary-green/20 hover:border-primary-green text-primary-green bg-transparent px-8 py-4 rounded-full text-sm uppercase tracking-widest font-semibold transition-all duration-300 hover:bg-primary-green/5 cursor-pointer text-center"
-                >
-                  Take Wellness Quiz
+                  View All →
                 </button>
               </div>
 
-              {/* Quick stats panel */}
-              <div className="grid grid-cols-3 gap-6 pt-6 border-t border-cream-dark max-w-md">
-                <div>
-                  <span className="block font-serif text-3xl font-bold text-primary-green">100%</span>
-                  <span className="text-xs text-charcoal/60 uppercase tracking-wider font-medium">Open Labels</span>
-                </div>
-                <div>
-                  <span className="block font-serif text-3xl font-bold text-primary-green">Zero</span>
-                  <span className="text-xs text-charcoal/60 uppercase tracking-wider font-medium">Synthetics</span>
-                </div>
-                <div>
-                  <span className="block font-serif text-3xl font-bold text-primary-green">GMP</span>
-                  <span className="text-xs text-charcoal/60 uppercase tracking-wider font-medium">Certified</span>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Flat discovery counter concept card */}
-            <div className="lg:col-span-5 relative mt-8 lg:mt-0">
-              <div className="relative mx-auto max-w-[420px] rounded-3xl overflow-hidden glass-panel shadow-2xl border border-white/60 p-6 group transition-all duration-500 hover:shadow-sage/20 hover:border-sage/30">
-                
-                {/* Product bottles jpeg image as visual header */}
-                <div className="relative h-64 rounded-2xl overflow-hidden mb-6 bg-cream-dark">
-                  <img 
-                    src="/product bottles .jpeg" 
-                    alt="Kenwell Premium Tabletop Counter Bottles" 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 to-transparent flex items-end p-4">
-                    <span className="text-white font-serif text-xl font-medium tracking-wide">The Discovery Counter</span>
+              {/* Mini stats */}
+              <div className="hidden sm:flex items-center gap-8 pt-4 border-t border-cream-dark/60 max-w-sm">
+                {[['23+', 'Formulations'], ['4.8★', 'Avg Rating'], ['GMP', 'Certified']].map(([v, l]) => (
+                  <div key={l}>
+                    <span className="block font-serif text-2xl font-bold text-primary-green">{v}</span>
+                    <span className="text-[10px] text-charcoal/50 uppercase tracking-wider">{l}</span>
                   </div>
-                </div>
-                
-                <div className="space-y-4 text-left">
-                  <div className="flex items-center">
-                    <span className="bg-sage/10 text-sage text-[10px] font-mono px-2 py-0.5 rounded">Scan and Trace</span>
-                  </div>
-                  
-                  <h3 className="font-serif text-2xl text-primary-green font-bold">Tabletop Gym Station</h3>
-                  <p className="text-xs text-charcoal/70 leading-relaxed">
-                    Look for our premium wooden counters in select gyms and wellness spaces. Scan the bottle QR code to access third-party lab assays, purity certificates, and active ingredient mapping.
-                  </p>
-                  
-                  <div className="gold-divider opacity-50 my-2"></div>
-                  
-                  <div 
-                    onClick={() => setCurrentSection('scanner')}
-                    className="flex items-center justify-between bg-bg-secondary hover:bg-cream-dark/50 cursor-pointer p-3.5 rounded-xl border border-cream-dark transition-all"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <svg className="w-5 h-5 text-primary-green shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                      </svg>
-                      <div className="text-left">
-                        <span className="block text-xs font-semibold text-primary-green">Try Lab Scanner</span>
-                        <span className="text-[10px] text-charcoal/50">Verify bottle batch authenticity</span>
-                      </div>
-                    </div>
-                    <span className="text-sage text-sm font-semibold group-hover:translate-x-1 transition-transform">→</span>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-
           </div>
+        </div>
+
+        {/* Slide dots */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+          {HERO_SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i === slide ? 'w-7 bg-primary-green' : 'w-1.5 bg-charcoal/20 hover:bg-charcoal/40'}`}
+            />
+          ))}
         </div>
       </section>
 
-      {/* SECTION 2: CURATED BESTSELLERS ON HOME */}
-      <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Flagship Formulations</span>
-          <h2 className="text-4xl md:text-5xl font-serif text-primary-green mt-2 mb-4">Customer Favorites</h2>
-          <div className="gold-divider max-w-xs mx-auto mb-6"></div>
-          <p className="text-charcoal/70 text-sm max-w-2xl mx-auto">
-            Our most trusted and highly reviewed daily supplements. Clinically researched active compound limits for immediate physiological response.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {bestsellers.map((prod) => (
-            <div key={prod.id} className="glass-panel p-6 rounded-2xl border border-white/60 flex flex-col justify-between text-left hover:-translate-y-1.5 transition-all duration-300">
-              <div className="space-y-4">
-                <div className="flex justify-between items-center text-xs font-mono text-charcoal/40">
-                  <span className="bg-sage/10 text-sage px-2 py-0.5 rounded font-semibold uppercase">{prod.series}</span>
-                  <span>{prod.form}</span>
-                </div>
-                
-                <h3 
-                  onClick={() => onQuickView(prod)}
-                  className="font-serif text-2xl font-bold text-primary-green hover:text-sage transition-colors cursor-pointer"
-                >
-                  {prod.name}
-                </h3>
-                <p className="text-xs text-charcoal/60 leading-relaxed min-h-[3rem]">{prod.description}</p>
-                
-                <div className="flex space-x-1 items-center">
-                  <svg className="w-3.5 h-3.5 text-amber-500 fill-current shrink-0" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                  </svg>
-                  <span className="text-[11px] font-bold text-charcoal/70">4.8</span>
-                  <span className="text-[10px] text-charcoal/40">(180+ reviews)</span>
-                </div>
-
-                <div className="pt-2 flex flex-wrap gap-1.5">
-                  {prod.healthGoals.map(goal => (
-                    <span key={goal} className="bg-bg-secondary text-charcoal/60 text-[9px] px-2 py-0.5 rounded font-medium">{goal}</span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-cream-dark/50 flex justify-between items-center">
-                <div className="text-left font-mono">
-                  <span className="block text-[8px] text-charcoal/40 uppercase">Sale Price</span>
-                  <span className="text-base font-bold text-primary-green">₹{prod.price}</span>
-                </div>
-                <button 
-                  onClick={() => onQuickView(prod)}
-                  className="border border-primary-green/20 hover:border-primary-green text-primary-green px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
-                >
-                  View Details
-                </button>
-              </div>
+      {/* ══════════════════════════════════════════════
+          2. MARQUEE TRUST STRIP
+      ══════════════════════════════════════════════ */}
+      <div className="bg-primary-green overflow-hidden py-3 flex">
+        <div className="flex animate-marquee whitespace-nowrap w-max hover:[animation-play-state:paused]">
+          {[...Array(2)].map((_, groupIndex) => (
+            <div key={groupIndex} className="flex items-center px-3 md:px-5">
+              {['23 Premium Formulations', 'GMP Certified', '100% Open Labels', '4.8★ Average Rating', 'Free Shipping ₹999+', 'Zero Synthetic Fillers', 'Clinically Dosed'].map((item, i) => (
+                <span key={i} className="flex items-center gap-6 md:gap-10 px-3 md:px-5 text-[11px] font-mono uppercase tracking-wider text-white/85 whitespace-nowrap">
+                  {item}
+                  <span className="w-1 h-1 rounded-full bg-white/30" />
+                </span>
+              ))}
             </div>
           ))}
         </div>
-        
-        <div className="text-center mt-12">
-          <button
-            onClick={() => setCurrentSection('shop')}
-            className="bg-primary-green text-bg-primary hover:bg-sage hover:text-white px-8 py-3 rounded-full text-xs uppercase tracking-widest font-semibold transition-all duration-300 cursor-pointer inline-block"
-          >
-            Explore All 23 Formulations
+      </div>
+
+      {/* ══════════════════════════════════════════════
+          3. SHOP BY CATEGORY GRID  (PS Nutrition style)
+      ══════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Find Your Goal</span>
+            <h2 className="text-3xl md:text-4xl font-serif text-primary-green">Shop by Category</h2>
+          </div>
+          <button onClick={() => setCurrentSection('shop')} className="hidden sm:block text-xs font-semibold text-primary-green hover:text-sage border border-primary-green/20 hover:border-sage/50 px-5 py-2 rounded-full transition-all cursor-pointer uppercase tracking-wider">
+            All Products →
           </button>
         </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.label}
+              onClick={() => filterGoal(cat.goal)}
+              className={`group flex flex-col items-center gap-3 p-5 rounded-2xl border ${cat.color} transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer text-center`}
+            >
+              <span className={cat.text}>{cat.icon}</span>
+              <span className={`font-semibold text-sm ${cat.text}`}>{cat.label}</span>
+              <span className="text-[10px] text-charcoal/40 font-mono">{cat.desc}</span>
+            </button>
+          ))}
+        </div>
       </section>
 
-      {/* SECTION 3: BIOAVAILABILITY GUIDE (COMPARISON) */}
-      <section className="py-20 bg-bg-secondary/20">
+      {/* ══════════════════════════════════════════════
+          4. BESTSELLERS SHELF  (full horizontal grid)
+      ══════════════════════════════════════════════ */}
+      <section className="py-16 bg-bg-secondary/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            <div className="lg:col-span-5 space-y-6 text-left">
-              <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Clinical Bioavailability</span>
-              <h2 className="text-4xl md:text-5xl font-serif text-primary-green leading-tight">Chelations vs Synthetics</h2>
-              <div className="w-16 h-0.5 bg-sage"></div>
-              <p className="text-sm text-charcoal/70 leading-relaxed">
-                Cheap, low-cost commercial supplements often utilize inorganic mineral salts (like Magnesium Oxide or Zinc Sulfate) because they are inexpensive to synthesize.
-              </p>
-              <p className="text-sm text-charcoal/70 leading-relaxed">
-                However, these molecules register absorption rates under 5% in human intestinal tracts. Unabsorbed ions remain in the gut lumen, drawing water in and causing digestive upset. 
-              </p>
-              <p className="text-sm text-charcoal/70 leading-relaxed">
-                Kenwell uses fully chelated organic minerals (glycinates and picolinates) that are absorbed intact through dipeptide pathways, yielding 5x higher cellular levels with absolute gut comfort.
-              </p>
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Customer Favorites</span>
+              <h2 className="text-3xl md:text-4xl font-serif text-primary-green">Bestsellers</h2>
             </div>
+            <button onClick={() => setCurrentSection('bestsellers')} className="hidden sm:block text-xs font-semibold text-primary-green hover:text-sage border border-primary-green/20 hover:border-sage/50 px-5 py-2 rounded-full transition-all cursor-pointer uppercase tracking-wider">
+              See All →
+            </button>
+          </div>
 
-            <div className="lg:col-span-7">
-              <div className="glass-panel rounded-2xl border border-white/60 overflow-hidden text-xs text-left shadow-md">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-bg-secondary/60 font-mono text-[9px] uppercase tracking-wider border-b border-cream-dark">
-                      <th className="p-4">Mineral Parameter</th>
-                      <th className="p-4">Standard Form (Competitors)</th>
-                      <th className="p-4">Chelated Form (Kenwell)</th>
-                      <th className="p-4 text-right">Efficacy Increase</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-cream-dark/40">
-                    <tr>
-                      <td className="p-4 font-bold text-primary-green">Magnesium</td>
-                      <td className="p-4 text-charcoal/60">Magnesium Oxide (4% absorption)</td>
-                      <td className="p-4 font-semibold">Magnesium Glycinate (Chelated)</td>
-                      <td className="p-4 text-right font-bold text-sage">5.4x Higher</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 font-bold text-primary-green">Zinc</td>
-                      <td className="p-4 text-charcoal/60">Zinc Sulfate (competitive channels)</td>
-                      <td className="p-4 font-semibold">Zinc Picolinate (organic carrier)</td>
-                      <td className="p-4 text-right font-bold text-sage">3.1x Higher</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 font-bold text-primary-green">Vitamin C</td>
-                      <td className="p-4 text-charcoal/60">Ascorbic Acid (gut saturation limits)</td>
-                      <td className="p-4 font-semibold">Liposomal Ascorbic (lipid wrapper)</td>
-                      <td className="p-4 text-right font-bold text-sage">4.8x Higher</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 font-bold text-primary-green">Glutathione</td>
-                      <td className="p-4 text-charcoal/60">Standard L-Glutathione (acid damage)</td>
-                      <td className="p-4 font-semibold">Reduced L-Glutathione (acid stable)</td>
-                      <td className="p-4 text-right font-bold text-sage">4.2x Higher</td>
-                    </tr>
-                  </tbody>
-                </table>
+          {/* Horizontal scroll mobile / 3-col grid desktop */}
+          <div className="flex gap-4 overflow-x-auto pb-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none">
+            {bestsellers.map(p => (
+              <ShelfCard
+                key={p.id}
+                product={p}
+                onQuickView={onQuickView}
+                onAddToCart={onAddToCart}
+                onToggleWishlist={onToggleWishlist}
+                isInWishlist={wishlistItems?.some(w => w.id === p.id)}
+              />
+            ))}
+          </div>
+
+          <div className="sm:hidden text-center mt-6">
+            <button onClick={() => setCurrentSection('bestsellers')} className="text-xs font-semibold text-primary-green border border-primary-green/20 px-6 py-2.5 rounded-full uppercase tracking-wider cursor-pointer">
+              View All Bestsellers →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          5. SHOP BY SERIES — 3-col feature cards
+      ══════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center mb-10">
+          <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold">Product Lines</span>
+          <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-2">Shop by Series</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[
+            {
+              series: 'Core Series',
+              badge: 'Daily Baseline',
+              count: '7 products',
+              desc: 'Foundation nutrients for daily health — chelated minerals, triple-strength omega-3, and essential multivitamins.',
+              accent: 'border-sage/30 bg-gradient-to-br from-sage/5 to-sage/12',
+              btnColor: 'text-sage border-sage/30 hover:bg-sage hover:text-white',
+              dotColor: 'bg-sage',
+            },
+            {
+              series: 'Wellness Series',
+              badge: 'Targeted Protocols',
+              count: '12 products',
+              desc: 'Targeted formulations for joints, liver detox, gut health, sleep, and hormone balance.',
+              accent: 'border-champagne/50 bg-gradient-to-br from-champagne/15 to-champagne/30',
+              btnColor: 'text-gold-accent border-champagne/50 hover:bg-gold-accent hover:text-white',
+              dotColor: 'bg-gold-accent',
+            },
+            {
+              series: 'Liposomal Series',
+              badge: 'Advanced Longevity',
+              count: '4 products',
+              desc: 'NAD+, CoQ10, Glutathione & Vitamin C in lipid encapsulation — maximum bioavailability, zero acid degradation.',
+              accent: 'border-slate-teal/30 bg-gradient-to-br from-slate-teal/5 to-slate-teal/12',
+              btnColor: 'text-slate-teal border-slate-teal/30 hover:bg-slate-teal hover:text-white',
+              dotColor: 'bg-slate-teal',
+            },
+          ].map((s) => (
+            <div
+              key={s.series}
+              className={`group relative rounded-2xl border ${s.accent} p-7 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col`}
+              onClick={() => filterSeries(s.series)}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <span className={`inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider font-semibold`}>
+                  <span className={`w-2 h-2 rounded-full ${s.dotColor}`} />
+                  {s.badge}
+                </span>
+                <span className="text-[10px] text-charcoal/40 font-mono">{s.count}</span>
               </div>
+              <h3 className="font-serif text-2xl text-primary-green mb-3 group-hover:text-inherit transition-colors">{s.series}</h3>
+              <p className="text-sm text-charcoal/60 leading-relaxed flex-grow">{s.desc}</p>
+              <button className={`mt-6 w-full border rounded-full py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${s.btnColor}`}>
+                Explore {s.series} →
+              </button>
             </div>
+          ))}
+        </div>
+      </section>
 
+      {/* ══════════════════════════════════════════════
+          6. INTERACTIVE STACK BUILDER PROMO  (PS Nutrition: "Fuel Calculator")
+      ══════════════════════════════════════════════ */}
+      <section className="py-20 bg-primary-green relative overflow-hidden">
+        {/* Large decorative BG text */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+          <span className="font-serif text-[18vw] font-bold text-white/[0.04] leading-none">STACK</span>
+        </div>
+
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+          <span className="inline-block bg-white/15 border border-white/20 text-[10px] font-mono uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
+            Personalised Nutrition
+          </span>
+          <h2 className="font-serif text-4xl sm:text-5xl mb-5 leading-tight">
+            Build Your Perfect<br />
+            <span className="italic font-light opacity-80">Supplement Stack</span>
+          </h2>
+          <p className="text-white/70 text-base max-w-xl mx-auto mb-10 leading-relaxed">
+            Take the 90-second Wellness Quiz and get a personalised supplement protocol matched to your goals — then build your stack in one click.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => setCurrentSection('quiz')}
+              className="bg-white text-primary-green hover:bg-cream-dark px-8 py-4 rounded-full text-sm uppercase tracking-widest font-bold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
+            >
+              Take Wellness Quiz
+            </button>
+            <button
+              onClick={() => setCurrentSection('builder')}
+              className="border-2 border-white/40 hover:border-white text-white hover:bg-white/10 px-8 py-4 rounded-full text-sm uppercase tracking-widest font-semibold transition-all cursor-pointer"
+            >
+              Open Stack Builder
+            </button>
           </div>
         </div>
       </section>
 
-      {/* SECTION 4: THE BOTTLE TRANSPARENCY PHILOSOPHY */}
-      <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          <div className="glass-panel p-8 rounded-2xl border border-white/60 space-y-4 hover:border-sage/40 transition-colors text-left">
-            <span className="font-mono text-xs uppercase tracking-wider text-sage font-bold">01 - Bioavailability</span>
-            <h3 className="font-serif text-2xl font-bold text-primary-green">Targeted Absorption</h3>
-            <p className="text-xs text-charcoal/70 leading-relaxed">
-              Every formula is customized to pass gut limits. By utilizing molecular complexes that utilize dipeptide pathways, we bypass standard mineral transport channels.
-            </p>
-          </div>
+      {/* ══════════════════════════════════════════════
+          7. TRUST / WHY KENWELL  — 4 icon cards
+      ══════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center mb-10">
+          <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold">The Kenwell Standard</span>
+          <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-2">Why We're Different</h2>
+        </div>
 
-          <div className="glass-panel p-8 rounded-2xl border border-white/60 space-y-4 hover:border-sage/40 transition-colors text-left">
-            <span className="font-mono text-xs uppercase tracking-wider text-sage font-bold">02 - Zero Fillers</span>
-            <h3 className="font-serif text-2xl font-bold text-primary-green">Open Ingredient List</h3>
-            <p className="text-xs text-charcoal/70 leading-relaxed">
-              We never pack cheap silicon dioxide, talc, or chemical glazes. We disclose every single inactive stabilizer and capsule wrapper directly on our open label.
-            </p>
-          </div>
-
-          <div className="glass-panel p-8 rounded-2xl border border-white/60 space-y-4 hover:border-sage/40 transition-colors text-left">
-            <span className="font-mono text-xs uppercase tracking-wider text-sage font-bold">03 - Origin Sourced</span>
-            <h3 className="font-serif text-2xl font-bold text-primary-green">Origin Traceability</h3>
-            <p className="text-xs text-charcoal/70 leading-relaxed">
-              We trace each botanical extract to its geographical source (like KSM-66 from Rajasthan). Our active chemical compounds are sourced from verified GMP facilities.
-            </p>
-          </div>
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {TRUST_POINTS.map((t) => (
+            <div key={t.title} className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/70 p-6 hover:shadow-lg hover:border-sage/30 transition-all duration-300 text-left">
+              <div className="w-10 h-10 rounded-xl bg-sage/10 border border-sage/20 flex items-center justify-center mb-4">
+                {t.icon}
+              </div>
+              <h3 className="font-serif text-lg font-bold text-primary-green mb-2">{t.title}</h3>
+              <p className="text-sm text-charcoal/60 leading-relaxed">{t.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* SECTION 5: CLINICAL CUSTOMER REVIEWS */}
-      <section className="py-20 bg-bg-secondary/40">
+      {/* ══════════════════════════════════════════════
+          8. REVIEWS  — 3 cards with product tags
+      ══════════════════════════════════════════════ */}
+      <section className="py-16 bg-bg-secondary/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center mb-16">
-            <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">User Verification</span>
-            <h2 className="text-4xl md:text-5xl font-serif text-primary-green mt-2 mb-4">Reviews from the Field</h2>
-            <div className="gold-divider max-w-xs mx-auto mb-6"></div>
+          <div className="text-center mb-10">
+            <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold">Verified Reviews</span>
+            <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-2">What Customers Say</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            {/* Review 1 */}
-            <div className="glass-panel p-8 rounded-2xl border border-white/65 space-y-6 text-left flex flex-col justify-between">
-              <div className="space-y-4">
-                {renderSvgStars()}
-                <h4 className="font-serif text-lg font-bold text-primary-green">"Amazing recovery times"</h4>
-                <p className="text-xs text-charcoal/70 leading-relaxed">
-                  I switched to the Chelated Magnesium Glycinate and Ashwagandha stack. My sleep latency dropped from 45 minutes to under 15, and I wake up without morning grogginess. The label breakdown is completely clear.
-                </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              { quote: '"Amazing recovery times"', body: 'Switched to the Chelated Magnesium + Ashwagandha stack. Sleep latency dropped from 45 min to under 15. Wake up without grogginess.', name: 'Rahul K.', role: 'CrossFit Athlete', product: 'Magnesium + Ashwagandha', stars: 5 },
+              { quote: '"Legitimate open labels"', body: 'As a clinical nutritionist I examine every supplement closely. Kenwell is the first Indian brand I actively recommend — purity assays verified, zero undisclosed fillers.', name: 'Dr. Priya M.', role: 'Clinical Nutritionist', product: 'Multivitamin with Probiotics', stars: 5 },
+              { quote: '"Mitochondrial fuel works"', body: 'The NAD+ and CoQ10 stack made a noticeable difference in afternoon focus. No more brain fog during long coding sessions.', name: 'Vikram S.', role: 'Software Architect', product: 'NAD+ · CoQ10 Ubiquinone', stars: 5 },
+            ].map((r, i) => (
+              <div key={i} className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/70 p-7 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow">
+                <div className="space-y-3">
+                  <Stars n={r.stars} />
+                  <h4 className="font-serif text-lg font-bold text-primary-green">{r.quote}</h4>
+                  <p className="text-sm text-charcoal/65 leading-relaxed">{r.body}</p>
+                </div>
+                <div className="mt-5 pt-4 border-t border-cream-dark/40 flex items-end justify-between">
+                  <div>
+                    <span className="block text-sm font-bold text-charcoal/80">{r.name}</span>
+                    <span className="text-[10px] text-charcoal/45">{r.role}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[9px] text-charcoal/35 uppercase tracking-wider block">Using</span>
+                    <span className="text-[10px] font-semibold text-sage">{r.product}</span>
+                  </div>
+                </div>
               </div>
-              <div className="border-t border-cream-dark/40 pt-4 flex items-center justify-between text-xs text-charcoal/50">
-                <span className="font-bold">Rahul K.</span>
-                <span>Verified Crossfit Athlete</span>
-              </div>
-            </div>
-
-            {/* Review 2 */}
-            <div className="glass-panel p-8 rounded-2xl border border-white/65 space-y-6 text-left flex flex-col justify-between">
-              <div className="space-y-4">
-                {renderSvgStars()}
-                <h4 className="font-serif text-lg font-bold text-primary-green">"Legitimate open labels"</h4>
-                <p className="text-xs text-charcoal/70 leading-relaxed">
-                  As a clinical nutritionist, I examine client supplement panels closely. Kenwell is the first Indian brand I have recommended that discloses every inactive filler and capsule stabilizer. Purity assays are verified.
-                </p>
-              </div>
-              <div className="border-t border-cream-dark/40 pt-4 flex items-center justify-between text-xs text-charcoal/50">
-                <span className="font-bold">Dr. Priya M.</span>
-                <span>Clinical Nutrition Specialist</span>
-              </div>
-            </div>
-
-            {/* Review 3 */}
-            <div className="glass-panel p-8 rounded-2xl border border-white/65 space-y-6 text-left flex flex-col justify-between">
-              <div className="space-y-4">
-                {renderSvgStars()}
-                <h4 className="font-serif text-lg font-bold text-primary-green">"Mitochondrial fuel works"</h4>
-                <p className="text-xs text-charcoal/70 leading-relaxed">
-                  The NAD+ and CoQ10 stack has made a noticeable change in my mid-afternoon focus. I no longer experience brain fog during coding blocks. The transparency scanner Certificate of Analysis verified the active assays.
-                </p>
-              </div>
-              <div className="border-t border-cream-dark/40 pt-4 flex items-center justify-between text-xs text-charcoal/50">
-                <span className="font-bold">Vikram S.</span>
-                <span>Software Systems Architect</span>
-              </div>
-            </div>
-
+            ))}
           </div>
-
         </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          9. FINAL CTA BANNER
+      ══════════════════════════════════════════════ */}
+      <section className="py-20 px-4 text-center bg-gradient-to-b from-bg-primary via-cream-dark/20 to-bg-primary">
+        <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold">The Full Collection</span>
+        <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-3 mb-4">
+          23 Meticulously Engineered Formulations
+        </h2>
+        <p className="text-charcoal/55 text-sm max-w-md mx-auto mb-8 leading-relaxed">
+          Open labels · Clinical doses · Organic chelations · Zero synthetic fillers
+        </p>
+        <button
+          onClick={() => setCurrentSection('shop')}
+          className="bg-primary-green hover:bg-sage text-white px-10 py-4 rounded-full text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
+        >
+          Browse the Full Shop →
+        </button>
       </section>
 
     </div>

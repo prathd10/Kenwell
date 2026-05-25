@@ -27,6 +27,26 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [currentSection])
 
+  // Listen for goal/series filter events dispatched by Hero tiles
+  useEffect(() => {
+    const handleGoalFilter = (e) => {
+      setSelectedGoal(e.detail)
+      setSelectedSeries('All')
+      setCurrentSection('shop')
+    }
+    const handleSeriesFilter = (e) => {
+      setSelectedSeries(e.detail)
+      setSelectedGoal('All')
+      setCurrentSection('shop')
+    }
+    window.addEventListener('kenwell:filterGoal', handleGoalFilter)
+    window.addEventListener('kenwell:filterSeries', handleSeriesFilter)
+    return () => {
+      window.removeEventListener('kenwell:filterGoal', handleGoalFilter)
+      window.removeEventListener('kenwell:filterSeries', handleSeriesFilter)
+    }
+  }, [])
+
   const addToStack = (product) => {
     if (!stackItems.some(item => item.id === product.id)) {
       setStackItems([...stackItems, product])
@@ -115,71 +135,13 @@ export default function App() {
       
       <main className="flex-grow z-10">
         {currentSection === 'home' && (
-          <>
-            <Hero 
-              setCurrentSection={setCurrentSection} 
-              onQuickView={handleQuickView}
-            />
-            {/* Direct preview of our series */}
-            <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
-              <div className="text-center mb-16">
-                <span className="text-sage font-mono uppercase tracking-wider text-sm">Product Range</span>
-                <h2 className="text-4xl md:text-5xl font-serif mt-2 mb-4">Meticulously Engineered Formulations</h2>
-                <div className="gold-divider max-w-sm mx-auto mb-6"></div>
-                <p className="text-charcoal/70 max-w-2xl mx-auto">
-                  Every product is standard-controlled for maximum clinical bioavailability. 
-                  Select a category to discover targeted cellular nutrition.
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Core Series */}
-                <div 
-                  onClick={() => handleSelectFilter('series', 'Core Series')}
-                  className="group relative cursor-pointer overflow-hidden rounded-2xl glass-panel p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl border-l-4 border-sage"
-                >
-                  <span className="text-xs font-mono bg-sage/10 text-sage px-3 py-1 rounded-full uppercase tracking-wider">Daily Baseline</span>
-                  <h3 className="text-2xl font-serif mt-4 mb-2 group-hover:text-sage transition-colors">Core Series</h3>
-                  <p className="text-charcoal/70 text-sm leading-relaxed mb-6">
-                    A collection of foundation nutrients designed for daily health. Includes high-potency multivitamins, probiotics, and fully chelated magnesium.
-                  </p>
-                  <span className="inline-flex items-center text-xs font-semibold text-sage group-hover:translate-x-2 transition-transform">
-                    Explore Core Series <span className="ml-1">→</span>
-                  </span>
-                </div>
-                
-                {/* Wellness Series */}
-                <div 
-                  onClick={() => handleSelectFilter('series', 'Wellness Series')}
-                  className="group relative cursor-pointer overflow-hidden rounded-2xl glass-panel p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl border-l-4 border-champagne"
-                >
-                  <span className="text-xs font-mono bg-champagne/20 text-charcoal px-3 py-1 rounded-full uppercase tracking-wider">Targeted Protocols</span>
-                  <h3 className="text-2xl font-serif mt-4 mb-2 group-hover:text-gold-accent transition-colors">Wellness Series</h3>
-                  <p className="text-charcoal/70 text-sm leading-relaxed mb-6">
-                    Targeted formulations including highly bioavailable mineral balances, joint repair matrices, and natural hepatoprotectives.
-                  </p>
-                  <span className="inline-flex items-center text-xs font-semibold text-gold-accent group-hover:translate-x-2 transition-transform">
-                    Explore Wellness Series <span className="ml-1">→</span>
-                  </span>
-                </div>
-                
-                {/* Liposomal Series */}
-                <div 
-                  onClick={() => handleSelectFilter('series', 'Liposomal Series')}
-                  className="group relative cursor-pointer overflow-hidden rounded-2xl glass-panel p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl border-l-4 border-slate-teal"
-                >
-                  <span className="text-xs font-mono bg-slate-teal/10 text-slate-teal px-3 py-1 rounded-full uppercase tracking-wider">Advanced Longevity</span>
-                  <h3 className="text-2xl font-serif mt-4 mb-2 group-hover:text-slate-teal transition-colors">Liposomal Series</h3>
-                  <p className="text-charcoal/70 text-sm leading-relaxed mb-6">
-                    Advanced clinical-grade cellular rejuvenators utilizing lipid encapsulation to bypass stomach acid and enter the bloodstream.
-                  </p>
-                  <span className="inline-flex items-center text-xs font-semibold text-slate-teal group-hover:translate-x-2 transition-transform">
-                    Explore Liposomal Series <span className="ml-1">→</span>
-                  </span>
-                </div>
-              </div>
-            </section>
-          </>
+          <Hero 
+            setCurrentSection={setCurrentSection} 
+            onQuickView={handleQuickView}
+            onAddToCart={addToCart}
+            onToggleWishlist={toggleWishlist}
+            wishlistItems={wishlistItems}
+          />
         )}
         
         {currentSection === 'shop' && (
