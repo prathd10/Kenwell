@@ -1,0 +1,335 @@
+import React, { useState } from 'react'
+import { PRODUCTS } from '../data'
+
+export default function LabScanner() {
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [scanning, setScanning] = useState(false)
+  const [reportRetrieved, setReportRetrieved] = useState(false)
+
+  // Sourcing list to match products
+  const getSourcingLocation = (productId) => {
+    const sourcingMap = {
+      1: { active: 'L. acidophilus blend', source: 'Frankfurt, Germany', base: 'Yeast free organic base' },
+      2: { active: 'Fully Chelated Magnesium Glycinate', source: 'Munich, Germany', base: 'Soluble cellulose binder' },
+      3: { active: 'trans-MK7 Vitamin K2', source: 'Oslo, Norway', base: 'Organic calcium malate' },
+      4: { active: 'Zinc Picolinate', source: 'Gujarat, India', base: 'Microcrystalline cellulose' },
+      5: { active: 'EPA/DHA Fish Oil', source: 'Coastal Chimbote, Peru', base: 'Triglyceride concentrate' },
+      6: { active: 'Triple Strength Fish Oil', source: 'Coastal Chimbote, Peru', base: 'Triglyceride concentrate' },
+      7: { active: 'Marine Algal Oil', source: 'Nova Scotia, Canada', base: 'Vegan softgel starch wrapper' },
+      12: { active: 'Nicotinamide Mononucleotide (NMN)', source: 'Kyoto, Japan', base: 'Trimethylglycine methyl donor' },
+      14: { active: 'Liposomal Ascorbic Acid', source: 'Zurich, Switzerland', base: 'Sunflower lecithin carrier' },
+      15: { active: 'Reduced L-Glutathione', source: 'Tokyo, Japan', base: 'Milk thistle standard matrix' },
+      19: { active: 'KSM-66 Ashwagandha Root Extract', source: 'Rajasthan, India', base: 'Standardized root withanolides' },
+      23: { active: 'Berberine HCl', source: 'Himalayan Foothills, India', base: 'Chromium picolonate blend' }
+    }
+    
+    return sourcingMap[productId] || { active: 'Active Botanical Extract', source: 'Western Ghats, India', base: 'Clean label vegetable capsules' }
+  }
+
+  const handleScan = (product) => {
+    setSelectedProduct(product)
+    setScanning(true)
+    setReportRetrieved(false)
+
+    // Simulate scanner sweep loading state
+    setTimeout(() => {
+      setScanning(false)
+      setReportRetrieved(true)
+    }, 1800)
+  }
+
+  const handleReset = () => {
+    setSelectedProduct(null)
+    setScanning(false)
+    setReportRetrieved(false)
+  }
+
+  return (
+    <div className="py-12 px-4 md:px-8 max-w-7xl mx-auto space-y-10">
+      
+      {/* Page Header */}
+      <div className="text-center max-w-2xl mx-auto space-y-4">
+        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Label Integrity Portal</span>
+        <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Lab Transparency Scanner</h1>
+        <div className="gold-divider max-w-xs mx-auto"></div>
+        <p className="text-charcoal/70 text-sm leading-relaxed">
+          Slide 3 Discovery Counter Integration. Verify your batch Certificate of Analysis (CoA), purity percentages, heavy metals panel, and geographic botanical origin.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        
+        {/* Left Column: Simulated Phone Scanner Screen */}
+        <div className="lg:col-span-5 flex flex-col items-center">
+          <div className="relative w-full max-w-[360px] h-[580px] bg-charcoal rounded-[40px] border-8 border-cream-dark shadow-2xl p-4 overflow-hidden flex flex-col justify-between text-white font-sans">
+            
+            {/* Phone Speaker & Notch */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-cream-dark rounded-b-2xl z-20 flex justify-center items-center">
+              <div className="w-12 h-1 bg-charcoal/50 rounded-full"></div>
+            </div>
+
+            {/* Scanning viewport */}
+            <div className="relative flex-grow rounded-2xl overflow-hidden bg-black/90 border border-white/10 mt-6 flex flex-col items-center justify-center p-4">
+              
+              {/* Scan Jpeg Overlay backdrop if no report */}
+              {!reportRetrieved && (
+                <div className="absolute inset-0 opacity-40">
+                  <img 
+                    src="/scannable qr and counter.jpeg" 
+                    alt="Scan Background" 
+                    className="w-full h-full object-cover blur-[2px]"
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                </div>
+              )}
+
+              {/* Scanning Active Overlay Sweep Line */}
+              {scanning && (
+                <div className="absolute top-0 left-0 right-0 h-1 bg-sage animate-[bounce_2s_infinite] shadow-[0_0_15px_#7A8C5A] z-20"></div>
+              )}
+
+              {/* Viewport UI states */}
+              {!selectedProduct && (
+                <div className="z-10 text-center space-y-4 p-4">
+                  <div className="w-20 h-20 border-2 border-dashed border-white/40 rounded-2xl mx-auto flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <circle cx="12" cy="13" r="3" strokeWidth="1.5" />
+                    </svg>
+                  </div>
+                  <h4 className="font-serif text-lg font-bold">Align QR Code</h4>
+                  <p className="text-[10px] text-white/60 leading-relaxed max-w-[180px] mx-auto">
+                    Select a Kenwell formula below to align its container with your camera lens.
+                  </p>
+                </div>
+              )}
+
+              {selectedProduct && scanning && (
+                <div className="z-10 text-center space-y-3">
+                  <div className="w-24 h-24 border-2 border-sage rounded-2xl mx-auto flex items-center justify-center">
+                    <svg className="w-10 h-10 text-sage animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 6H16" />
+                    </svg>
+                  </div>
+                  <h4 className="text-sm font-semibold tracking-wider uppercase text-sage">Scanning Batch QR...</h4>
+                  <p className="text-[10px] text-white/50">{selectedProduct.name}</p>
+                </div>
+              )}
+
+              {selectedProduct && reportRetrieved && (
+                <div className="z-10 text-center space-y-4 p-4 animate-in fade-in duration-300">
+                  <div className="w-16 h-16 bg-sage/20 border border-sage/50 text-sage rounded-full mx-auto flex items-center justify-center">
+                    <svg className="w-8 h-8 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-[9px] font-mono text-sage tracking-wider uppercase">Authenticity Verified</span>
+                    <h4 className="font-serif text-base font-bold text-white mt-1">{selectedProduct.name}</h4>
+                    <p className="text-[10px] text-white/40 mt-0.5">Batch #KNW-2026-A22</p>
+                  </div>
+                  <button 
+                    onClick={handleReset}
+                    className="bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono uppercase tracking-wider py-2 px-4 rounded-full transition-all cursor-pointer"
+                  >
+                    Scan Another
+                  </button>
+                </div>
+              )}
+
+              {/* Target Scan Reticle Box */}
+              {!scanning && !reportRetrieved && (
+                <div className="absolute w-44 h-44 border-2 border-white/20 rounded-3xl flex items-center justify-center">
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-sage -mt-1 -ml-1 rounded-tl-lg"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-sage -mt-1 -mr-1 rounded-tr-lg"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-sage -mb-1 -ml-1 rounded-bl-lg"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-sage -mb-1 -mr-1 rounded-br-lg"></div>
+                  <span className="text-[9px] font-mono tracking-widest text-white/30 uppercase">Align QR Code</span>
+                </div>
+              )}
+
+            </div>
+
+            {/* Select product list in-phone */}
+            <div className="h-44 flex flex-col justify-end py-2 bg-charcoal/80">
+              <span className="block text-[8px] font-mono uppercase text-white/40 tracking-wider text-left mb-1.5">Select Formula to verify</span>
+              <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-none">
+                {PRODUCTS.slice(0, 10).map((prod) => (
+                  <button
+                    key={prod.id}
+                    onClick={() => handleScan(prod)}
+                    disabled={scanning}
+                    className={`flex-shrink-0 px-3 py-2 rounded-xl text-[10px] font-semibold text-left transition-all border w-28 cursor-pointer ${
+                      selectedProduct?.id === prod.id 
+                        ? 'bg-sage border-sage text-white' 
+                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
+                    }`}
+                  >
+                    <span className="block truncate">{prod.name}</span>
+                    <span className="block text-[8px] text-white/40 font-mono mt-0.5">{prod.series.split(' ')[0]}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Right Column: Lab CoA Sheet & Sourcing Map */}
+        <div className="lg:col-span-7 flex flex-col justify-between">
+          {reportRetrieved && selectedProduct ? (
+            <div className="glass-panel p-8 rounded-3xl border border-white/50 space-y-6 text-left animate-in fade-in duration-400">
+              
+              {/* CoA Title Header */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-cream-dark/50 pb-4">
+                <div>
+                  <h3 className="font-serif text-2xl font-bold text-primary-green">Certificate of Analysis (CoA)</h3>
+                  <p className="text-xs text-charcoal/50 font-mono mt-0.5">
+                    Batch Code: <span className="font-bold text-primary-green">KNW-2026-A22</span> | Manufacture: March 2026
+                  </p>
+                </div>
+                <div className="bg-sage/10 text-sage border border-sage/20 rounded-full px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider">
+                  Pass / Approved
+                </div>
+              </div>
+
+              {/* Lab Assays (Assay, Heavy Metals, Microbe) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* Active Purity Assay */}
+                <div className="bg-white/40 border border-cream-dark/40 rounded-xl p-4 space-y-3">
+                  <h4 className="font-mono text-[9px] uppercase tracking-wider text-charcoal/50 font-bold border-b border-cream-dark/50 pb-1">Chemical Assay Purity</h4>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-semibold text-primary-green">{getSourcingLocation(selectedProduct.id).active}</span>
+                    <span className="font-mono text-sage font-bold">103.2%</span>
+                  </div>
+                  <p className="text-[10px] text-charcoal/60 leading-relaxed">
+                    HPLC verified active compound levels match 100%+ label guidelines with zero synthetic overages.
+                  </p>
+                </div>
+
+                {/* Sourcing Location Card */}
+                <div className="bg-white/40 border border-cream-dark/40 rounded-xl p-4 space-y-3">
+                  <h4 className="font-mono text-[9px] uppercase tracking-wider text-charcoal/50 font-bold border-b border-cream-dark/50 pb-1">Origin Sourcing Check</h4>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-semibold text-primary-green">Botanical Origin</span>
+                    <span className="font-mono text-sage font-bold">{getSourcingLocation(selectedProduct.id).source}</span>
+                  </div>
+                  <p className="text-[10px] text-charcoal/60 leading-relaxed">
+                    Raw extract harvested directly from regional source; verified trace coordinates.
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Lab Panel Table */}
+              <div className="border border-cream-dark rounded-xl overflow-hidden text-xs">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-bg-secondary/40 font-mono text-[9px] uppercase tracking-wider border-b border-cream-dark">
+                      <th className="p-3">Assay Parameter</th>
+                      <th className="p-3">Specification Limit</th>
+                      <th className="p-3">Tested Result</th>
+                      <th className="p-3 text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-cream-dark/40">
+                    <tr>
+                      <td className="p-3 font-semibold">Lead (Pb)</td>
+                      <td className="p-3 font-mono text-charcoal/60">&lt; 0.5 ppm</td>
+                      <td className="p-3 font-mono font-bold text-primary-green">0.02 ppm</td>
+                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-semibold">Arsenic (As)</td>
+                      <td className="p-3 font-mono text-charcoal/60">&lt; 0.5 ppm</td>
+                      <td className="p-3 font-mono font-bold text-primary-green">&lt; 0.01 ppm</td>
+                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-semibold">Cadmium (Cd)</td>
+                      <td className="p-3 font-mono text-charcoal/60">&lt; 0.3 ppm</td>
+                      <td className="p-3 font-mono font-bold text-primary-green">&lt; 0.01 ppm</td>
+                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-semibold">Total Yeast & Mold</td>
+                      <td className="p-3 font-mono text-charcoal/60">&lt; 100 CFU/g</td>
+                      <td className="p-3 font-mono font-bold text-primary-green">Absent</td>
+                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-semibold">E. Coli & Salmonella</td>
+                      <td className="p-3 font-mono text-charcoal/60">Absent / 10g</td>
+                      <td className="p-3 font-mono font-bold text-primary-green">Absent</td>
+                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Transparent Excipient Badge */}
+              <div className="bg-bg-secondary/40 border border-cream-dark/50 rounded-2xl p-5 space-y-2">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-charcoal/40 font-bold block">100% Disclosure Excipient Profile</span>
+                <p className="text-xs text-charcoal/70 leading-relaxed">
+                  In addition to the active molecular raw compounds, this batch utilizes: <strong>{getSourcingLocation(selectedProduct.id).base}</strong>. Absolutely zero titanium dioxide, talc, artificial colorings, or synthetic glazing agents were used in formulation.
+                </p>
+              </div>
+
+            </div>
+          ) : (
+            /* Standby State with Brand image card */
+            <div className="glass-panel p-8 rounded-3xl border border-white/50 flex flex-col justify-center items-center text-center space-y-6 min-h-[480px]">
+              
+              <div className="relative w-full max-w-[480px] h-60 rounded-2xl overflow-hidden bg-cream-dark shadow-md">
+                <img 
+                  src="/scannable qr and counter.jpeg" 
+                  alt="Kenwell Tabletop Counter Concept" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/20 to-transparent flex flex-col justify-end p-6 text-left text-white">
+                  <span className="text-xs font-mono text-champagne uppercase tracking-widest font-semibold">We Have Nothing To Hide</span>
+                  <h3 className="font-serif text-2xl font-bold mt-1">Transparency First Sourcing</h3>
+                </div>
+              </div>
+              
+              <div className="max-w-md space-y-3">
+                <h3 className="font-serif text-2xl font-semibold text-primary-green">Acknowledge Active Batches</h3>
+                <p className="text-sm text-charcoal/70 leading-relaxed">
+                  Every single bottle shipped features a unique scannable QR code on the back label. Scan this code using your mobile device or select a formula on the phone mock layout to trace third-party testing logs and active ingredients assays.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-charcoal/50 font-mono">
+                <span className="flex items-center gap-1">
+                  <svg className="w-3 h-3 text-sage animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                  heavy metals tested
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-3 h-3 text-sage animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                  active molecule assays
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-3 h-3 text-sage animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                  excipient disclosure
+                </span>
+              </div>
+
+            </div>
+          )}
+        </div>
+
+      </div>
+
+    </div>
+  )
+}
