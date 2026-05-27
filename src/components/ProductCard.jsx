@@ -42,16 +42,16 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
   }, [product.price])
 
   return (
-    <div className="group relative flex flex-col h-full rounded-2xl glass-panel p-5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg border border-white/60">
+    <div className="group relative flex flex-col h-full rounded-2xl glass-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg border border-white/60 overflow-hidden">
       
       {/* Product Image Container */}
-      <div className={`relative w-full h-52 flex items-center justify-center mb-4 rounded-xl overflow-hidden border border-cream-dark/30 ${getImageBg(product.series)}`}>
+      <div className={`relative w-full h-52 flex items-center justify-center overflow-hidden ${getImageBg(product.series)}`}>
         
         {/* Floating Wishlist Heart */}
         {onToggleWishlist && (
           <button
             onClick={() => onToggleWishlist(product)}
-            className={`absolute top-2.5 right-2.5 p-2 rounded-full backdrop-blur-md transition-all duration-300 z-30 cursor-pointer border ${
+            className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all duration-300 z-30 cursor-pointer border ${
               isInWishlist 
                 ? 'bg-sage/20 border-sage/40 text-sage' 
                 : 'bg-white/60 border-white/80 text-charcoal/40 hover:text-sage hover:bg-white'
@@ -90,7 +90,7 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
       </div>
 
       {/* Product Text Details */}
-      <div className="flex-grow flex flex-col justify-between">
+      <div className="flex-grow flex flex-col justify-between p-5 pt-4">
         <div className="space-y-2 text-left">
           
           {/* Servings Info */}

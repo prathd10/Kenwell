@@ -14,6 +14,7 @@ export default function Navbar({
   onQuickView
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [shopExpanded, setShopExpanded] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [wishlistOpen, setWishlistOpen] = useState(false)
 
@@ -35,6 +36,7 @@ export default function Navbar({
   }
 
   return (
+    <>
     <nav className="sticky top-0 z-50 glass-panel backdrop-blur-md border-b border-cream-dark shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
@@ -251,90 +253,6 @@ export default function Navbar({
           </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden glass-panel border-t border-cream-dark transition-all duration-300">
-          <div className="px-2 pt-4 pb-6 space-y-2 sm:px-3">
-            {navItems.map((item) => {
-              if (item.id === 'shop') {
-                return (
-                  <div key={item.id} className="space-y-1">
-                    <button
-                      onClick={() => handleNavClick('shop')}
-                      className={`flex items-center justify-between w-full text-left px-4 py-3 rounded-xl text-base font-medium tracking-wide uppercase transition-all ${
-                        currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women'
-                          ? 'bg-sage/10 text-primary-green font-bold' 
-                          : 'text-charcoal/70'
-                      }`}
-                    >
-                      Shop
-                    </button>
-                    {/* Mobile submenus */}
-                    <div className="pl-4 pr-2 pb-2 grid grid-cols-2 gap-4 text-left border-l-2 border-cream-dark/50 ml-4 my-2">
-                      <div className="space-y-1.5">
-                        <span className="block text-[8px] font-mono uppercase tracking-widest text-primary-green font-bold">Goals</span>
-                        {['Immunity', 'Energy', 'Sleep', 'Stress', 'Longevity', 'Gut Health'].map(goal => (
-                          <button
-                            key={goal}
-                            onClick={() => {
-                              onSelectFilter('goal', goal)
-                              setMobileMenuOpen(false)
-                            }}
-                            className="block text-[10px] font-semibold text-charcoal/60 uppercase hover:text-primary-green py-0.5 text-left w-full cursor-pointer"
-                          >
-                            {goal}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="space-y-1.5">
-                        <span className="block text-[8px] font-mono uppercase tracking-widest text-primary-green font-bold">Categories</span>
-                        {[
-                          { name: 'Core Series', type: 'series', val: 'Core Series' },
-                          { name: 'Wellness Series', type: 'series', val: 'Wellness Series' },
-                          { name: 'Liposomal Series', type: 'series', val: 'Liposomal Series' },
-                          { name: 'Bestsellers', type: 'collection', val: 'bestsellers' },
-                          { name: 'For Men', type: 'collection', val: 'men' },
-                          { name: 'For Women', type: 'collection', val: 'women' }
-                        ].map(cat => (
-                          <button
-                            key={cat.name}
-                            onClick={() => {
-                              onSelectFilter(cat.type, cat.val)
-                              setMobileMenuOpen(false)
-                            }}
-                            className="block text-[10px] font-semibold text-charcoal/60 uppercase hover:text-primary-green py-0.5 text-left w-full cursor-pointer"
-                          >
-                            {cat.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )
-              }
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center justify-between w-full text-left px-4 py-3 rounded-xl text-base font-medium tracking-wide uppercase transition-all ${
-                    currentSection === item.id 
-                      ? 'bg-sage/10 text-primary-green font-bold' 
-                      : 'text-charcoal/70 hover:bg-cream-dark/20'
-                  }`}
-                >
-                  <span>{item.name}</span>
-                  {item.badge > 0 && (
-                    <span className="bg-sage text-white text-[10px] font-mono px-2 py-0.5 rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
 
       {/* CART DRAWER OVERLAY */}
       {cartOpen && (
@@ -557,5 +475,139 @@ export default function Navbar({
         </div>
       )}
     </nav>
+
+    {/* Mobile Menu — outside nav to avoid backdrop-filter containing block constraint */}
+    <div className="md:hidden">
+      {/* Backdrop */}
+      <div
+        onClick={() => setMobileMenuOpen(false)}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 40,
+          background: 'rgba(28,45,26,0.4)',
+          backdropFilter: 'blur(2px)',
+          opacity: mobileMenuOpen ? 1 : 0,
+          pointerEvents: mobileMenuOpen ? 'auto' : 'none',
+          transition: 'opacity 0.28s ease',
+        }}
+      />
+
+      {/* Drawer panel */}
+      <div style={{
+        position: 'fixed', top: 0, right: 0,
+        width: '72%', maxWidth: 300, height: '100vh',
+        zIndex: 50,
+        background: '#FAFAF8',
+        boxShadow: '-8px 0 32px rgba(28,45,26,0.15)',
+        transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
+        transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
+        display: 'flex', flexDirection: 'column',
+        overflowY: 'auto',
+      }}>
+        {/* Drawer Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid #E8E3D9' }}>
+          <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.18em', color: '#1C2D1A', textTransform: 'uppercase' }}>
+            Kenwell
+          </span>
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7A8C5A', padding: 4, display: 'flex', alignItems: 'center' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Nav Items */}
+        <div style={{ flex: 1, padding: '0.75rem 0' }}>
+          {/* Shop with collapsible sub-items */}
+          <div>
+            <button
+              onClick={() => setShopExpanded(v => !v)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                width: '100%', padding: '0.875rem 1.5rem',
+                background: 'none', border: 'none', cursor: 'pointer',
+                fontFamily: '"Cormorant Garamond", serif', fontSize: '1.5rem', fontWeight: 600,
+                color: (currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women') ? '#1C2D1A' : '#4A5568',
+                borderLeft: (currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women') ? '3px solid #B89F70' : '3px solid transparent',
+                textAlign: 'left', letterSpacing: '0.01em',
+              }}
+            >
+              Shop
+              <svg
+                style={{ transform: shopExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0 }}
+                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+
+            <div style={{ maxHeight: shopExpanded ? 400 : 0, overflow: 'hidden', transition: 'max-height 0.3s ease' }}>
+              {[
+                { label: 'All Products', action: () => { onSelectFilter('all', 'all'); setMobileMenuOpen(false) } },
+                { label: 'Bestsellers', action: () => { onSelectFilter('collection', 'bestsellers'); setMobileMenuOpen(false) } },
+                { label: 'For Men', action: () => { onSelectFilter('collection', 'men'); setMobileMenuOpen(false) } },
+                { label: 'For Women', action: () => { onSelectFilter('collection', 'women'); setMobileMenuOpen(false) } },
+                { label: 'Core Series', action: () => { onSelectFilter('series', 'Core Series'); setMobileMenuOpen(false) } },
+                { label: 'Wellness Series', action: () => { onSelectFilter('series', 'Wellness Series'); setMobileMenuOpen(false) } },
+                { label: 'Liposomal Series', action: () => { onSelectFilter('series', 'Liposomal Series'); setMobileMenuOpen(false) } },
+              ].map(sub => (
+                <button
+                  key={sub.label}
+                  onClick={sub.action}
+                  style={{
+                    display: 'block', width: '100%', textAlign: 'left',
+                    padding: '0.45rem 1.5rem 0.45rem 2.25rem',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontFamily: '"DM Sans", sans-serif', fontSize: '0.8rem',
+                    color: '#6B7280', letterSpacing: '0.07em', textTransform: 'uppercase',
+                  }}
+                >
+                  {sub.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Other nav items */}
+          {[
+            { id: 'builder', label: 'Stack', badge: stackCount },
+            { id: 'scanner', label: 'Lab Scanner' },
+            { id: 'library', label: 'Science Library' },
+            { id: 'about', label: 'About Us' },
+          ].map(item => (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                width: '100%', padding: '0.875rem 1.5rem',
+                background: 'none', border: 'none', cursor: 'pointer',
+                fontFamily: '"Cormorant Garamond", serif', fontSize: '1.5rem', fontWeight: 600,
+                color: currentSection === item.id ? '#1C2D1A' : '#4A5568',
+                borderLeft: currentSection === item.id ? '3px solid #B89F70' : '3px solid transparent',
+                textAlign: 'left', letterSpacing: '0.01em',
+              }}
+            >
+              {item.label}
+              {item.badge > 0 && (
+                <span style={{ background: '#7A8C5A', color: 'white', fontSize: '0.6rem', fontFamily: 'monospace', padding: '2px 7px', borderRadius: 20, fontWeight: 700 }}>
+                  {item.badge}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Drawer Footer */}
+        <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid #E8E3D9' }}>
+          <p style={{ fontSize: '0.65rem', color: '#C9B99A', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: '"DM Sans", sans-serif' }}>
+            Kenwell · Wellness &amp; Nutrition
+          </p>
+        </div>
+      </div>
+    </div>
+    </>
   )
 }

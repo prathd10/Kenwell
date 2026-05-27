@@ -162,7 +162,7 @@ function ShelfCard({ product, onQuickView, onAddToCart, onToggleWishlist, isInWi
           src={err ? getLocalSrc(product) : (product.image || getLocalSrc(product))}
           alt={product.name}
           onError={() => setErr(true)}
-          className="h-44 w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>
       {/* Info */}
@@ -244,12 +244,14 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
   return (
     <div className="w-full">
 
-      {/* ══════════════════════════════════════════════
-          1. FULL-BLEED HERO BANNER  (PS Nutrition style)
-      ══════════════════════════════════════════════ */}
-      <section
-        className={`relative min-h-[60vh] flex items-center bg-[#F4F1EA] overflow-hidden transition-all duration-700`}
-      >
+      {/* Hero + Marquee Wrapper for Mobile Full Height */}
+      <div className="flex flex-col min-h-[calc(100svh-70px)] lg:min-h-0 lg:block">
+        {/* ══════════════════════════════════════════════
+            1. FULL-BLEED HERO BANNER  (PS Nutrition style)
+        ══════════════════════════════════════════════ */}
+        <section
+          className={`relative flex-1 lg:flex-none lg:min-h-[60vh] flex items-center bg-[#F4F1EA] overflow-hidden transition-all duration-700`}
+        >
         {/* Full-width Lifestyle Background Image */}
         {activeSlide.bgImage && (
           <div className="absolute inset-0 z-0 transition-opacity duration-1000">
@@ -269,8 +271,8 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
 
         {/* --- FULL BLEED RIGHT HALF BACKGROUND --- */}
         <div 
-          className="absolute right-0 top-0 bottom-0 w-[70%] lg:w-[65%] pointer-events-none overflow-hidden"
-          style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 40%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 40%)' }}
+          className="absolute -right-[5%] lg:right-0 top-0 bottom-0 w-[75%] lg:w-[65%] pointer-events-none overflow-hidden"
+          style={{ maskImage: 'linear-gradient(to right, transparent 25%, black 50%)', WebkitMaskImage: 'linear-gradient(to right, transparent 25%, black 50%)' }}
         >
           {/* Glow disc behind bottle */}
           <div
@@ -283,7 +285,7 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
             key={`bg2-${nextNextSlide.id}`}
             src={nextNextProduct?.image || getLocalSrc(nextNextProduct)}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center translate-x-12 scale-[1.15] opacity-[0.15] blur-[12px] -z-20 transition-all duration-700"
+            className="absolute inset-0 w-full h-full object-cover object-center translate-x-[16%] lg:translate-x-[16%] scale-[1.15] opacity-[0.15] blur-[12px] -z-20 transition-all duration-700"
           />
 
           {/* Blurred Background Product 1 */}
@@ -291,7 +293,7 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
             key={`bg1-${nextSlide.id}`}
             src={nextProduct?.image || getLocalSrc(nextProduct)}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center translate-x-6 scale-[1.1] opacity-[0.35] blur-[6px] -z-10 transition-all duration-700"
+            className="absolute inset-0 w-full h-full object-cover object-center translate-x-[12%] lg:translate-x-[12%] scale-[1.1] opacity-[0.35] blur-[6px] -z-10 transition-all duration-700"
           />
 
           {/* Front Active Product */}
@@ -300,12 +302,12 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
             src={heroImgErr ? getLocalSrc(activeProduct) : (activeProduct?.image || getLocalSrc(activeProduct))}
             alt=""
             onError={() => setHeroImgErr(true)}
-            className="absolute inset-0 w-full h-full object-cover object-center scale-[1.05] drop-shadow-2xl z-10 transition-all duration-700"
+            className="absolute inset-0 w-full h-full object-cover object-center translate-x-[8%] lg:translate-x-[8%] scale-[1.05] drop-shadow-2xl z-10 transition-all duration-700"
           />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 lg:py-16 z-10">
-          <div className="w-[55%] lg:w-1/2">
+          <div className="w-[50%] sm:w-[55%] lg:w-1/2">
 
             {/* ── Left text ── */}
             <div
@@ -362,7 +364,7 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
       {/* ══════════════════════════════════════════════
           2. MARQUEE TRUST STRIP
       ══════════════════════════════════════════════ */}
-      <div className="bg-primary-green overflow-hidden py-3 flex">
+      <div className="bg-primary-green overflow-hidden py-3 flex shrink-0">
         <div className="flex animate-marquee whitespace-nowrap w-max hover:[animation-play-state:paused]">
           {[...Array(2)].map((_, groupIndex) => (
             <div key={groupIndex} className="flex items-center px-3 md:px-5">
@@ -376,6 +378,8 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
           ))}
         </div>
       </div>
+
+      </div> {/* End Hero + Marquee Wrapper */}
 
       {/* ══════════════════════════════════════════════
           3. SHOP BY CATEGORY GRID  (PS Nutrition style)
@@ -452,7 +456,7 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
           <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-2">Shop by Series</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {[
             {
               series: 'Core Series',
@@ -481,23 +485,32 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
               btnColor: 'text-slate-teal border-slate-teal/30 hover:bg-slate-teal hover:text-white',
               dotColor: 'bg-slate-teal',
             },
+            {
+              series: 'Performance Series',
+              badge: 'Optimization',
+              count: '5 products',
+              desc: 'Scientifically dosed formulas to enhance physical output, recovery, and cognitive stamina.',
+              accent: 'border-primary-green/20 bg-gradient-to-br from-primary-green/5 to-primary-green/10',
+              btnColor: 'text-primary-green border-primary-green/30 hover:bg-primary-green hover:text-white',
+              dotColor: 'bg-primary-green',
+            },
           ].map((s) => (
             <div
               key={s.series}
-              className={`group relative rounded-2xl border ${s.accent} p-7 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col`}
+              className={`group relative rounded-2xl border ${s.accent} p-4 sm:p-7 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col`}
               onClick={() => filterSeries(s.series)}
             >
-              <div className="flex items-center justify-between mb-5">
-                <span className={`inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider font-semibold`}>
-                  <span className={`w-2 h-2 rounded-full ${s.dotColor}`} />
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-0 mb-3 sm:mb-5">
+                <span className={`inline-flex items-center gap-1 sm:gap-1.5 text-[8px] sm:text-[10px] font-mono uppercase tracking-wider font-semibold`}>
+                  <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${s.dotColor}`} />
                   {s.badge}
                 </span>
-                <span className="text-[10px] text-charcoal/40 font-mono">{s.count}</span>
+                <span className="text-[9px] sm:text-[10px] text-charcoal/40 font-mono">{s.count}</span>
               </div>
-              <h3 className="font-serif text-2xl text-primary-green mb-3 group-hover:text-inherit transition-colors">{s.series}</h3>
-              <p className="text-sm text-charcoal/60 leading-relaxed flex-grow">{s.desc}</p>
-              <button className={`mt-6 w-full border rounded-full py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${s.btnColor}`}>
-                Explore {s.series} →
+              <h3 className="font-serif text-lg sm:text-2xl text-primary-green mb-2 sm:mb-3 group-hover:text-inherit transition-colors">{s.series}</h3>
+              <p className="text-[11px] sm:text-sm text-charcoal/60 leading-relaxed flex-grow">{s.desc}</p>
+              <button className={`mt-4 sm:mt-6 w-full border rounded-full py-2 sm:py-2.5 text-[9px] sm:text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${s.btnColor}`}>
+                Explore <span className="hidden sm:inline">{s.series} </span>→
               </button>
             </div>
           ))}
@@ -550,14 +563,14 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
           <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-2">Why We're Different</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {TRUST_POINTS.map((t) => (
-            <div key={t.title} className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/70 p-6 hover:shadow-lg hover:border-sage/30 transition-all duration-300 text-left">
-              <div className="w-10 h-10 rounded-xl bg-sage/10 border border-sage/20 flex items-center justify-center mb-4">
-                {t.icon}
+            <div key={t.title} className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/70 p-4 sm:p-6 hover:shadow-lg hover:border-sage/30 transition-all duration-300 text-left">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-sage/10 border border-sage/20 flex items-center justify-center mb-3 sm:mb-4">
+                <div className="scale-75 sm:scale-100">{t.icon}</div>
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary-green mb-2">{t.title}</h3>
-              <p className="text-sm text-charcoal/60 leading-relaxed">{t.body}</p>
+              <h3 className="font-serif text-sm sm:text-lg font-bold text-primary-green mb-1.5 sm:mb-2">{t.title}</h3>
+              <p className="text-[10px] sm:text-sm text-charcoal/60 leading-relaxed">{t.body}</p>
             </div>
           ))}
         </div>
@@ -573,30 +586,41 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
             <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-2">What Customers Say</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              { quote: '"Amazing recovery times"', body: 'Switched to the Chelated Magnesium + Ashwagandha stack. Sleep latency dropped from 45 min to under 15. Wake up without grogginess.', name: 'Rahul K.', role: 'CrossFit Athlete', product: 'Magnesium + Ashwagandha', stars: 5 },
-              { quote: '"Legitimate open labels"', body: 'As a clinical nutritionist I examine every supplement closely. Kenwell is the first Indian brand I actively recommend — purity assays verified, zero undisclosed fillers.', name: 'Dr. Priya M.', role: 'Clinical Nutritionist', product: 'Multivitamin with Probiotics', stars: 5 },
-              { quote: '"Mitochondrial fuel works"', body: 'The NAD+ and CoQ10 stack made a noticeable difference in afternoon focus. No more brain fog during long coding sessions.', name: 'Vikram S.', role: 'Software Architect', product: 'NAD+ · CoQ10 Ubiquinone', stars: 5 },
-            ].map((r, i) => (
-              <div key={i} className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/70 p-7 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow">
-                <div className="space-y-3">
-                  <Stars n={r.stars} />
-                  <h4 className="font-serif text-lg font-bold text-primary-green">{r.quote}</h4>
-                  <p className="text-sm text-charcoal/65 leading-relaxed">{r.body}</p>
-                </div>
-                <div className="mt-5 pt-4 border-t border-cream-dark/40 flex items-end justify-between">
-                  <div>
-                    <span className="block text-sm font-bold text-charcoal/80">{r.name}</span>
-                    <span className="text-[10px] text-charcoal/45">{r.role}</span>
+          <div className="relative overflow-hidden group py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+            <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
+              {[
+                { quote: '"Amazing recovery times"', body: 'Switched to the Chelated Magnesium + Ashwagandha stack. Sleep latency dropped from 45 min to under 15. Wake up without grogginess.', name: 'Rahul K.', role: 'CrossFit Athlete', product: 'Magnesium + Ashwagandha', stars: 5 },
+                { quote: '"Legitimate open labels"', body: 'As a clinical nutritionist I examine every supplement closely. Kenwell is the first Indian brand I actively recommend — purity assays verified, zero undisclosed fillers.', name: 'Dr. Priya M.', role: 'Clinical Nutritionist', product: 'Multivitamin with Probiotics', stars: 5 },
+                { quote: '"Mitochondrial fuel works"', body: 'The NAD+ and CoQ10 stack made a noticeable difference in afternoon focus. No more brain fog during long coding sessions.', name: 'Vikram S.', role: 'Software Architect', product: 'NAD+ · CoQ10', stars: 5 },
+                { quote: '"Visible skin improvements"', body: 'Added Liposomal Glutathione to my routine. After 3 weeks, my skin looks noticeably brighter and clearer. Absorption is definitely superior.', name: 'Ananya T.', role: 'Dermatologist', product: 'Liposomal Glutathione', stars: 5 },
+                { quote: '"Finally, no nausea"', body: 'Most multivitamins upset my stomach, but the Core Series is gentle. The bioavailable forms make a huge difference in my daily energy levels.', name: 'Karan D.', role: 'Fitness Coach', product: 'Core Multivitamin', stars: 5 },
+                { quote: '"A staple in my stack"', body: 'TUDCA is hard to find with this level of purity in India. Kenwell delivered perfectly. Liver enzymes are back in optimal range.', name: 'Siddharth M.', role: 'Biohacker', product: 'TUDCA 500mg', stars: 5 },
+                { quote: '"Amazing recovery times"', body: 'Switched to the Chelated Magnesium + Ashwagandha stack. Sleep latency dropped from 45 min to under 15. Wake up without grogginess.', name: 'Rahul K.', role: 'CrossFit Athlete', product: 'Magnesium + Ashwagandha', stars: 5 },
+                { quote: '"Legitimate open labels"', body: 'As a clinical nutritionist I examine every supplement closely. Kenwell is the first Indian brand I actively recommend — purity assays verified, zero undisclosed fillers.', name: 'Dr. Priya M.', role: 'Clinical Nutritionist', product: 'Multivitamin with Probiotics', stars: 5 },
+                { quote: '"Mitochondrial fuel works"', body: 'The NAD+ and CoQ10 stack made a noticeable difference in afternoon focus. No more brain fog during long coding sessions.', name: 'Vikram S.', role: 'Software Architect', product: 'NAD+ · CoQ10', stars: 5 },
+                { quote: '"Visible skin improvements"', body: 'Added Liposomal Glutathione to my routine. After 3 weeks, my skin looks noticeably brighter and clearer. Absorption is definitely superior.', name: 'Ananya T.', role: 'Dermatologist', product: 'Liposomal Glutathione', stars: 5 },
+                { quote: '"Finally, no nausea"', body: 'Most multivitamins upset my stomach, but the Core Series is gentle. The bioavailable forms make a huge difference in my daily energy levels.', name: 'Karan D.', role: 'Fitness Coach', product: 'Core Multivitamin', stars: 5 },
+                { quote: '"A staple in my stack"', body: 'TUDCA is hard to find with this level of purity in India. Kenwell delivered perfectly. Liver enzymes are back in optimal range.', name: 'Siddharth M.', role: 'Biohacker', product: 'TUDCA 500mg', stars: 5 },
+              ].map((r, i) => (
+                <div key={i} className="w-[300px] sm:w-[380px] flex-shrink-0 bg-white/70 backdrop-blur-sm rounded-2xl border border-white/70 p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow mr-4 sm:mr-5 whitespace-normal">
+                  <div className="space-y-3">
+                    <Stars n={r.stars} />
+                    <h4 className="font-serif text-lg font-bold text-primary-green">{r.quote}</h4>
+                    <p className="text-sm text-charcoal/65 leading-relaxed">{r.body}</p>
                   </div>
-                  <div className="text-right">
-                    <span className="text-[9px] text-charcoal/35 uppercase tracking-wider block">Using</span>
-                    <span className="text-[10px] font-semibold text-sage">{r.product}</span>
+                  <div className="mt-5 pt-4 border-t border-cream-dark/40 flex items-end justify-between">
+                    <div>
+                      <span className="block text-sm font-bold text-charcoal/80">{r.name}</span>
+                      <span className="text-[10px] text-charcoal/45">{r.role}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[9px] text-charcoal/35 uppercase tracking-wider block">Using</span>
+                      <span className="text-[10px] font-semibold text-sage">{r.product}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
