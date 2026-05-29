@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { LayoutDashboard, Tag, Package, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, Tag, Package, LogOut, Menu, X, Video } from 'lucide-react'
 
 const NAV = [
   { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/admin/categories', icon: Tag, label: 'Categories' },
   { to: '/admin/products', icon: Package, label: 'Products' },
+  { to: '/admin/ugc', icon: Video, label: 'UGC Videos' },
 ]
 
 function Sidebar({ onClose }) {

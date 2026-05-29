@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { PRODUCTS } from '../data'
+import UGCSection from './UGCSection'
 
 /* ── Image map ─────────────────────────────────────────────────── */
 const LOCAL_BOTTLE_MAP = {
@@ -624,6 +625,11 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════
+          8b. UGC JOURNEY REVIEWS — 3 hover-play videos
+      ══════════════════════════════════════════════ */}
+      <UGCSection />
 
       {/* ══════════════════════════════════════════════
           9. FINAL CTA BANNER
