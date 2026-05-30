@@ -280,6 +280,8 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                               src={prod.image} 
                               alt={prod.name} 
                               className="w-full h-full object-cover"
+                              loading="lazy"
+                              decoding="async"
                             />
                           </div>
                         </React.Fragment>
@@ -302,7 +304,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                       {customStack.productIds.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean).map(prod => (
                         <div key={prod.id} className="flex items-center gap-2 border border-cream-dark/30 rounded p-2 bg-bg-primary/50">
                           <div className="w-8 h-8 rounded shrink-0 overflow-hidden border border-white shadow-sm">
-                            <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" />
+                            <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                           </div>
                           <div className="text-xs font-semibold text-primary-green">{prod.name}</div>
                         </div>
@@ -367,6 +369,8 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                           src={prod.image} 
                           alt={prod.name} 
                           className="w-full h-full object-contain mix-blend-multiply drop-shadow-[0_15px_25px_rgba(0,0,0,0.2)]"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     ))}
@@ -489,7 +493,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                       className="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-cream-dark/40 hover:border-sage/40 transition-colors cursor-pointer"
                     >
                       <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border-2 border-white shadow-sm">
-                        <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" />
+                        <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                       </div>
                       <div className="min-w-0">
                         <h4 className="font-serif text-[11px] font-bold text-primary-green truncate">{prod.name}</h4>

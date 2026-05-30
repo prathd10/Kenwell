@@ -110,7 +110,7 @@ function CategoryCard({ cat, navigate, onDelete }) {
       {/* Image area */}
       <div style={{ height: 156, background: 'linear-gradient(135deg, #EAE5D9 0%, #DDD8CA 100%)', position: 'relative', overflow: 'hidden' }}>
         {cat.image_url ? (
-          <img src={cat.image_url} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease', transform: hovered ? 'scale(1.04)' : 'scale(1)' }} />
+          <img src={cat.image_url} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease', transform: hovered ? 'scale(1.04)' : 'scale(1)' }} loading="lazy" decoding="async" />
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: 8 }}>
             <Layers size={32} color="#C9B99A" />

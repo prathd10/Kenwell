@@ -205,7 +205,7 @@ function ProductRow({ product: p, isLast, navigate, onDelete }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ width: 42, height: 42, borderRadius: 9, background: '#EAE5D9', overflow: 'hidden', flexShrink: 0, border: '1px solid #DDD8CA' }}>
             {p.images?.[0] ? (
-              <img src={p.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={p.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                 <Package size={16} color="#C9B99A" />

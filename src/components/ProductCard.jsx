@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react'
 
 export default function ProductCard({ product, onQuickView, onAddToStack, isInStack, onToggleWishlist, isInWishlist, onAddToCart }) {
   const [imgError, setImgError] = useState(false)
+  const [imgLoaded, setImgLoaded] = useState(false)
 
   // Generate initials for the bottle label (e.g. "Multivitamin with Probiotics" -> "MV")
   const getInitials = (name) => {
@@ -77,11 +78,17 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
         {/* Product bottle image — fills container end to end */}
         {!imgError ? (
           <div className="relative w-full h-full z-20">
+            {/* Shimmer skeleton shown while image is fetching */}
+            {!imgLoaded && (
+              <div className="absolute inset-0 img-skeleton" />
+            )}
             <img 
               src={product.image} 
               alt={product.name} 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="lazy"
+              decoding="async"
+              onLoad={() => setImgLoaded(true)}
               onError={() => setImgError(true)}
             />
           </div>

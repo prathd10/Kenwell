@@ -228,7 +228,9 @@ export default function Hero({
             <img 
               src={activeSlide.bgImage} 
               alt="Lifestyle Background" 
-              className="w-full h-full object-cover opacity-80 mix-blend-multiply" 
+              className="w-full h-full object-cover opacity-80 mix-blend-multiply"
+              fetchpriority="high"
+              decoding="async"
             />
             {/* Gradient overlay to ensure text readability on the left */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#F4F1EA] via-[#F4F1EA]/90 to-transparent w-[70%]" />
@@ -250,29 +252,34 @@ export default function Hero({
             style={{ background: `radial-gradient(circle at center, ${activeSlide.accent}, transparent 80%)` }}
           />
 
-          {/* Blurred Background Product 2 */}
+          {/* Blurred Background Product 2 — decorative, lazy load */}
           <img
             key={`bg2-${nextNextSlide.id}`}
             src={nextNextProduct?.image || getLocalSrc(nextNextProduct)}
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-center translate-x-[16%] lg:translate-x-[16%] scale-[1.15] opacity-[0.15] blur-[12px] -z-20 transition-all duration-700"
+            loading="lazy"
+            decoding="async"
           />
 
-          {/* Blurred Background Product 1 */}
+          {/* Blurred Background Product 1 — decorative, lazy load */}
           <img
             key={`bg1-${nextSlide.id}`}
             src={nextProduct?.image || getLocalSrc(nextProduct)}
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-center translate-x-[12%] lg:translate-x-[12%] scale-[1.1] opacity-[0.35] blur-[6px] -z-10 transition-all duration-700"
+            loading="lazy"
+            decoding="async"
           />
 
-          {/* Front Active Product */}
+          {/* Front Active Product — eager but non-blocking decode */}
           <img
             key={slide}
             src={heroImgErr ? getLocalSrc(activeProduct) : (activeProduct?.image || getLocalSrc(activeProduct))}
             alt=""
             onError={() => setHeroImgErr(true)}
             className="absolute inset-0 w-full h-full object-cover object-center translate-x-[8%] lg:translate-x-[8%] scale-[1.05] drop-shadow-2xl z-10 transition-all duration-700"
+            decoding="async"
           />
         </div>
 

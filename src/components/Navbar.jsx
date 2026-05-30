@@ -329,7 +329,7 @@ export default function Navbar({
                   }}>
                     {/* Product Image */}
                     <div style={{ width: 48, height: 64, borderRadius: 8, border: '1px solid #DDD8CA', overflow: 'hidden', flexShrink: 0, background: '#fff' }}>
-                      <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
                     </div>
 
                     <div style={{ flexGrow: 1 }}>
@@ -480,7 +480,7 @@ export default function Navbar({
                     borderRadius: 12, alignItems: 'center',
                   }}>
                     <div style={{ width: 48, height: 64, borderRadius: 8, border: '1px solid #DDD8CA', overflow: 'hidden', flexShrink: 0, background: '#fff' }}>
-                      <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
                     </div>
 
                     <div style={{ flexGrow: 1 }}>

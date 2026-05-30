@@ -126,3 +126,23 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
   text-transform: uppercase;
 }
+
+/* ── Image lazy-load shimmer skeleton ─────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.img-skeleton {
+  background: linear-gradient(
+    90deg,
+    #EAE5D9 0%,
+    #F4F1EA 40%,
+    #DDD8CA 60%,
+    #EAE5D9 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: inherit;
+}
+

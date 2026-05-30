@@ -37,6 +37,8 @@ export default function ProductModal({ product, onClose, onAddToStack, isInStack
               src={product.image} 
               alt={product.name} 
               className="w-full h-full object-contain p-4 drop-shadow-lg"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           
