@@ -45,16 +45,21 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
     <div className="group relative flex flex-col h-full rounded-2xl glass-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg border border-white/60 overflow-hidden">
       
       {/* Product Image Container */}
-      <div className={`relative w-full h-52 flex items-center justify-center overflow-hidden ${getImageBg(product.series)}`}>
+      <div className={`relative w-full aspect-square overflow-hidden flex items-center justify-center group-hover:bg-cream-dark/20 transition-colors ${getImageBg(product.series)}`}>
         
+        {/* Dynamic Background to remove empty space feeling */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8)_0%,transparent_100%)] opacity-80 mix-blend-overlay"></div>
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-black/5 rounded-full blur-3xl"></div>
+
         {/* Floating Wishlist Heart */}
         {onToggleWishlist && (
           <button
             onClick={() => onToggleWishlist(product)}
-            className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all duration-300 z-30 cursor-pointer border ${
+            className={`absolute top-4 right-4 p-2 rounded-full backdrop-blur-md transition-all duration-300 z-40 cursor-pointer border ${
               isInWishlist 
                 ? 'bg-sage/20 border-sage/40 text-sage' 
-                : 'bg-white/60 border-white/80 text-charcoal/40 hover:text-sage hover:bg-white'
+                : 'bg-white/80 border-white text-charcoal/40 hover:text-sage hover:bg-white shadow-sm'
             }`}
             title={isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
           >
@@ -69,54 +74,54 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
           </button>
         )}
 
-        {/* Product bottle image — object-contain to show full bottle */}
+        {/* Product bottle image — fills container end to end */}
         {!imgError ? (
-          <img 
-            src={product.image} 
-            alt={product.name} 
-            className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105 drop-shadow-md"
-            loading="lazy"
-            onError={() => setImgError(true)}
-          />
+          <div className="relative w-full h-full z-20">
+            <img 
+              src={product.image} 
+              alt={product.name} 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              loading="lazy"
+              onError={() => setImgError(true)}
+            />
+          </div>
         ) : (
           /* Branded fallback placeholder */
-          <div className="absolute inset-0 flex items-center justify-center flex-col gap-2">
-            <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center border-2 border-sage/30">
-              <span className="font-serif text-xl font-bold text-sage">{getInitials(product.name)}</span>
+          <div className="absolute inset-0 flex items-center justify-center flex-col gap-2 z-20">
+            <div className="w-20 h-20 rounded-full bg-sage/20 flex items-center justify-center border-2 border-sage/30 shadow-inner">
+              <span className="font-serif text-2xl font-bold text-sage">{getInitials(product.name)}</span>
             </div>
-            <span className="text-[9px] font-mono text-charcoal/40 uppercase tracking-wider">kenwell</span>
+            <span className="text-[10px] font-mono text-charcoal/50 uppercase tracking-wider">kenwell</span>
           </div>
         )}
       </div>
 
       {/* Product Text Details */}
-      <div className="flex-grow flex flex-col justify-between p-5 pt-4">
-        <div className="space-y-2 text-left">
+      <div className="flex-grow flex flex-col justify-between p-4 pt-3">
+        <div className="space-y-1 text-left">
           
-          {/* Servings Info */}
-          <div className="flex items-center justify-end text-xs">
+          {/* Rating + Servings Row */}
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center space-x-1">
+              <svg className="w-3.5 h-3.5 text-amber-500 fill-current shrink-0" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              </svg>
+              <span className="font-bold text-charcoal/80 text-[10px]">{rating}</span>
+              <span className="text-charcoal/40 text-[9px]">({reviewCount})</span>
+            </div>
             <span className="text-charcoal/50 font-mono text-[9px] uppercase">{product.form}</span>
-          </div>
-
-          {/* Star Review Panel */}
-          <div className="flex items-center space-x-1 text-xs">
-            <svg className="w-3.5 h-3.5 text-amber-500 fill-current shrink-0" viewBox="0 0 24 24">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-            </svg>
-            <span className="font-bold text-charcoal/80 text-[11px]">{rating}</span>
-            <span className="text-charcoal/40 text-[10px]">({reviewCount} reviews)</span>
           </div>
           
           {/* Product Name */}
           <h3 
             onClick={() => onQuickView(product)}
-            className="font-serif text-lg font-bold text-primary-green hover:text-sage transition-colors cursor-pointer line-clamp-1"
+            className="font-serif text-base font-bold text-primary-green hover:text-sage transition-colors cursor-pointer line-clamp-1"
           >
             {product.name}
           </h3>
           
           {/* Tagline */}
-          <p className="text-xs text-charcoal/60 line-clamp-2 leading-relaxed min-h-[2rem]">
+          <p className="text-[11px] text-charcoal/60 line-clamp-1 leading-relaxed">
             {product.tagline}
           </p>
 
@@ -134,11 +139,11 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
 
         </div>
 
-        <div className="mt-4 pt-3 border-t border-cream-dark/50 flex items-center justify-between">
+        <div className="mt-3 pt-2.5 border-t border-cream-dark/50 flex items-end justify-between">
           {/* Price with strikethrough & discount percent */}
           <div className="text-left">
             <span className="text-[9px] text-charcoal/40 uppercase block leading-none font-mono">Price</span>
-            <div className="flex items-baseline space-x-1.5 mt-0.5">
+            <div className="flex items-baseline space-x-1 mt-0.5">
               <span className="font-mono text-base font-bold text-primary-green">₹{product.price}</span>
               <span className="font-mono text-[10px] text-charcoal/40 line-through">₹{mrp}</span>
               <span className="text-[9px] font-semibold text-sage">20% OFF</span>
@@ -146,11 +151,11 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
           </div>
 
           {/* Action CTAs */}
-          <div className="flex space-x-2 items-center">
+          <div className="flex space-x-2.5 items-center">
             {/* Quick View Button */}
             <button
               onClick={() => onQuickView(product)}
-              className="text-[11px] font-semibold text-charcoal/60 hover:text-primary-green transition-colors uppercase tracking-wider py-1 cursor-pointer"
+              className="text-[10px] font-semibold text-charcoal/60 hover:text-primary-green transition-colors uppercase tracking-wider py-1 cursor-pointer"
               title="Quick View Details"
             >
               Info
@@ -160,27 +165,14 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             {onAddToCart && (
               <button
                 onClick={() => onAddToCart(product)}
-                className="p-2 rounded-full bg-bg-secondary text-primary-green hover:bg-sage hover:text-white border border-cream-dark/50 transition-all duration-300 shadow-sm cursor-pointer shrink-0"
+                className="p-1.5 rounded-full bg-bg-secondary text-primary-green hover:bg-sage hover:text-white border border-cream-dark/50 transition-all duration-300 shadow-sm cursor-pointer shrink-0"
                 title="Add to Cart"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </button>
             )}
-            
-            {/* Add to Stack Button */}
-            <button
-              onClick={() => onAddToStack(product)}
-              disabled={isInStack}
-              className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                isInStack 
-                  ? 'bg-sage/10 text-sage border border-sage/20 cursor-default'
-                  : 'bg-primary-green text-bg-primary hover:bg-sage hover:text-white shadow-sm cursor-pointer'
-              }`}
-            >
-              {isInStack ? 'In Stack' : '+ Stack'}
-            </button>
           </div>
         </div>
 

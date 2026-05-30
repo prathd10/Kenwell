@@ -9,6 +9,7 @@ import ScienceLibrary from './components/ScienceLibrary'
 import ProductModal from './components/ProductModal'
 import Footer from './components/Footer'
 import AboutUs from './components/AboutUs'
+import TrackOrder from './components/TrackOrder'
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState('home')
@@ -94,6 +95,10 @@ export default function App() {
     }
   }
 
+  const clearCart = () => {
+    setCartItems([])
+  }
+
   const handleSelectFilter = (type, value) => {
     if (type === 'series') {
       setSelectedSeries(value)
@@ -131,6 +136,7 @@ export default function App() {
         updateCartQuantity={updateCartQuantity}
         onSelectFilter={handleSelectFilter}
         onQuickView={handleQuickView}
+        clearCart={clearCart}
       />
       
       <main className="flex-grow z-10">
@@ -141,6 +147,8 @@ export default function App() {
             onAddToCart={addToCart}
             onToggleWishlist={toggleWishlist}
             wishlistItems={wishlistItems}
+            onAddToStack={addToStack}
+            stackItems={stackItems}
           />
         )}
         
@@ -215,6 +223,8 @@ export default function App() {
             onClearStack={clearStack}
             onQuickView={handleQuickView}
             setCurrentSection={setCurrentSection}
+            onAddToStack={addToStack}
+            onAddToCart={addToCart}
           />
         )}
         
@@ -234,6 +244,10 @@ export default function App() {
         
         {currentSection === 'library' && (
           <ScienceLibrary />
+        )}
+        
+        {currentSection === 'track' && (
+          <TrackOrder />
         )}
         
         {currentSection === 'about' && (

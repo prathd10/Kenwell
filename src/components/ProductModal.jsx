@@ -234,25 +234,11 @@ export default function ProductModal({ product, onClose, onAddToStack, isInStack
               {onAddToCart && (
                 <button
                   onClick={() => onAddToCart(product)}
-                  className="w-full sm:w-auto px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider text-charcoal/70 hover:text-primary-green border border-cream-dark transition-all cursor-pointer text-center bg-white"
+                  className="w-full sm:w-auto px-7 py-3 rounded-full text-xs font-semibold uppercase tracking-wider text-bg-primary bg-primary-green hover:bg-sage hover:text-white transition-all cursor-pointer text-center shadow-md hover:shadow-lg"
                 >
                   Add to Cart
                 </button>
               )}
-
-              <button
-                onClick={() => {
-                  onAddToStack(product)
-                }}
-                disabled={isInStack}
-                className={`w-full sm:w-auto px-7 py-3 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 text-center ${
-                  isInStack
-                    ? 'bg-sage/10 text-sage border border-sage/20 cursor-default'
-                    : 'bg-primary-green text-bg-primary hover:bg-sage hover:text-white shadow-md hover:shadow-lg cursor-pointer'
-                }`}
-              >
-                {isInStack ? 'Added to Stack' : 'Add to Stack'}
-              </button>
             </div>
           </div>
 

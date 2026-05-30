@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { LayoutDashboard, Tag, Package, LogOut, Menu, X, Video } from 'lucide-react'
+import { LayoutDashboard, Tag, Package, LogOut, Menu, X, Video, ShoppingBag, ExternalLink } from 'lucide-react'
 
 const NAV = [
   { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
   { to: '/admin/categories', icon: Tag, label: 'Categories' },
   { to: '/admin/products', icon: Package, label: 'Products' },
   { to: '/admin/ugc', icon: Video, label: 'UGC Videos' },
@@ -116,6 +117,23 @@ function Sidebar({ onClose }) {
             </div>
           </div>
         )}
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            padding: '0.65rem 0.875rem', width: '100%', borderRadius: 9,
+            color: 'rgba(244,241,234,0.35)', background: 'transparent',
+            border: 'none', cursor: 'pointer', fontSize: '0.85rem',
+            fontFamily: '"DM Sans", sans-serif', transition: 'all 0.15s',
+            marginBottom: 8,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#F4F1EA'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)' }}
+          onMouseLeave={e => { e.currentTarget.style.color = 'rgba(244,241,234,0.35)'; e.currentTarget.style.background = 'transparent' }}
+        >
+          <ExternalLink size={15} />
+          View Website
+        </button>
+        
         <button
           onClick={handleLogout}
           style={{

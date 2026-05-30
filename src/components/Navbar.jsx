@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import CheckoutModal from './CheckoutModal'
 
 export default function Navbar({ 
   currentSection, 
@@ -11,19 +12,29 @@ export default function Navbar({
   removeFromCart,
   updateCartQuantity,
   onSelectFilter,
-  onQuickView
+  onQuickView,
+  clearCart
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [shopExpanded, setShopExpanded] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [wishlistOpen, setWishlistOpen] = useState(false)
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
+
+  // Decoupled cart opener event listener
+  React.useEffect(() => {
+    const handleOpenCart = () => setCartOpen(true)
+    window.addEventListener('kenwell:openCart', handleOpenCart)
+    return () => window.removeEventListener('kenwell:openCart', handleOpenCart)
+  }, [])
 
   const navItems = [
     { id: 'shop', name: 'Shop' },
-    { id: 'builder', name: 'Stack', badge: stackCount },
+    { id: 'builder', name: 'Stacks', badge: 'Save' },
     { id: 'scanner', name: 'Lab Scanner' },
     { id: 'library', name: 'Science Library' },
-    { id: 'about', name: 'About Us' }
+    { id: 'about', name: 'About Us' },
+    { id: 'track', name: 'Track Order' }
   ]
 
   const handleNavClick = (sectionId) => {
@@ -150,8 +161,8 @@ export default function Navbar({
                   }`}
                 >
                   {item.name}
-                  {item.badge > 0 && (
-                    <span className="absolute -top-1.5 -right-5 bg-sage text-white text-[10px] font-mono px-1.5 py-0.5 rounded-full animate-bounce shadow-md">
+                  {item.badge && (
+                    <span className="absolute -top-1.5 -right-6 bg-sage text-white text-[9px] font-mono px-1.5 py-0.5 rounded-full animate-bounce shadow-md uppercase tracking-wider font-bold">
                       {item.badge}
                     </span>
                   )}
@@ -253,88 +264,110 @@ export default function Navbar({
           </div>
         </div>
       </div>
+    </nav>
 
-      {/* CART DRAWER OVERLAY */}
+      {/* CART DRAWER OVERLAY — outside <nav> to avoid backdrop-filter stacking context trapping fixed children */}
       {cartOpen && (
-        <div className="fixed inset-0 z-[100] flex justify-end bg-charcoal/50 backdrop-blur-sm animate-in fade-in duration-200">
-          <div 
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            display: 'flex', justifyContent: 'flex-end',
+            background: 'rgba(28,45,26,0.5)',
+            backdropFilter: 'blur(4px)',
+            animation: 'fadeIn 0.2s ease',
+          }}
+        >
+          <div
             onClick={() => setCartOpen(false)}
-            className="flex-grow cursor-pointer"
-          ></div>
-          
-          <div className="w-full max-w-md bg-bg-primary h-full shadow-2xl flex flex-col justify-between text-left animate-in slide-in-from-right duration-300 border-l border-cream-dark">
+            style={{ flexGrow: 1, cursor: 'pointer' }}
+          />
+
+          <div style={{
+            width: '100%', maxWidth: 440,
+            background: '#F4F1EA',
+            height: '100%',
+            boxShadow: '-8px 0 40px rgba(28,45,26,0.18)',
+            display: 'flex', flexDirection: 'column',
+            justifyContent: 'space-between',
+            textAlign: 'left',
+            borderLeft: '1px solid #DDD8CA',
+            animation: 'slideInRight 0.3s cubic-bezier(0.4,0,0.2,1)',
+            overflowY: 'auto',
+          }}>
             {/* Header */}
-            <div className="p-6 border-b border-cream-dark/50 flex justify-between items-center bg-white">
-              <div className="flex items-center space-x-2">
-                <svg className="w-5 h-5 text-primary-green" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+            <div style={{
+              padding: '1.5rem',
+              borderBottom: '1px solid rgba(221,216,202,0.5)',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              background: '#fff',
+              position: 'sticky', top: 0, zIndex: 10,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <svg style={{ width: 20, height: 20, color: '#2E402B' }} fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                <h3 className="font-serif text-xl font-bold text-primary-green">Shopping Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})</h3>
+                <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0 }}>
+                  Shopping Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
+                </h3>
               </div>
-              <button 
+              <button
                 onClick={() => setCartOpen(false)}
-                className="text-charcoal/40 hover:text-charcoal text-xl p-1 cursor-pointer"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: 'rgba(28,45,26,0.4)', padding: 4, lineHeight: 1, display: 'flex', alignItems: 'center' }}
               >
                 ✕
               </button>
             </div>
 
             {/* Cart Items List */}
-            <div className="flex-grow overflow-y-auto p-6 space-y-4">
+            <div style={{ flexGrow: 1, overflowY: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {cartItems.length > 0 ? (
                 cartItems.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-4 bg-white border border-cream-dark/40 rounded-xl">
-                    {/* Tiny Bottle Image */}
-                    <div className="w-12 h-16 rounded-lg border border-cream-dark overflow-hidden shrink-0 bg-white">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  <div key={item.id} style={{
+                    display: 'flex', gap: '1rem', padding: '1rem',
+                    background: '#fff', border: '1px solid rgba(221,216,202,0.4)',
+                    borderRadius: 12,
+                  }}>
+                    {/* Product Image */}
+                    <div style={{ width: 48, height: 64, borderRadius: 8, border: '1px solid #DDD8CA', overflow: 'hidden', flexShrink: 0, background: '#fff' }}>
+                      <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
 
-                    <div className="flex-grow space-y-1">
-                      <h4 
-                        onClick={() => {
-                          setCartOpen(false)
-                          onQuickView(item)
-                        }}
-                        className="font-serif text-sm font-bold text-primary-green hover:underline cursor-pointer line-clamp-1"
+                    <div style={{ flexGrow: 1 }}>
+                      <h4
+                        onClick={() => { setCartOpen(false); onQuickView(item) }}
+                        style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '0.875rem', fontWeight: 700, color: '#2E402B', cursor: 'pointer', margin: '0 0 0.25rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                       >
                         {item.name}
                       </h4>
-                      <p className="text-[10px] text-charcoal/50 font-mono">{item.form} • {item.servings} Servs</p>
-                      
-                      {/* Quantity Selector & Price */}
-                      <div className="flex justify-between items-center pt-1.5">
-                        <div className="flex items-center border border-cream-dark/60 rounded-full bg-bg-primary overflow-hidden">
-                          <button 
+                      <p style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Montserrat, sans-serif', margin: '0 0 0.5rem' }}>{item.form} • {item.servings} Servs</p>
+
+                      {/* Quantity & Price */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', border: '1px solid rgba(221,216,202,0.6)', borderRadius: 99, overflow: 'hidden', background: '#F4F1EA' }}>
+                          <button
                             onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
-                            className="px-2 py-0.5 text-xs text-charcoal/60 hover:bg-cream-dark/40 transition-colors font-mono cursor-pointer"
-                          >
-                            -
-                          </button>
-                          <span className="px-2.5 text-xs font-mono font-bold text-charcoal">{item.quantity}</span>
-                          <button 
+                            style={{ padding: '2px 10px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem', color: 'rgba(28,45,26,0.6)', fontFamily: 'monospace' }}
+                          >-</button>
+                          <span style={{ padding: '0 8px', fontSize: '0.75rem', fontFamily: 'monospace', fontWeight: 700, color: '#1C2D1A' }}>{item.quantity}</span>
+                          <button
                             onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
-                            className="px-2 py-0.5 text-xs text-charcoal/60 hover:bg-cream-dark/40 transition-colors font-mono cursor-pointer"
-                          >
-                            +
-                          </button>
+                            style={{ padding: '2px 10px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem', color: 'rgba(28,45,26,0.6)', fontFamily: 'monospace' }}
+                          >+</button>
                         </div>
-                        <span className="font-mono text-xs font-bold text-primary-green">₹{item.price * item.quantity}</span>
+                        <span style={{ fontFamily: 'Montserrat, monospace', fontSize: '0.75rem', fontWeight: 700, color: '#2E402B' }}>₹{item.price * item.quantity}</span>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="text-center py-20 space-y-4">
-                  <svg className="w-12 h-12 text-cream-dark mx-auto" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <div style={{ textAlign: 'center', padding: '5rem 0' }}>
+                  <svg style={{ width: 48, height: 48, color: '#DDD8CA', margin: '0 auto 1rem' }} fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                   </svg>
-                  <p className="text-sm text-charcoal/50">Your cart is currently empty.</p>
-                  <button 
-                    onClick={() => {
-                      setCartOpen(false)
-                      handleNavClick('shop')
-                    }}
-                    className="text-xs font-semibold uppercase tracking-wider text-sage hover:underline cursor-pointer"
+                  <p style={{ fontSize: '0.875rem', color: 'rgba(28,45,26,0.5)', marginBottom: '1rem' }}>Your cart is currently empty.</p>
+                  <button
+                    onClick={() => { setCartOpen(false); handleNavClick('shop') }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7A8C5A', textDecoration: 'underline' }}
                   >
                     Start Shopping →
                   </button>
@@ -344,26 +377,40 @@ export default function Navbar({
 
             {/* Footer / Summary */}
             {cartItems.length > 0 && (
-              <div className="p-6 border-t border-cream-dark/50 bg-white space-y-4">
-                <div className="space-y-2 text-xs font-mono text-charcoal/60">
-                  <div className="flex justify-between">
+              <div style={{ padding: '1.5rem', borderTop: '1px solid rgba(221,216,202,0.5)', background: '#fff' }}>
+                <div style={{ marginBottom: '1rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontFamily: 'monospace', color: 'rgba(28,45,26,0.6)', marginBottom: '0.5rem' }}>
                     <span>Subtotal</span>
                     <span>₹{cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0)}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontFamily: 'monospace', color: 'rgba(28,45,26,0.6)', marginBottom: '0.5rem' }}>
                     <span>Shipping</span>
-                    <span className="text-sage font-bold uppercase">Free</span>
+                    <span style={{ color: '#7A8C5A', fontWeight: 700, textTransform: 'uppercase' }}>Free</span>
                   </div>
-                  <div className="gold-divider my-2"></div>
-                  <div className="flex justify-between text-sm font-bold text-primary-green font-serif">
+                  <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, #C9B99A, transparent)', margin: '0.75rem 0' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 700, color: '#2E402B', fontFamily: '"Cormorant Garamond", serif' }}>
                     <span>Total Investment</span>
                     <span>₹{cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0)}</span>
                   </div>
                 </div>
 
                 <button
-                  onClick={() => alert(`Secure check-out initiated for ₹${cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0)}!`)}
-                  className="w-full bg-primary-green text-bg-primary hover:bg-sage hover:text-white py-3.5 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer text-center block"
+                  onClick={() => {
+                    setCartOpen(false)
+                    setCheckoutOpen(true)
+                  }}
+                  style={{
+                    display: 'block', width: '100%',
+                    background: '#2E402B', color: '#F4F1EA',
+                    border: 'none', borderRadius: 99,
+                    padding: '0.875rem 0',
+                    fontSize: '0.7rem', fontWeight: 600,
+                    textTransform: 'uppercase', letterSpacing: '0.15em',
+                    cursor: 'pointer',
+                    transition: 'background 0.25s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#7A8C5A'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#2E402B'}
                 >
                   Proceed to Checkout
                 </button>
@@ -373,79 +420,105 @@ export default function Navbar({
         </div>
       )}
 
-      {/* WISHLIST DRAWER OVERLAY */}
+      {/* WISHLIST DRAWER OVERLAY — outside <nav> to avoid backdrop-filter stacking context */}
       {wishlistOpen && (
-        <div className="fixed inset-0 z-[100] flex justify-end bg-charcoal/50 backdrop-blur-sm animate-in fade-in duration-200">
-          <div 
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            display: 'flex', justifyContent: 'flex-end',
+            background: 'rgba(28,45,26,0.5)',
+            backdropFilter: 'blur(4px)',
+            animation: 'fadeIn 0.2s ease',
+          }}
+        >
+          <div
             onClick={() => setWishlistOpen(false)}
-            className="flex-grow cursor-pointer"
-          ></div>
-          
-          <div className="w-full max-w-md bg-bg-primary h-full shadow-2xl flex flex-col justify-between text-left animate-in slide-in-from-right duration-300 border-l border-cream-dark">
+            style={{ flexGrow: 1, cursor: 'pointer' }}
+          />
+
+          <div style={{
+            width: '100%', maxWidth: 440,
+            background: '#F4F1EA',
+            height: '100%',
+            boxShadow: '-8px 0 40px rgba(28,45,26,0.18)',
+            display: 'flex', flexDirection: 'column',
+            borderLeft: '1px solid #DDD8CA',
+            animation: 'slideInRight 0.3s cubic-bezier(0.4,0,0.2,1)',
+            overflowY: 'auto',
+          }}>
             {/* Header */}
-            <div className="p-6 border-b border-cream-dark/50 flex justify-between items-center bg-white">
-              <div className="flex items-center space-x-2">
-                <svg className="w-5 h-5 text-sage" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+            <div style={{
+              padding: '1.5rem',
+              borderBottom: '1px solid rgba(221,216,202,0.5)',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              background: '#fff',
+              position: 'sticky', top: 0, zIndex: 10,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <svg style={{ width: 20, height: 20, color: '#7A8C5A' }} fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-                <h3 className="font-serif text-xl font-bold text-primary-green">Your Wishlist ({wishlistItems.length})</h3>
+                <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0 }}>
+                  Your Wishlist ({wishlistItems.length})
+                </h3>
               </div>
-              <button 
+              <button
                 onClick={() => setWishlistOpen(false)}
-                className="text-charcoal/40 hover:text-charcoal text-xl p-1 cursor-pointer"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.25rem', color: 'rgba(28,45,26,0.4)', padding: 4, lineHeight: 1 }}
               >
                 ✕
               </button>
             </div>
 
-            {/* Wishlist Items List */}
-            <div className="flex-grow overflow-y-auto p-6 space-y-4">
+            {/* Wishlist Items */}
+            <div style={{ flexGrow: 1, overflowY: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {wishlistItems.length > 0 ? (
                 wishlistItems.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-4 bg-white border border-cream-dark/40 rounded-xl items-center">
-                    {/* Tiny Bottle Image */}
-                    <div className="w-12 h-16 rounded-lg border border-cream-dark overflow-hidden shrink-0 bg-white">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  <div key={item.id} style={{
+                    display: 'flex', gap: '1rem', padding: '1rem',
+                    background: '#fff', border: '1px solid rgba(221,216,202,0.4)',
+                    borderRadius: 12, alignItems: 'center',
+                  }}>
+                    <div style={{ width: 48, height: 64, borderRadius: 8, border: '1px solid #DDD8CA', overflow: 'hidden', flexShrink: 0, background: '#fff' }}>
+                      <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
 
-                    <div className="flex-grow space-y-1">
-                      <div className="flex justify-between items-start">
-                        <h4 
-                          onClick={() => {
-                            setWishlistOpen(false)
-                            onQuickView(item)
-                          }}
-                          className="font-serif text-sm font-bold text-primary-green hover:underline cursor-pointer line-clamp-1"
+                    <div style={{ flexGrow: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.25rem' }}>
+                        <h4
+                          onClick={() => { setWishlistOpen(false); onQuickView(item) }}
+                          style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '0.875rem', fontWeight: 700, color: '#2E402B', cursor: 'pointer', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '80%' }}
                         >
                           {item.name}
                         </h4>
-                        <button 
+                        <button
                           onClick={() => toggleWishlist(item)}
-                          className="text-charcoal/30 hover:text-red-700 text-xs pl-2 cursor-pointer font-bold"
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(28,45,26,0.3)', fontSize: '0.75rem', fontWeight: 700, padding: '0 0 0 8px' }}
                           title="Remove from Wishlist"
                         >
                           ✕
                         </button>
                       </div>
-                      <p className="text-[10px] text-charcoal/50 font-mono">{item.form} • ₹{item.price}</p>
-                      
-                      {/* Action buttons inside Wishlist item */}
-                      <div className="pt-2 flex gap-2">
+                      <p style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Montserrat, sans-serif', margin: '0 0 0.5rem' }}>{item.form} • ₹{item.price}</p>
+
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button
-                          onClick={() => {
-                            addToCart(item)
-                            toggleWishlist(item) // remove from wishlist once added to cart to keep it clean
+                          onClick={() => { addToCart(item); toggleWishlist(item) }}
+                          style={{
+                            padding: '4px 12px', background: '#2E402B', color: '#F4F1EA',
+                            border: 'none', borderRadius: 99, cursor: 'pointer',
+                            fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em',
                           }}
-                          className="px-3 py-1 bg-primary-green text-bg-primary hover:bg-sage text-[10px] font-semibold uppercase tracking-wider rounded-full transition-colors cursor-pointer shadow-sm"
                         >
                           + Cart
                         </button>
                         <button
-                          onClick={() => {
-                            setWishlistOpen(false)
-                            onQuickView(item)
+                          onClick={() => { setWishlistOpen(false); onQuickView(item) }}
+                          style={{
+                            padding: '4px 12px', background: '#F4F1EA', color: 'rgba(28,45,26,0.6)',
+                            border: '1px solid rgba(221,216,202,0.5)', borderRadius: 99, cursor: 'pointer',
+                            fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em',
                           }}
-                          className="px-3 py-1 bg-bg-primary text-charcoal/60 hover:text-primary-green border border-cream-dark/50 text-[10px] font-semibold uppercase tracking-wider rounded-full transition-colors cursor-pointer"
                         >
                           Info
                         </button>
@@ -454,17 +527,14 @@ export default function Navbar({
                   </div>
                 ))
               ) : (
-                <div className="text-center py-20 space-y-4">
-                  <svg className="w-12 h-12 text-cream-dark mx-auto" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <div style={{ textAlign: 'center', padding: '5rem 0' }}>
+                  <svg style={{ width: 48, height: 48, color: '#DDD8CA', margin: '0 auto 1rem' }} fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
-                  <p className="text-sm text-charcoal/50">Your wishlist is currently empty.</p>
-                  <button 
-                    onClick={() => {
-                      setWishlistOpen(false)
-                      handleNavClick('shop')
-                    }}
-                    className="text-xs font-semibold uppercase tracking-wider text-sage hover:underline cursor-pointer"
+                  <p style={{ fontSize: '0.875rem', color: 'rgba(28,45,26,0.5)', marginBottom: '1rem' }}>Your wishlist is currently empty.</p>
+                  <button
+                    onClick={() => { setWishlistOpen(false); handleNavClick('shop') }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7A8C5A', textDecoration: 'underline' }}
                   >
                     Browse Formulations →
                   </button>
@@ -474,7 +544,6 @@ export default function Navbar({
           </div>
         </div>
       )}
-    </nav>
 
     {/* Mobile Menu — outside nav to avoid backdrop-filter containing block constraint */}
     <div className="md:hidden">
@@ -572,9 +641,10 @@ export default function Navbar({
 
           {/* Other nav items */}
           {[
-            { id: 'builder', label: 'Stack', badge: stackCount },
+            { id: 'builder', label: 'Curated Stacks', badge: 'Save' },
             { id: 'scanner', label: 'Lab Scanner' },
             { id: 'library', label: 'Science Library' },
+            { id: 'track', label: 'Track Order' },
             { id: 'about', label: 'About Us' },
           ].map(item => (
             <button
@@ -591,8 +661,8 @@ export default function Navbar({
               }}
             >
               {item.label}
-              {item.badge > 0 && (
-                <span style={{ background: '#7A8C5A', color: 'white', fontSize: '0.6rem', fontFamily: 'monospace', padding: '2px 7px', borderRadius: 20, fontWeight: 700 }}>
+              {item.badge && (
+                <span style={{ background: '#7A8C5A', color: 'white', fontSize: '0.55rem', fontFamily: 'monospace', padding: '2px 7px', borderRadius: 20, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   {item.badge}
                 </span>
               )}
@@ -608,6 +678,17 @@ export default function Navbar({
         </div>
       </div>
     </div>
+    
+    <CheckoutModal
+      isOpen={checkoutOpen}
+      onClose={() => setCheckoutOpen(false)}
+      cartItems={cartItems}
+      totalAmount={cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0)}
+      onOrderSuccess={() => {
+        if (clearCart) clearCart()
+      }}
+      setCurrentSection={setCurrentSection}
+    />
     </>
   )
 }

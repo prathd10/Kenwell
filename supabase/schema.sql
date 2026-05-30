@@ -145,3 +145,47 @@ ON CONFLICT DO NOTHING;
 -- and create your admin account with an email + password.
 -- That is the account you will use to log in at /admin/login
 -- ============================================================
+
+-- ============================================================
+-- Orders Table
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS orders (
+  id                  UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  friendly_id         TEXT NOT NULL UNIQUE,          -- e.g. #ba8d93aa
+  customer_name       TEXT NOT NULL,
+  customer_email      TEXT NOT NULL,
+  customer_phone      TEXT NOT NULL,
+  shipping_address    TEXT NOT NULL,
+  city                TEXT NOT NULL,
+  postal_code         TEXT NOT NULL,
+  amount              DECIMAL(10,2) NOT NULL DEFAULT 0,
+  status              TEXT NOT NULL DEFAULT 'Pending', -- 'Pending', 'Failed', 'Paid', 'Delivered'
+  items               JSONB NOT NULL DEFAULT '[]',   -- JSON list of order items
+  emails_sent         BOOLEAN[] DEFAULT '{false, false, false}', -- 3 email dots
+  razorpay_payment_id TEXT,                          -- Razorpay payment ID returned on success
+  razorpay_order_id   TEXT,                          -- Razorpay order ID
+  razorpay_signature  TEXT,                          -- Razorpay signature
+  created_at          TIMESTAMPTZ DEFAULT NOW(),
+  updated_at          TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE OR REPLACE TRIGGER trg_orders_updated_at
+  BEFORE UPDATE ON orders
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+-- Public storefront can place orders
+CREATE POLICY "public_insert_orders"
+  ON orders FOR INSERT WITH CHECK (true);
+
+-- Public storefront can query their order status by matching details
+CREATE POLICY "public_select_orders"
+  ON orders FOR SELECT USING (true);
+
+-- Admin gets full access to read/write/update orders
+CREATE POLICY "admin_all_orders"
+  ON orders FOR ALL USING (auth.role() = 'authenticated');
+
+

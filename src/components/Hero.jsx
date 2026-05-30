@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { PRODUCTS } from '../data'
 import UGCSection from './UGCSection'
+import ProductCard from './ProductCard'
 
 /* ── Image map ─────────────────────────────────────────────────── */
 const LOCAL_BOTTLE_MAP = {
@@ -31,8 +32,8 @@ const LOCAL_BOTTLE_MAP = {
 const HERO_SLIDES = [
   {
     id: 19,
-    headline: 'Clinically-Backed Stress Relief',
-    sub: 'KSM-66 Ashwagandha · Lowers cortisol up to 27%',
+    headline: 'Proven Stress Relief',
+    sub: 'Ashwagandha · Naturally lowers stress levels',
     badge: 'Core Series',
     cta: 'Shop Ashwagandha',
     accent: '#7A8C5A',
@@ -41,8 +42,8 @@ const HERO_SLIDES = [
   },
   {
     id: 12,
-    headline: 'Advanced Cellular Rejuvenation',
-    sub: 'NAD+ Precursor Complex · Powers mitochondrial energy',
+    headline: 'More Energy & Healthy Aging',
+    sub: 'NAD+ · Boosts your natural body energy',
     badge: 'Liposomal Series',
     cta: 'Shop NAD+',
     accent: '#4A8B8C',
@@ -51,8 +52,8 @@ const HERO_SLIDES = [
   },
   {
     id: 15,
-    headline: 'The Master Antioxidant',
-    sub: 'Reduced L-Glutathione · Cellular detox & skin clarity',
+    headline: 'The Ultimate Detox',
+    sub: 'Glutathione · Clears toxins & brightens skin',
     badge: 'Liposomal Series',
     cta: 'Shop Glutathione',
     accent: '#4A8B8C',
@@ -100,23 +101,23 @@ const BESTSELLER_IDS = [19, 2, 12, 15, 6, 1]
 const TRUST_SVG_CLS = 'w-6 h-6 text-sage'
 const TRUST_POINTS = [
   {
-    title: 'Clinical Doses',
-    body: 'Every ingredient at peer-reviewed efficacy levels. No proprietary blends hiding underdosed actives.',
+    title: 'Proper Doses',
+    body: 'Every ingredient is used in the right amount to actually work. We don\'t hide tiny amounts in "secret blends".',
     icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" /></svg>,
   },
   {
-    title: 'Zero Fillers',
-    body: 'No silicon dioxide, talc, or chemical glazes. We disclose every inactive ingredient on the open label.',
+    title: 'No Junk Fillers',
+    body: 'No talc, cheap chemicals, or fake colors. We show every single ingredient on the label so you know what you are taking.',
     icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>,
   },
   {
-    title: 'GMP Certified',
-    body: 'Manufactured under Good Manufacturing Practice standards. Every batch tested for purity and potency.',
+    title: 'Top Quality Made',
+    body: 'Made in top-quality facilities. Every single batch is tested for safety and purity before it reaches you.',
     icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>,
   },
   {
     title: 'Lab Verified',
-    body: 'Third-party Certificate of Analysis for every product. Scan the QR on the bottle to verify batch purity.',
+    body: 'A third-party lab checks every product. You can scan the QR code on your bottle to see the proof yourself.',
     icon: <svg className={TRUST_SVG_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>,
   },
 ]
@@ -138,75 +139,43 @@ function getLocalSrc(product) {
   return LOCAL_BOTTLE_MAP[product.id] || '/bottle_multivitamin.png'
 }
 
-/* ── Small product card for the bestseller shelf ───────────────── */
-function ShelfCard({ product, onQuickView, onAddToCart, onToggleWishlist, isInWishlist }) {
-  const [err, setErr] = useState(false)
-  const mrp = Math.round(product.price * 1.25)
-  const rating = (4.5 + (product.id % 5) * 0.1).toFixed(1)
-  const reviews = 74 + (product.id * 17) % 180
 
-  return (
-    <div className="group flex flex-col bg-white/80 backdrop-blur-sm rounded-2xl border border-white/70 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden min-w-[200px] flex-shrink-0 sm:min-w-0">
-      {/* Image */}
-      <div className="relative h-52 bg-gradient-to-b from-cream-dark/20 to-cream-dark/50 flex items-center justify-center overflow-hidden">
-        <button
-          onClick={() => onToggleWishlist(product)}
-          className={`absolute top-2.5 right-2.5 z-10 p-1.5 rounded-full border transition-all cursor-pointer ${
-            isInWishlist ? 'bg-sage/10 border-sage/40 text-sage' : 'bg-white/80 border-white/60 text-charcoal/30 hover:text-sage'
-          }`}
-        >
-          <svg className={`w-3.5 h-3.5 ${isInWishlist ? 'fill-current' : ''}`} fill={isInWishlist ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-        </button>
-        <img
-          src={err ? getLocalSrc(product) : (product.image || getLocalSrc(product))}
-          alt={product.name}
-          onError={() => setErr(true)}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-      </div>
-      {/* Info */}
-      <div className="p-4 flex flex-col flex-grow">
-        <div className="flex items-center gap-1.5 mb-1.5">
-          <Stars n={5} />
-          <span className="text-[10px] text-charcoal/45">({reviews})</span>
-        </div>
-        <h3 onClick={() => onQuickView(product)} className="font-serif text-[15px] font-bold text-primary-green hover:text-sage transition-colors cursor-pointer line-clamp-1 mb-0.5">
-          {product.name}
-        </h3>
-        <p className="text-[11px] text-charcoal/55 line-clamp-2 leading-relaxed mb-3 flex-grow">{product.tagline}</p>
-        <div className="flex items-center justify-between pt-3 border-t border-cream-dark/50 mt-auto">
-          <div>
-            <div className="flex items-baseline gap-1.5">
-              <span className="font-mono font-bold text-primary-green">₹{product.price}</span>
-              <span className="font-mono text-[10px] text-charcoal/35 line-through">₹{mrp}</span>
-            </div>
-            <span className="text-[9px] text-sage font-semibold">20% OFF</span>
-          </div>
-          <button
-            onClick={() => onAddToCart(product)}
-            className="flex items-center gap-1.5 bg-primary-green hover:bg-sage text-white text-[11px] font-semibold px-3.5 py-2 rounded-full transition-all cursor-pointer shadow-sm"
-          >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            Add
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 /* ══════════════════════════════════════════════════════════════
    MAIN EXPORT
 ═══════════════════════════════════════════════════════════════ */
-export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onToggleWishlist, wishlistItems }) {
+export default function Hero({ 
+  setCurrentSection, 
+  onQuickView, 
+  onAddToCart, 
+  onToggleWishlist, 
+  wishlistItems,
+  onAddToStack,
+  stackItems
+}) {
   const [slide, setSlide] = useState(0)
   const [fading, setFading] = useState(false)
   const [heroImgErr, setHeroImgErr] = useState(false)
   const intervalRef = useRef(null)
+  const carouselRef = useRef(null)
+
+  const scrollCarousel = (dir) => {
+    if (carouselRef.current) {
+      const container = carouselRef.current;
+      const firstChild = container.firstElementChild;
+      const scrollAmount = firstChild ? firstChild.clientWidth + 24 : 300; // clientWidth + 24px gap (gap-6)
+      if (dir === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        // If at the end, wrap to start
+        if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 15) {
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+      }
+    }
+  }
 
   const goTo = useCallback((i) => {
     setFading(true)
@@ -369,7 +338,7 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
         <div className="flex animate-marquee whitespace-nowrap w-max hover:[animation-play-state:paused]">
           {[...Array(2)].map((_, groupIndex) => (
             <div key={groupIndex} className="flex items-center px-3 md:px-5">
-              {['23 Premium Formulations', 'GMP Certified', '100% Open Labels', '4.8★ Average Rating', 'Free Shipping ₹999+', 'Zero Synthetic Fillers', 'Clinically Dosed'].map((item, i) => (
+              {['23 Premium Health Products', 'Top Quality Made', '100% Transparent Labels', '4.8★ Average Rating', 'Free Shipping ₹999+', 'No Artificial Fillers', 'Proper Health Doses'].map((item, i) => (
                 <span key={i} className="flex items-center gap-6 md:gap-10 px-3 md:px-5 text-[11px] font-mono uppercase tracking-wider text-white/85 whitespace-nowrap">
                   {item}
                   <span className="w-1 h-1 rounded-full bg-white/30" />
@@ -412,36 +381,61 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
       </section>
 
       {/* ══════════════════════════════════════════════
-          4. BESTSELLERS SHELF  (full horizontal grid)
+          4. BESTSELLERS SHELF  (Carousel)
       ══════════════════════════════════════════════ */}
-      <section className="py-16 bg-bg-secondary/30">
+      <section className="py-12 bg-bg-secondary/30 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8">
             <div>
               <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Customer Favorites</span>
               <h2 className="text-3xl md:text-4xl font-serif text-primary-green">Bestsellers</h2>
             </div>
-            <button onClick={() => setCurrentSection('bestsellers')} className="hidden sm:block text-xs font-semibold text-primary-green hover:text-sage border border-primary-green/20 hover:border-sage/50 px-5 py-2 rounded-full transition-all cursor-pointer uppercase tracking-wider">
-              See All →
+            <div className="hidden sm:flex items-center gap-3">
+              <button onClick={() => scrollCarousel('left')} className="p-2 rounded-full border border-primary-green/20 hover:bg-white text-primary-green transition-all cursor-pointer">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <button onClick={() => scrollCarousel('right')} className="p-2 rounded-full border border-primary-green/20 hover:bg-white text-primary-green transition-all cursor-pointer">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Horizontal scroll carousel */}
+          <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div 
+              ref={carouselRef}
+              className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+              {bestsellers.map(p => (
+                <div 
+                  key={p.id}
+                  className="w-[260px] sm:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] flex-shrink-0 snap-start"
+                >
+                  <ProductCard
+                    product={p}
+                    onQuickView={onQuickView}
+                    onAddToStack={onAddToStack}
+                    isInStack={stackItems?.some(item => item.id === p.id)}
+                    onToggleWishlist={onToggleWishlist}
+                    isInWishlist={wishlistItems?.some(w => w.id === p.id)}
+                    onAddToCart={onAddToCart}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex sm:hidden justify-center items-center mt-2 gap-4">
+            <button onClick={() => scrollCarousel('left')} className="p-2 rounded-full border border-primary-green/20 text-primary-green active:bg-primary-green/10">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button onClick={() => scrollCarousel('right')} className="p-2 rounded-full border border-primary-green/20 text-primary-green active:bg-primary-green/10">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
-
-          {/* Horizontal scroll mobile / 3-col grid desktop */}
-          <div className="flex gap-4 overflow-x-auto pb-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none">
-            {bestsellers.map(p => (
-              <ShelfCard
-                key={p.id}
-                product={p}
-                onQuickView={onQuickView}
-                onAddToCart={onAddToCart}
-                onToggleWishlist={onToggleWishlist}
-                isInWishlist={wishlistItems?.some(w => w.id === p.id)}
-              />
-            ))}
-          </div>
-
-          <div className="sm:hidden text-center mt-6">
-            <button onClick={() => setCurrentSection('bestsellers')} className="text-xs font-semibold text-primary-green border border-primary-green/20 px-6 py-2.5 rounded-full uppercase tracking-wider cursor-pointer">
+          
+          <div className="text-center mt-10">
+            <button onClick={() => setCurrentSection('shop')} className="text-xs font-semibold text-primary-green hover:text-sage border border-primary-green/20 hover:border-sage/50 px-6 py-2.5 rounded-full uppercase tracking-wider cursor-pointer transition-all">
               View All Bestsellers →
             </button>
           </div>
@@ -461,36 +455,36 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
           {[
             {
               series: 'Core Series',
-              badge: 'Daily Baseline',
+              badge: 'Daily Basics',
               count: '7 products',
-              desc: 'Foundation nutrients for daily health — chelated minerals, triple-strength omega-3, and essential multivitamins.',
+              desc: 'Everyday nutrients to keep you healthy — easy-to-absorb minerals, fish oil, and daily vitamins.',
               accent: 'border-sage/30 bg-gradient-to-br from-sage/5 to-sage/12',
               btnColor: 'text-sage border-sage/30 hover:bg-sage hover:text-white',
               dotColor: 'bg-sage',
             },
             {
               series: 'Wellness Series',
-              badge: 'Targeted Protocols',
+              badge: 'Targeted Health',
               count: '12 products',
-              desc: 'Targeted formulations for joints, liver detox, gut health, sleep, and hormone balance.',
+              desc: 'Specific products for your joints, liver, gut, sleep, and keeping your hormones balanced.',
               accent: 'border-champagne/50 bg-gradient-to-br from-champagne/15 to-champagne/30',
               btnColor: 'text-gold-accent border-champagne/50 hover:bg-gold-accent hover:text-white',
               dotColor: 'bg-gold-accent',
             },
             {
               series: 'Liposomal Series',
-              badge: 'Advanced Longevity',
+              badge: 'Healthy Aging',
               count: '4 products',
-              desc: 'NAD+, CoQ10, Glutathione & Vitamin C in lipid encapsulation — maximum bioavailability, zero acid degradation.',
+              desc: 'Products like NAD+ and Vitamin C made with special technology so your body absorbs them perfectly.',
               accent: 'border-slate-teal/30 bg-gradient-to-br from-slate-teal/5 to-slate-teal/12',
               btnColor: 'text-slate-teal border-slate-teal/30 hover:bg-slate-teal hover:text-white',
               dotColor: 'bg-slate-teal',
             },
             {
               series: 'Performance Series',
-              badge: 'Optimization',
+              badge: 'Fitness & Energy',
               count: '5 products',
-              desc: 'Scientifically dosed formulas to enhance physical output, recovery, and cognitive stamina.',
+              desc: 'Powerful formulas to help you work out harder, recover faster, and stay focused.',
               accent: 'border-primary-green/20 bg-gradient-to-br from-primary-green/5 to-primary-green/10',
               btnColor: 'text-primary-green border-primary-green/30 hover:bg-primary-green hover:text-white',
               dotColor: 'bg-primary-green',
@@ -529,14 +523,14 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <span className="inline-block bg-white/15 border border-white/20 text-[10px] font-mono uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-            Personalised Nutrition
+            Your Personal Plan
           </span>
           <h2 className="font-serif text-4xl sm:text-5xl mb-5 leading-tight">
             Build Your Perfect<br />
             <span className="italic font-light opacity-80">Supplement Stack</span>
           </h2>
           <p className="text-white/70 text-base max-w-xl mx-auto mb-10 leading-relaxed">
-            Take the 90-second Wellness Quiz and get a personalised supplement protocol matched to your goals — then build your stack in one click.
+            Take our quick 90-second health quiz to get a custom supplement plan made just for your goals — then add it to your cart in one click.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -637,10 +631,10 @@ export default function Hero({ setCurrentSection, onQuickView, onAddToCart, onTo
       <section className="py-20 px-4 text-center bg-gradient-to-b from-bg-primary via-cream-dark/20 to-bg-primary">
         <span className="text-sage font-mono uppercase tracking-wider text-[11px] font-semibold">The Full Collection</span>
         <h2 className="text-3xl md:text-4xl font-serif text-primary-green mt-3 mb-4">
-          23 Meticulously Engineered Formulations
+          23 Premium Health Products
         </h2>
         <p className="text-charcoal/55 text-sm max-w-md mx-auto mb-8 leading-relaxed">
-          Open labels · Clinical doses · Organic chelations · Zero synthetic fillers
+          Transparent labels · Proper doses · Easy to absorb · No artificial junk
         </p>
         <button
           onClick={() => setCurrentSection('shop')}

@@ -107,11 +107,11 @@ export default function ScienceLibrary() {
       
       {/* Page Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4">
-        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Peer-Reviewed Journals</span>
-        <h1 className="text-4xl md:text-5xl font-serif text-primary-green">The Science Library</h1>
+        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Health Articles</span>
+        <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Wellness Library</h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
         <p className="text-charcoal/70 text-sm leading-relaxed">
-          Explore the clinical biochemistry behind Kenwell formulations. Read our breakdown of bioavailability, clinical pathways, and human biomarker trials.
+          Learn the science behind our supplements. Read easy-to-understand articles about how our products help your body.
         </p>
       </div>
 
@@ -126,7 +126,7 @@ export default function ScienceLibrary() {
           </div>
           <input
             type="text"
-            placeholder="Search publications by chemical pathway..."
+            placeholder="Search for topics or health benefits..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-bg-primary border border-cream-dark px-10 py-3 rounded-full text-sm focus:outline-none focus:border-sage placeholder-charcoal/40"
@@ -179,7 +179,7 @@ export default function ScienceLibrary() {
             <div className="mt-6 pt-4 border-t border-cream-dark/30 flex justify-between items-center">
               <span className="text-[10px] font-mono text-charcoal/40 uppercase">{article.date}</span>
               <span className="text-xs font-semibold text-sage group-hover:translate-x-1.5 transition-transform">
-                Read Publication →
+                Read Article →
               </span>
             </div>
           </article>
@@ -239,7 +239,7 @@ export default function ScienceLibrary() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <strong>Biochemical Glossary:</strong> Hover over or click dashed underlined terms (like <span className="border-b border-dashed border-sage text-primary-green font-semibold">HPA axis</span>) in the article body to view clinical definition cards.
+                  <strong>Science Dictionary:</strong> Hover over or click dashed underlined words (like <span className="border-b border-dashed border-sage text-primary-green font-semibold">HPA axis</span>) in the article to see a simple explanation.
                 </div>
               </div>
             </div>
@@ -249,7 +249,7 @@ export default function ScienceLibrary() {
                 onClick={() => setSelectedArticle(null)}
                 className="bg-primary-green text-bg-primary hover:bg-sage hover:text-white px-8 py-3 rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer text-center"
               >
-                Close Publication
+                Close Article
               </button>
             </div>
 
@@ -267,7 +267,7 @@ export default function ScienceLibrary() {
             transform: 'translateX(-50%)'
           }}
         >
-          <span className="block text-[8px] font-mono uppercase tracking-wider text-sage font-bold">Biochemical Term</span>
+          <span className="block text-[8px] font-mono uppercase tracking-wider text-sage font-bold">Science Term</span>
           <span className="block text-xs font-bold text-primary-green mt-0.5">{hoveredTerm.term}</span>
           <p className="text-[10px] text-charcoal/80 mt-1 leading-relaxed">{hoveredTerm.definition}</p>
         </div>

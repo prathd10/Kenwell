@@ -154,13 +154,13 @@ export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection })
   const getObjectiveSummaryText = () => {
     switch(answers.objective) {
       case 'sleep-stress': 
-        return 'Based on your health objectives and stress points, your custom protocol is formulated to regulate the Hypothalamic-Pituitary-Adrenal (HPA) axis, lower systemic cortisol levels, and supply inhibitory neurotransmitter support to ease neural firing before rest.'
+        return 'Based on your answers, this plan helps lower your daily stress and calms your mind so you can fall asleep faster and stay asleep.'
       case 'performance-energy': 
-        return 'To maximize physical recovery and cell stamina, your protocol supplies cellular ATP cofactors (CoQ10) combined with baseline micronutrients and essential omega fatty acids to optimize cardiac output, muscle recovery, and oxygen absorption.'
+        return 'To help you perform at your best, this plan gives your cells the natural energy and nutrients they need to recover faster and stay strong.'
       case 'longevity-brain': 
-        return 'Your longevity matrix focuses on cellular rejuvenation. By supplying direct NAD+ precursors to fuel sirtuin longevity pathways and reduced L-glutathione (the master antioxidant), your cells are shielded from free-radical decay and epigenetic aging.'
+        return 'This plan focuses on healthy aging. It gives your body powerful antioxidants and energy boosters to keep your mind sharp and protect your cells as you age.'
       default: 
-        return 'Your gastrointestinal protocol focuses on synbiotic colon seeding. Seeding 30 Billion CFU of clinically studied strains combined with artichoke leaf and milk thistle silymarin supports hepatic Phase II filtration and nutrient assimilation.'
+        return 'This plan focuses on your digestion. By giving your gut healthy bacteria and helping your liver flush out toxins, your whole body will feel lighter and healthier.'
     }
   }
 
@@ -170,11 +170,11 @@ export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection })
       {/* Page Header */}
       {!showResult && (
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Biomarker Consultation</span>
-          <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Find Your Protocol</h1>
+          <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Health Quiz</span>
+          <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Find Your Perfect Plan</h1>
           <div className="gold-divider max-w-xs mx-auto"></div>
           <p className="text-charcoal/70 text-sm leading-relaxed">
-            Answer a few quick questions about your objectives and lifestyle. Our diagnostic logic will compile an optimized wellness stack built specifically for your cells.
+            Answer a few quick questions about your goals and lifestyle. We will build a custom supplement plan made just for your body.
           </p>
         </div>
       )}
@@ -246,10 +246,10 @@ export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection })
         <div className="max-w-md mx-auto py-20 text-center space-y-6 animate-in fade-in duration-300">
           <div className="w-16 h-16 border-4 border-sage/20 border-t-sage rounded-full animate-spin mx-auto"></div>
           <div className="space-y-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-sage animate-pulse font-bold block">Biomarker Matching Engine</span>
-            <h3 className="font-serif text-2xl font-bold text-primary-green">Compiling Sourcing Matrix</h3>
+            <span className="font-mono text-xs uppercase tracking-widest text-sage animate-pulse font-bold block">Analyzing Your Answers</span>
+            <h3 className="font-serif text-2xl font-bold text-primary-green">Building Your Plan</h3>
             <p className="text-xs text-charcoal/60 leading-relaxed">
-              Evaluating cellular objectives, mineral absorption channels, and dietary requirements to format your clean label stack...
+              We are finding the perfect combination of products to match your health goals...
             </p>
           </div>
         </div>
@@ -262,7 +262,7 @@ export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection })
           {/* Result Banner Cards */}
           <div className="glass-panel p-8 md:p-10 rounded-3xl border border-white/50 grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-gradient-to-br from-bg-secondary/30 to-sage/5">
             <div className="md:col-span-8 space-y-4">
-              <span className="text-[10px] font-mono uppercase bg-sage/10 text-sage px-3 py-1 rounded-full font-bold tracking-wider">Your Personalized Protocol</span>
+              <span className="text-[10px] font-mono uppercase bg-sage/10 text-sage px-3 py-1 rounded-full font-bold tracking-wider">Your Custom Plan</span>
               <h2 className="font-serif text-4xl md:text-5xl font-extrabold text-primary-green leading-none">
                 {getObjectiveTitle()}
               </h2>
