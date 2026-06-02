@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
+import { uploadToImageKit } from '../../lib/imagekit'
 import { Video, Plus, Trash2, GripVertical, Save, Eye, EyeOff, CheckCircle, Loader } from 'lucide-react'
 
 function empty(maxOrder) {
@@ -317,12 +318,18 @@ function EditForm({ draft, setDraft, inputStyle, labelStyle, onSave, onCancel, s
           <input style={inputStyle} value={draft.product} onChange={e => setDraft({ ...draft, product: e.target.value })} placeholder="e.g. KSM-66 Ashwagandha" />
         </div>
         <div style={{ gridColumn: '1 / -1' }}>
-          <label style={labelStyle}>Video URL <span style={{ color: '#C9B99A', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(direct MP4/WebM or reel link)</span></label>
-          <input style={inputStyle} value={draft.video_url} onChange={e => setDraft({ ...draft, video_url: e.target.value })} placeholder="https://cdn.example.com/my-reel.mp4" />
+          <label style={labelStyle}>Video URL <span style={{ color: '#C9B99A', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(direct MP4/WebM)</span></label>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <input style={{ ...inputStyle, flex: 1 }} value={draft.video_url} onChange={e => setDraft({ ...draft, video_url: e.target.value })} placeholder="https://cdn.example.com/my-reel.mp4" />
+            <UploadButton onUpload={url => setDraft({ ...draft, video_url: url })} accept="video/*" label="Upload Video" />
+          </div>
         </div>
         <div style={{ gridColumn: '1 / -1' }}>
           <label style={labelStyle}>Thumbnail URL <span style={{ color: '#C9B99A', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional poster image)</span></label>
-          <input style={inputStyle} value={draft.thumbnail_url || ''} onChange={e => setDraft({ ...draft, thumbnail_url: e.target.value })} placeholder="https://cdn.example.com/thumb.jpg" />
+          <div style={{ display: 'flex', gap: 10 }}>
+            <input style={{ ...inputStyle, flex: 1 }} value={draft.thumbnail_url || ''} onChange={e => setDraft({ ...draft, thumbnail_url: e.target.value })} placeholder="https://cdn.example.com/thumb.jpg" />
+            <UploadButton onUpload={url => setDraft({ ...draft, thumbnail_url: url })} accept="image/*" label="Upload Image" />
+          </div>
         </div>
         <div style={{ gridColumn: '1 / -1' }}>
           <label style={labelStyle}>Caption / Quote</label>
@@ -345,5 +352,46 @@ function EditForm({ draft, setDraft, inputStyle, labelStyle, onSave, onCancel, s
         </button>
       </div>
     </div>
+  )
+}
+
+function UploadButton({ onUpload, accept, label }) {
+  const [uploading, setUploading] = useState(false)
+  const fileInputRef = useRef(null)
+
+  async function handleFileChange(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    
+    setUploading(true)
+    try {
+      const res = await uploadToImageKit(file, 'kenwell/ugc')
+      onUpload(res.url)
+    } catch (err) {
+      alert('Upload failed: ' + err.message)
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
+
+  return (
+    <>
+      <input type="file" ref={fileInputRef} accept={accept} style={{ display: 'none' }} onChange={handleFileChange} />
+      <button 
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        disabled={uploading}
+        style={{ 
+          background: '#F4F1EA', border: '1.5px solid #EAE5D9', borderRadius: 8, padding: '0 1rem', 
+          cursor: uploading ? 'not-allowed' : 'pointer', color: '#1C2D1A', fontSize: '0.8rem', 
+          fontFamily: '"DM Sans", sans-serif', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6,
+          flexShrink: 0
+        }}
+      >
+        {uploading ? <Loader size={14} style={{ animation: 'spin 1s linear infinite' }} /> : <Plus size={14} />}
+        {uploading ? 'Uploading...' : label}
+      </button>
+    </>
   )
 }

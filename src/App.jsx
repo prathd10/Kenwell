@@ -10,6 +10,7 @@ import ProductModal from './components/ProductModal'
 import Footer from './components/Footer'
 import AboutUs from './components/AboutUs'
 import TrackOrder from './components/TrackOrder'
+import AnalyticsTracker from './components/AnalyticsTracker'
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState('home')
@@ -121,6 +122,9 @@ export default function App() {
 
   return (
     <div className="bg-bg-primary text-charcoal font-body antialiased min-h-screen flex flex-col selection:bg-sage selection:text-white">
+      {/* Real Analytics Tracking */}
+      <AnalyticsTracker currentSection={currentSection} />
+
       {/* Premium background grid */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[linear-gradient(to_right,#E6E3D5_1px,transparent_1px),linear-gradient(to_bottom,#E6E3D5_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
       

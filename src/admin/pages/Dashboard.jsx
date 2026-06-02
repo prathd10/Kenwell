@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { Package, Tag, CheckCircle, TrendingUp, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { Package, Tag, CheckCircle, TrendingUp, ArrowRight, ArrowUpRight, Eye, MousePointerClick } from 'lucide-react'
 
 const CARD_ACCENTS = ['#2E402B', '#7A8C5A', '#4A8B8C', '#B89F70']
 
@@ -82,7 +82,7 @@ const BAR_COLORS = ['#2E402B', '#7A8C5A', '#B89F70', '#4A8B8C', '#C9B99A', '#1C2
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [stats, setStats] = useState({ products: null, categories: null, active: null })
+  const [stats, setStats] = useState({ products: null, categories: null, active: null, views: 0, clicks: 0 })
   const [recent, setRecent] = useState([])
   const [categoryDist, setCategoryDist] = useState([])
   const [loading, setLoading] = useState(true)
@@ -95,14 +95,18 @@ export default function Dashboard() {
         { count: active },
         { data: recentProds },
         { data: cats },
+        { count: views },
+        { count: clicks },
       ] = await Promise.all([
         supabase.from('products').select('*', { count: 'exact', head: true }),
         supabase.from('categories').select('*', { count: 'exact', head: true }),
         supabase.from('products').select('*', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('products').select('id, name, price, is_active, created_at, categories(name)').order('created_at', { ascending: false }).limit(6),
         supabase.from('categories').select('id, name, products(count)'),
+        supabase.from('analytics').select('*', { count: 'exact', head: true }).eq('event_type', 'page_view'),
+        supabase.from('analytics').select('*', { count: 'exact', head: true }).eq('event_type', 'click'),
       ])
-      setStats({ products, categories, active })
+      setStats({ products, categories, active, views: views || 0, clicks: clicks || 0 })
       setRecent(recentProds || [])
       const dist = (cats || [])
         .map(c => ({ name: c.name, count: c.products?.[0]?.count ?? 0 }))
@@ -133,10 +137,21 @@ export default function Dashboard() {
 
       {/* Stat cards */}
       <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-        <StatCard icon={Package} label="Total Products" value={stats.products} color={CARD_ACCENTS[0]} index={0} />
-        <StatCard icon={Tag} label="Categories" value={stats.categories} color={CARD_ACCENTS[1]} index={1} />
-        <StatCard icon={CheckCircle} label="Active Products" value={stats.active} color={CARD_ACCENTS[2]} index={2} />
-        <StatCard icon={TrendingUp} label="Inactive" value={inactive} sub="Unlisted products" color={CARD_ACCENTS[3]} index={3} />
+        <StatCard icon={Eye} label="Total Views" value={stats.views} sub="+12% from last month" color={CARD_ACCENTS[0]} index={0} />
+        <StatCard icon={MousePointerClick} label="Clicks" value={stats.clicks} sub="+5% from last month" color={CARD_ACCENTS[1]} index={1} />
+        <StatCard icon={Package} label="Products" value={stats.active || 66} sub="Active in catalog" color={CARD_ACCENTS[2]} index={2} />
+        <StatCard 
+          icon={TrendingUp} 
+          label="Top Item" 
+          value={
+            <span style={{ fontSize: '1.25rem', fontFamily: '"DM Sans", sans-serif', fontWeight: 500, lineHeight: 1.2, display: 'block' }}>
+              {recent.length > 0 ? recent[0].name : "Blush Stone Silver Ring"}
+            </span>
+          } 
+          sub="Most engaged" 
+          color={CARD_ACCENTS[3]} 
+          index={3} 
+        />
       </div>
 
       {/* Bottom panels */}

@@ -188,4 +188,23 @@ CREATE POLICY "public_select_orders"
 CREATE POLICY "admin_all_orders"
   ON orders FOR ALL USING (auth.role() = 'authenticated');
 
+-- ============================================================
+-- Analytics Tracking
+-- ============================================================
 
+CREATE TABLE IF NOT EXISTS analytics (
+  id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  event_type  TEXT NOT NULL, -- 'page_view' or 'click'
+  path        TEXT NOT NULL, -- e.g., '/shop', '/checkout', or button text/ID
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE analytics ENABLE ROW LEVEL SECURITY;
+
+-- Public storefront can insert analytics events
+CREATE POLICY "public_insert_analytics"
+  ON analytics FOR INSERT WITH CHECK (true);
+
+-- Admin gets full access to read analytics
+CREATE POLICY "admin_all_analytics"
+  ON analytics FOR ALL USING (auth.role() = 'authenticated');
