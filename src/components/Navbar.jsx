@@ -33,8 +33,8 @@ export default function Navbar({
     { id: 'builder', name: 'Stacks', badge: 'Save' },
     { id: 'scanner', name: 'Lab Scanner' },
     { id: 'library', name: 'Science Library' },
-    { id: 'about', name: 'About Us' },
-    { id: 'track', name: 'Track Order' }
+    { id: 'stores', name: 'Store Locator' },
+    { id: 'about', name: 'About Us' }
   ]
 
   const handleNavClick = (sectionId) => {
@@ -644,7 +644,8 @@ export default function Navbar({
             { id: 'builder', label: 'Curated Stacks', badge: 'Save' },
             { id: 'scanner', label: 'Lab Scanner' },
             { id: 'library', label: 'Science Library' },
-            { id: 'track', label: 'Track Order' },
+            { id: 'stores', label: 'Store Locator' },
+            { id: 'partner', label: 'Become a Partner' },
             { id: 'about', label: 'About Us' },
           ].map(item => (
             <button

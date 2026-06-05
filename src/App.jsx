@@ -10,7 +10,10 @@ import ProductModal from './components/ProductModal'
 import Footer from './components/Footer'
 import AboutUs from './components/AboutUs'
 import TrackOrder from './components/TrackOrder'
+import StoreLocator from './components/StoreLocator'
+import PartnerWithUs from './components/PartnerWithUs'
 import AnalyticsTracker from './components/AnalyticsTracker'
+
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState('home')
@@ -256,6 +259,14 @@ export default function App() {
         
         {currentSection === 'about' && (
           <AboutUs />
+        )}
+
+        {currentSection === 'stores' && (
+          <StoreLocator setCurrentSection={setCurrentSection} />
+        )}
+
+        {currentSection === 'partner' && (
+          <PartnerWithUs setCurrentSection={setCurrentSection} />
         )}
       </main>
       

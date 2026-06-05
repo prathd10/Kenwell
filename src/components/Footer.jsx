@@ -65,6 +65,21 @@ export default function Footer({ setCurrentSection }) {
                   About Us
                 </button>
               </li>
+              <li>
+                <button onClick={() => setCurrentSection('stores')} className="hover:text-champagne transition-colors cursor-pointer">
+                  Store Locator
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentSection('partner')} className="hover:text-champagne transition-colors cursor-pointer">
+                  Become a Partner
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentSection('track')} className="hover:text-champagne transition-colors cursor-pointer">
+                  Track Order
+                </button>
+              </li>
             </ul>
           </div>
 

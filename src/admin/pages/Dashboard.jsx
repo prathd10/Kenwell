@@ -17,8 +17,7 @@ function StatCard({ icon: Icon, label, value, sub, color, index }) {
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        flex: 1,
-        minWidth: 160,
+        width: '100%',
         boxShadow: hovered
           ? '0 8px 32px rgba(28,45,26,0.12)'
           : '0 2px 12px rgba(28,45,26,0.06)',
@@ -136,7 +135,15 @@ export default function Dashboard() {
       </div>
 
       {/* Stat cards */}
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+      <div 
+        className="stats-grid"
+        style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(2, 1fr)', 
+          gap: 14, 
+          marginBottom: '1.5rem' 
+        }}
+      >
         <StatCard icon={Eye} label="Total Views" value={stats.views} sub="+12% from last month" color={CARD_ACCENTS[0]} index={0} />
         <StatCard icon={MousePointerClick} label="Clicks" value={stats.clicks} sub="+5% from last month" color={CARD_ACCENTS[1]} index={1} />
         <StatCard icon={Package} label="Products" value={stats.active || 66} sub="Active in catalog" color={CARD_ACCENTS[2]} index={2} />
@@ -144,8 +151,8 @@ export default function Dashboard() {
           icon={TrendingUp} 
           label="Top Item" 
           value={
-            <span style={{ fontSize: '1.25rem', fontFamily: '"DM Sans", sans-serif', fontWeight: 500, lineHeight: 1.2, display: 'block' }}>
-              {recent.length > 0 ? recent[0].name : "Blush Stone Silver Ring"}
+            <span style={{ fontSize: '1.25rem', fontFamily: '"DM Sans", sans-serif', fontWeight: 500, lineHeight: 1.2, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {recent.length > 0 ? recent[0].name : "KSM-66 Ashwagandha"}
             </span>
           } 
           sub="Most engaged" 

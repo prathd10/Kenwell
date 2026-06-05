@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { LayoutDashboard, Tag, Package, LogOut, Menu, X, Video, ShoppingBag, ExternalLink } from 'lucide-react'
+import { LayoutDashboard, Tag, Package, LogOut, Menu, X, Video, ShoppingBag, ExternalLink, MapPin, FileText } from 'lucide-react'
 
 const NAV = [
   { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
   { to: '/admin/categories', icon: Tag, label: 'Categories' },
   { to: '/admin/products', icon: Package, label: 'Products' },
+  { to: '/admin/stores', icon: MapPin, label: 'Store Locator' },
+  { to: '/admin/partner-requests', icon: FileText, label: 'Partner Requests' },
   { to: '/admin/ugc', icon: Video, label: 'UGC Videos' },
 ]
 
@@ -66,7 +68,7 @@ function Sidebar({ onClose }) {
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, padding: '0.5rem 0.75rem' }}>
+      <nav style={{ flex: 1, padding: '0.5rem 0.75rem', overflowY: 'auto' }}>
         <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.25)', letterSpacing: '0.25em', textTransform: 'uppercase', padding: '0.5rem 0.75rem', marginBottom: 4 }}>
           Navigation
         </div>

@@ -208,3 +208,99 @@ CREATE POLICY "public_insert_analytics"
 -- Admin gets full access to read analytics
 CREATE POLICY "admin_all_analytics"
   ON analytics FOR ALL USING (auth.role() = 'authenticated');
+
+-- ============================================================
+-- Store Locator
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS stores (
+  id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name            TEXT NOT NULL,
+  type            TEXT NOT NULL DEFAULT 'Official Store', -- 'Official Store' or 'Store Partner'
+  address         TEXT NOT NULL,
+  city            TEXT NOT NULL,
+  state           TEXT NOT NULL,
+  postal_code     TEXT NOT NULL,
+  phone           TEXT,
+  map_link        TEXT NOT NULL, -- Direct Google Maps share link
+  is_active       BOOLEAN DEFAULT TRUE,
+  created_at      TIMESTAMPTZ DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE OR REPLACE TRIGGER trg_stores_updated_at
+  BEFORE UPDATE ON stores
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE stores ENABLE ROW LEVEL SECURITY;
+
+-- Public storefront can read active stores
+CREATE POLICY "public_read_active_stores"
+  ON stores FOR SELECT USING (is_active = true);
+
+-- Admin gets full access to read/write/update/delete stores
+CREATE POLICY "admin_all_stores"
+  ON stores FOR ALL USING (auth.role() = 'authenticated');
+
+-- Seed: Sample stores
+INSERT INTO stores (name, type, address, city, state, postal_code, phone, map_link, is_active)
+VALUES
+  (
+    'Kenwell Flagship Store - Bandra',
+    'Official Store',
+    'Ground Floor, Hill Road, Bandra West, Mumbai',
+    'Mumbai',
+    'Maharashtra',
+    '400050',
+    '+91 98765 43210',
+    'https://maps.google.com/?q=Hill+Road+Bandra+West+Mumbai',
+    true
+  ),
+  (
+    'Guardian Health & Nutrition - Connaught Place',
+    'Store Partner',
+    'Shop No. 12, Block E, Connaught Place, New Delhi',
+    'New Delhi',
+    'Delhi',
+    '110001',
+    '+91 11 2345 6789',
+    'https://maps.google.com/?q=Connaught+Place+New+Delhi',
+    true
+  )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================
+-- Partner Inquiries
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS partner_inquiries (
+  id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  store_name      TEXT NOT NULL,
+  contact_name    TEXT NOT NULL,
+  email           TEXT NOT NULL,
+  phone           TEXT NOT NULL,
+  address         TEXT NOT NULL,
+  city            TEXT NOT NULL,
+  state           TEXT NOT NULL,
+  postal_code     TEXT NOT NULL,
+  message         TEXT,
+  status          TEXT NOT NULL DEFAULT 'New', -- 'New', 'Contacted', 'Archived'
+  created_at      TIMESTAMPTZ DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE OR REPLACE TRIGGER trg_partner_inquiries_updated_at
+  BEFORE UPDATE ON partner_inquiries
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE partner_inquiries ENABLE ROW LEVEL SECURITY;
+
+-- Public storefront can insert partner inquiries
+CREATE POLICY "public_insert_partner_inquiries"
+  ON partner_inquiries FOR INSERT WITH CHECK (true);
+
+-- Admin gets full access to read/write/update/delete inquiries
+CREATE POLICY "admin_all_partner_inquiries"
+  ON partner_inquiries FOR ALL USING (auth.role() = 'authenticated');
+
+
