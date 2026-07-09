@@ -7,11 +7,43 @@
 // without executing JS — the normal CSR app still takes over once JS loads.
 import { createClient } from '@supabase/supabase-js'
 import { preview } from 'vite'
-import { chromium } from 'playwright'
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { chromium } from 'playwright-core'
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 
 const DEFAULT_TITLE = 'Kenwell | Feel Good. Live Well.'
+
+// Vercel's build container is a minimal Linux sandbox missing the shared
+// libraries a normal downloaded Chromium needs to run (exits with code 127
+// on launch). @sparticuz/chromium ships a Chromium build made specifically
+// for these constrained serverless/CI environments. Locally, there's no
+// such constraint — just reuse whatever Chrome is already installed on the
+// machine (same one used for manual testing throughout this project).
+async function launchBrowser() {
+  if (process.env.VERCEL) {
+    const sparticuzChromium = (await import('@sparticuz/chromium')).default
+    return chromium.launch({
+      args: sparticuzChromium.args,
+      executablePath: await sparticuzChromium.executablePath(),
+      headless: true,
+    })
+  }
+
+  const localChromePaths = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+  ]
+  const executablePath = localChromePaths.find((p) => existsSync(p))
+  if (!executablePath) {
+    throw new Error(
+      'No local Chrome install found for prerendering. Install Google Chrome, or add its path to localChromePaths in scripts/prerender.mjs.'
+    )
+  }
+  return chromium.launch({ executablePath, headless: true })
+}
 
 async function getActiveSlugs() {
   const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY)
@@ -31,7 +63,7 @@ async function main() {
   const server = await preview({ preview: { port: 4173, host: '127.0.0.1' } })
   const baseUrl = `http://127.0.0.1:4173`
 
-  const browser = await chromium.launch()
+  const browser = await launchBrowser()
   const page = await browser.newPage()
 
   for (const slug of slugs) {
