@@ -1,29 +1,30 @@
 import React, { useState } from 'react'
-import { PRODUCTS } from '../data'
+import { useProducts } from '../context/ProductsContext'
 
 export default function LabScanner() {
+  const { products } = useProducts()
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [scanning, setScanning] = useState(false)
   const [reportRetrieved, setReportRetrieved] = useState(false)
 
   // Sourcing list to match products
-  const getSourcingLocation = (productId) => {
+  const getSourcingLocation = (productSlug) => {
     const sourcingMap = {
-      1: { active: 'L. acidophilus blend', source: 'Frankfurt, Germany', base: 'Yeast free organic base' },
-      2: { active: 'Fully Chelated Magnesium Glycinate', source: 'Munich, Germany', base: 'Soluble cellulose binder' },
-      3: { active: 'trans-MK7 Vitamin K2', source: 'Oslo, Norway', base: 'Organic calcium malate' },
-      4: { active: 'Zinc Picolinate', source: 'Gujarat, India', base: 'Microcrystalline cellulose' },
-      5: { active: 'EPA/DHA Fish Oil', source: 'Coastal Chimbote, Peru', base: 'Triglyceride concentrate' },
-      6: { active: 'Triple Strength Fish Oil', source: 'Coastal Chimbote, Peru', base: 'Triglyceride concentrate' },
-      7: { active: 'Marine Algal Oil', source: 'Nova Scotia, Canada', base: 'Vegan softgel starch wrapper' },
-      12: { active: 'Nicotinamide Mononucleotide (NMN)', source: 'Kyoto, Japan', base: 'Trimethylglycine methyl donor' },
-      14: { active: 'Liposomal Ascorbic Acid', source: 'Zurich, Switzerland', base: 'Sunflower lecithin carrier' },
-      15: { active: 'Reduced L-Glutathione', source: 'Tokyo, Japan', base: 'Milk thistle standard matrix' },
-      19: { active: 'KSM-66 Ashwagandha Root Extract', source: 'Rajasthan, India', base: 'Standardized root withanolides' },
-      23: { active: 'Berberine HCl', source: 'Himalayan Foothills, India', base: 'Chromium picolonate blend' }
+      'multivitamin-with-probiotics': { active: 'L. acidophilus blend', source: 'Frankfurt, Germany', base: 'Yeast free organic base' },
+      'chelated-magnesium-glycinate': { active: 'Fully Chelated Magnesium Glycinate', source: 'Munich, Germany', base: 'Soluble cellulose binder' },
+      'vitamin-d3-k2-calcium': { active: 'trans-MK7 Vitamin K2', source: 'Oslo, Norway', base: 'Organic calcium malate' },
+      'zinc-picolonate-magnesium': { active: 'Zinc Picolinate', source: 'Gujarat, India', base: 'Microcrystalline cellulose' },
+      'single-strength-fish-oil': { active: 'EPA/DHA Fish Oil', source: 'Coastal Chimbote, Peru', base: 'Triglyceride concentrate' },
+      'triple-strength-fish-oil': { active: 'Triple Strength Fish Oil', source: 'Coastal Chimbote, Peru', base: 'Triglyceride concentrate' },
+      'vegetarian-omega': { active: 'Marine Algal Oil', source: 'Nova Scotia, Canada', base: 'Vegan softgel starch wrapper' },
+      'nad': { active: 'Nicotinamide Mononucleotide (NMN)', source: 'Kyoto, Japan', base: 'Trimethylglycine methyl donor' },
+      'vitamin-c': { active: 'Liposomal Ascorbic Acid', source: 'Zurich, Switzerland', base: 'Sunflower lecithin carrier' },
+      'glutathione-reduced': { active: 'Reduced L-Glutathione', source: 'Tokyo, Japan', base: 'Milk thistle standard matrix' },
+      'ksm-66-ashwagandha': { active: 'KSM-66 Ashwagandha Root Extract', source: 'Rajasthan, India', base: 'Standardized root withanolides' },
+      'berberine-hcl': { active: 'Berberine HCl', source: 'Himalayan Foothills, India', base: 'Chromium picolonate blend' }
     }
-    
-    return sourcingMap[productId] || { active: 'Active Botanical Extract', source: 'Western Ghats, India', base: 'Clean label vegetable capsules' }
+
+    return sourcingMap[productSlug] || { active: 'Active Botanical Extract', source: 'Western Ghats, India', base: 'Clean label vegetable capsules' }
   }
 
   const handleScan = (product) => {
@@ -154,7 +155,7 @@ export default function LabScanner() {
             <div className="h-44 flex flex-col justify-end py-2 bg-charcoal/80">
               <span className="block text-[8px] font-mono uppercase text-white/40 tracking-wider text-left mb-1.5">Select Formula to verify</span>
               <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-none">
-                {PRODUCTS.slice(0, 10).map((prod) => (
+                {products.slice(0, 10).map((prod) => (
                   <button
                     key={prod.id}
                     onClick={() => handleScan(prod)}
@@ -200,7 +201,7 @@ export default function LabScanner() {
                 <div className="bg-white/40 border border-cream-dark/40 rounded-xl p-4 space-y-3">
                   <h4 className="font-mono text-[9px] uppercase tracking-wider text-charcoal/50 font-bold border-b border-cream-dark/50 pb-1">Chemical Assay Purity</h4>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-primary-green">{getSourcingLocation(selectedProduct.id).active}</span>
+                    <span className="font-semibold text-primary-green">{getSourcingLocation(selectedProduct.slug).active}</span>
                     <span className="font-mono text-sage font-bold">103.2%</span>
                   </div>
                   <p className="text-[10px] text-charcoal/60 leading-relaxed">
@@ -213,7 +214,7 @@ export default function LabScanner() {
                   <h4 className="font-mono text-[9px] uppercase tracking-wider text-charcoal/50 font-bold border-b border-cream-dark/50 pb-1">Origin Sourcing Check</h4>
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-semibold text-primary-green">Botanical Origin</span>
-                    <span className="font-mono text-sage font-bold">{getSourcingLocation(selectedProduct.id).source}</span>
+                    <span className="font-mono text-sage font-bold">{getSourcingLocation(selectedProduct.slug).source}</span>
                   </div>
                   <p className="text-[10px] text-charcoal/60 leading-relaxed">
                     Raw extract harvested directly from regional source; verified trace coordinates.
@@ -272,7 +273,7 @@ export default function LabScanner() {
               <div className="bg-bg-secondary/40 border border-cream-dark/50 rounded-2xl p-5 space-y-2">
                 <span className="font-mono text-[9px] uppercase tracking-wider text-charcoal/40 font-bold block">100% Disclosure Excipient Profile</span>
                 <p className="text-xs text-charcoal/70 leading-relaxed">
-                  In addition to the active molecular raw compounds, this batch utilizes: <strong>{getSourcingLocation(selectedProduct.id).base}</strong>. Absolutely zero titanium dioxide, talc, artificial colorings, or synthetic glazing agents were used in formulation.
+                  In addition to the active molecular raw compounds, this batch utilizes: <strong>{getSourcingLocation(selectedProduct.slug).base}</strong>. Absolutely zero titanium dioxide, talc, artificial colorings, or synthetic glazing agents were used in formulation.
                 </p>
               </div>
 

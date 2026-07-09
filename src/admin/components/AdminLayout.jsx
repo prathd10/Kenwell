@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { LayoutDashboard, Tag, Package, LogOut, Menu, X, Video, ShoppingBag, ExternalLink, MapPin, FileText } from 'lucide-react'
+import { LayoutDashboard, Tag, Package, LogOut, Menu, Video, ShoppingBag, ExternalLink, MapPin, FileText, Boxes, ShieldCheck } from 'lucide-react'
 
 const NAV = [
   { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
   { to: '/admin/categories', icon: Tag, label: 'Categories' },
   { to: '/admin/products', icon: Package, label: 'Products' },
+  { to: '/admin/stacks', icon: Boxes, label: 'Stacks' },
+  { to: '/admin/auth-codes', icon: ShieldCheck, label: 'Auth Codes' },
   { to: '/admin/stores', icon: MapPin, label: 'Store Locator' },
   { to: '/admin/partner-requests', icon: FileText, label: 'Partner Requests' },
   { to: '/admin/ugc', icon: Video, label: 'UGC Videos' },
@@ -32,7 +34,7 @@ function Sidebar({ onClose }) {
     <div
       style={{
         width: 240,
-        minHeight: '100vh',
+        height: '100vh',
         background: 'linear-gradient(170deg, #1C2D1A 0%, #253C22 60%, #1a2a18 100%)',
         display: 'flex',
         flexDirection: 'column',
@@ -157,31 +159,31 @@ function Sidebar({ onClose }) {
 }
 
 export default function AdminLayout() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#EFECE4', fontFamily: '"DM Sans", sans-serif' }}>
-      {/* Desktop sidebar */}
-      <div className="hidden md:block" style={{ flexShrink: 0, position: 'sticky', top: 0, height: '100vh' }}>
+      {/* Collapsible sidebar */}
+      <div
+        style={{
+          flexShrink: 0,
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          width: open ? 240 : 0,
+          overflow: 'hidden',
+          transition: 'width 0.25s ease',
+        }}
+      >
         <Sidebar onClose={() => {}} />
-      </div>
-
-      {/* Mobile overlay */}
-      {open && (
-        <div onClick={() => setOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 40, backdropFilter: 'blur(2px)' }} />
-      )}
-
-      {/* Mobile sidebar */}
-      <div className="md:hidden" style={{ position: 'fixed', top: 0, left: open ? 0 : -240, zIndex: 50, transition: 'left 0.25s ease', height: '100%' }}>
-        <Sidebar onClose={() => setOpen(false)} />
       </div>
 
       {/* Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        {/* Mobile topbar */}
-        <div className="md:hidden" style={{ background: '#1C2D1A', padding: '0.875rem 1.25rem', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>
+        {/* Topbar */}
+        <div style={{ background: '#1C2D1A', padding: '0.875rem 1.25rem', display: 'flex', alignItems: 'center', gap: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>
           <button onClick={() => setOpen(!open)} style={{ color: '#F4F1EA', background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}>
-            {open ? <X size={22} /> : <Menu size={22} />}
+            <Menu size={22} />
           </button>
           <span style={{ fontFamily: '"Cormorant Garamond", serif', color: '#F4F1EA', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.12em' }}>KENWELL</span>
         </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { PRODUCTS } from '../data'
+import { useProducts } from '../context/ProductsContext'
 
 export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection }) {
+  const { products } = useProducts()
   const [currentStep, setCurrentStep] = useState(1)
   const [answers, setAnswers] = useState({
     objective: '',
@@ -109,38 +110,38 @@ export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection })
     const isVeg = answers.diet === 'vegetarian'
     const isHighStress = answers.stress === 'high'
 
-    let pIds = []
+    let pSlugs = []
 
     if (objective === 'sleep-stress') {
-      pIds = [2, 18] // Magnesium Glycinate, Melatonin Sleep
-      if (isHighStress) pIds.push(19) // Add Ashwagandha if high stress
-    } 
+      pSlugs = ['chelated-magnesium-glycinate', 'melatonin-sleep-support']
+      if (isHighStress) pSlugs.push('ksm-66-ashwagandha')
+    }
     else if (objective === 'performance-energy') {
-      pIds = [1, 17] // Multivitamin, CoQ10
-      // If vegetarian, add Vegetarian Omega (7) instead of standard Fish oil, or B12
+      pSlugs = ['multivitamin-with-probiotics', 'coq10-ubiquinone']
+      // If vegetarian, add Vegetarian Omega instead of standard Fish oil
       if (isVeg) {
-        pIds.push(7) // Vegetarian Omega
+        pSlugs.push('vegetarian-omega')
       } else {
-        pIds.push(6) // Triple Strength Fish Oil
+        pSlugs.push('triple-strength-fish-oil')
       }
-    } 
+    }
     else if (objective === 'longevity-brain') {
-      pIds = [12, 15] // NAD+ Longevity, Glutathione Reduced
+      pSlugs = ['nad', 'glutathione-reduced']
       if (isVeg) {
-        pIds.push(16) // Vitamin B12 (vital for vegans)
+        pSlugs.push('vitamin-b12') // vital for vegans
       } else {
-        pIds.push(14) // Vitamin C Liposomal
+        pSlugs.push('vitamin-c') // Liposomal
       }
-    } 
+    }
     else { // gut-detox
-      pIds = [21, 9] // Prebiotics+Probiotics, Milk Thistle
+      pSlugs = ['prebiotics-probiotics', 'milk-thistle']
       if (isHighStress || answers.diet === 'convenience') {
-        pIds.push(11) // TUDCA (Advanced liver bile flow)
+        pSlugs.push('tudca') // Advanced liver bile flow
       }
     }
 
-    return PRODUCTS.filter(p => pIds.includes(p.id))
-  }, [showResult, answers])
+    return products.filter(p => pSlugs.includes(p.slug))
+  }, [showResult, answers, products])
 
   const getObjectiveTitle = () => {
     switch(answers.objective) {

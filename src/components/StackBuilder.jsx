@@ -1,134 +1,19 @@
 import React, { useMemo, useState } from 'react'
-import { PRODUCTS } from '../data'
-
-const BUNDLES = [
-  {
-    id: 'vitality',
-    name: "Daily Health Basics",
-    description: "Your daily health essentials. Get the vitamins you need, probiotics for a happy gut, and Omega-3 fish oil for your heart and brain.",
-    tagline: "Everyday wellness, heart, and gut health",
-    productIds: [1, 6], // Multivitamin, Triple Fish Oil
-    originalPrice: 1798, // 799 + 999
-    comboPrice: 1499, // Save 299 (~17%)
-    discountedItems: {
-      1: 666,
-      6: 833
-    },
-    badge: "Daily Basics",
-    focus: ["Daily Health", "Gut Health", "Heart Support"],
-    synergy: "The healthy fats in Fish Oil help your body absorb the vitamins in the Multivitamin much better.",
-    schedule: {
-      morning: "Take 1 Multivitamin tablet with breakfast.",
-      afternoon: "Take 1 Triple Strength Fish Oil softgel with lunch.",
-      evening: "None."
-    }
-  },
-  {
-    id: 'sleep-calm',
-    name: "Deep Sleep & Calm",
-    description: "Made to help you relax, lower stress, and get a deep, restful night's sleep so you wake up refreshed.",
-    tagline: "Better sleep, less stress, and full relaxation",
-    productIds: [2, 18, 19], // Magnesium, Melatonin, Ashwagandha
-    originalPrice: 1947, // 699 + 449 + 799
-    comboPrice: 1599, // Save 348 (~18%)
-    discountedItems: {
-      2: 569,
-      18: 369,
-      19: 661
-    },
-    badge: "Rest & Relax",
-    focus: ["Relaxation", "Less Stress", "Better Sleep"],
-    benefits: [
-      "Ashwagandha to help lower daily stress",
-      "Magnesium to gently relax your muscles",
-      "Melatonin to help you fall asleep naturally"
-    ],
-    synergy: "Magnesium relaxes your body, Melatonin signals your brain it's time for bed, and Ashwagandha calms your mind so you don't wake up during the night.",
-    schedule: {
-      morning: "None.",
-      afternoon: "Take 1 Ashwagandha capsule after lunch.",
-      evening: "Take 2 Magnesium tablets & 1 Melatonin tablet 30-45 minutes before sleep."
-    }
-  },
-  {
-    id: 'longevity',
-    name: "Healthy Aging Combo",
-    description: "Helps boost your natural energy, protect your cells from damage, and keep you feeling young and active.",
-    tagline: "More energy, healthy aging, and body protection",
-    productIds: [12, 14, 17], // NAD+, Vitamin C, CoQ10
-    originalPrice: 2897, // 1499 + 399 + 999
-    comboPrice: 2399, // Save 498 (~17%)
-    discountedItems: {
-      12: 1249,
-      14: 329,
-      17: 821
-    },
-    badge: "Anti-Aging",
-    focus: ["More Energy", "Cell Health", "Anti-Aging"],
-    synergy: "NAD+ helps create energy in your body, CoQ10 carries that energy where it's needed, and Vitamin C acts as a shield to keep your cells healthy.",
-    schedule: {
-      morning: "Take 1 NAD+ tablet and 1 Vitamin C tablet first thing on an empty stomach.",
-      afternoon: "Take 1 CoQ10 capsule with lunch (taking it with food helps absorption).",
-      evening: "None."
-    }
-  },
-  {
-    id: 'detox-liver',
-    name: "Liver & Body Detox",
-    description: "A powerful mix to help your liver flush out toxins, digest food better, and keep your body clean and healthy.",
-    tagline: "Protects your liver and improves digestion",
-    productIds: [9, 10, 11], // Milk Thistle, NAC, TUDCA
-    originalPrice: 2497, // 549 + 649 + 1299
-    comboPrice: 2099, // Save 398 (~16%)
-    discountedItems: {
-      9: 459,
-      10: 539,
-      11: 1101
-    },
-    badge: "Detox",
-    focus: ["Liver Health", "Digestion", "Flushing Toxins"],
-    synergy: "NAC helps your body make its own natural antioxidants, Milk Thistle protects your liver, and TUDCA helps clear out waste so toxins can leave your body easily.",
-    schedule: {
-      morning: "Take 1 TUDCA capsule on an empty stomach.",
-      afternoon: "Take 1 NAC capsule between meals.",
-      evening: "Take 1 Milk Thistle capsule with dinner."
-    }
-  },
-  {
-    id: 'metabolic',
-    name: "Weight Loss & Energy",
-    description: "A great combo to help boost your metabolism, burn fat, and keep your blood sugar balanced throughout the day.",
-    tagline: "Burns fat and balances sugar levels",
-    productIds: [22, 23], // Fat Burner, Berberine HCL
-    originalPrice: 1898, // 799 + 1099
-    comboPrice: 1549, // Save 349 (~18%)
-    discountedItems: {
-      22: 649,
-      23: 900
-    },
-    badge: "Weight Loss",
-    focus: ["Fat Burning", "More Energy", "Sugar Balance"],
-    synergy: "The Fat Burner helps your body start burning stored fat. Berberine makes sure that fat and sugar are used for energy instead of being stored again.",
-    schedule: {
-      morning: "Take 1 Fat Burner capsule 30 minutes before workout or breakfast.",
-      afternoon: "Take 1 Berberine HCL capsule 15 minutes before your largest lunch.",
-      evening: "None."
-    }
-  }
-]
+import { useProducts } from '../context/ProductsContext'
 
 export default function StackBuilder({ onQuickView, onAddToCart }) {
+  const { products, stacks } = useProducts()
   const [activeTab, setActiveTab] = useState('pre-made')
   const [selectedDetailStack, setSelectedDetailStack] = useState(null)
-  
+
   // Custom Stack States
   const [customInput, setCustomInput] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [customStack, setCustomStack] = useState(null)
 
   const handleAddBundleToCart = (bundle) => {
-    const products = bundle.productIds.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean)
-    products.forEach((prod) => {
+    const bundleProducts = bundle.productIds.map(id => products.find(p => p.id === id)).filter(Boolean)
+    bundleProducts.forEach((prod) => {
       let itemPrice = bundle.discountedItems ? bundle.discountedItems[prod.id] || prod.price : Math.round(prod.price * 0.85); // 15% off custom
       onAddToCart({
         ...prod,
@@ -146,40 +31,40 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
 
     setTimeout(() => {
       const lower = customInput.toLowerCase()
-      let suggestedIds = []
+      let suggestedSlugs = []
       let customName = "Your Custom Stack"
       let customSynergy = "Based on your description, we selected these products to work together to support your specific needs."
 
       if (lower.includes('sleep') || lower.includes('stress') || lower.includes('anxiety')) {
-        suggestedIds = [2, 18, 19] // Magnesium, Melatonin, Ashwagandha
+        suggestedSlugs = ['chelated-magnesium-glycinate', 'melatonin-sleep-support', 'ksm-66-ashwagandha']
         customName = "Relaxation & Recovery Stack"
       } else if (lower.includes('energy') || lower.includes('tired') || lower.includes('workout')) {
-        suggestedIds = [12, 17, 16] // NAD+, CoQ10, B12
+        suggestedSlugs = ['nad', 'coq10-ubiquinone', 'vitamin-b12']
         customName = "Energy & Vitality Stack"
       } else if (lower.includes('liver') || lower.includes('detox') || lower.includes('drink')) {
-        suggestedIds = [9, 10, 11] // Milk Thistle, NAC, TUDCA
+        suggestedSlugs = ['milk-thistle', 'nac', 'tudca']
         customName = "Total Detox Stack"
       } else if (lower.includes('joint') || lower.includes('pain') || lower.includes('bones')) {
-        suggestedIds = [8, 3, 6] // Joint Support, D3, Fish Oil Triple
+        suggestedSlugs = ['joint-support', 'vitamin-d3-k2-calcium', 'triple-strength-fish-oil']
         customName = "Mobility & Joint Stack"
       } else if (lower.includes('gut') || lower.includes('digestion') || lower.includes('bloat')) {
-        suggestedIds = [21, 13] // Probiotics, Liver Support Blend (helps digestion)
+        suggestedSlugs = ['prebiotics-probiotics', 'liver-support-blend']
         customName = "Gut Harmony Stack"
       } else {
-        suggestedIds = [1, 5] // Multivitamin, Single Fish Oil
+        suggestedSlugs = ['multivitamin-with-probiotics', 'single-strength-fish-oil']
         customName = "Daily Foundation Stack"
         customSynergy = "These are our core essentials to build a strong foundation for your daily health."
       }
 
-      const products = suggestedIds.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean)
-      const original = products.reduce((sum, p) => sum + p.price, 0)
+      const matchedProducts = suggestedSlugs.map(slug => products.find(p => p.slug === slug)).filter(Boolean)
+      const original = matchedProducts.reduce((sum, p) => sum + p.price, 0)
       const discountedPrice = Math.round(original * 0.85) // Custom stacks get a 15% discount
 
       setCustomStack({
         id: 'custom-' + Date.now(),
         name: customName,
         tagline: "Personalized based on your goals",
-        productIds: suggestedIds,
+        productIds: matchedProducts.map(p => p.id),
         originalPrice: original,
         comboPrice: discountedPrice,
         badge: "Custom Plan",
@@ -265,7 +150,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8)_0%,transparent_100%)] opacity-80"></div>
                   <div className="relative flex flex-wrap items-center justify-center w-full h-full min-h-[250px] p-4 md:p-6 z-10">
                     {customStack.productIds.map((id, index) => {
-                      const prod = PRODUCTS.find(p => p.id === id);
+                      const prod = products.find(p => p.id === id);
                       if (!prod) return null;
 
                       return (
@@ -301,7 +186,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                     <p className="text-sm text-charcoal/70">{customStack.synergy}</p>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
-                      {customStack.productIds.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean).map(prod => (
+                      {customStack.productIds.map(id => products.find(p => p.id === id)).filter(Boolean).map(prod => (
                         <div key={prod.id} className="flex items-center gap-2 border border-cream-dark/30 rounded p-2 bg-bg-primary/50">
                           <div className="w-8 h-8 rounded shrink-0 overflow-hidden border border-white shadow-sm">
                             <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
@@ -336,8 +221,8 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
 
       {activeTab === 'pre-made' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {BUNDLES.map((bundle) => {
-            const products = bundle.productIds.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean)
+          {stacks.map((bundle) => {
+            const bundleProducts = bundle.productIds.map(id => products.find(p => p.id === id)).filter(Boolean)
             const basePrice = bundle.comboPrice
             const currentPrice = basePrice
             const originalPrice = bundle.originalPrice
@@ -359,7 +244,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
 
                   {/* Visual stacked presentation of bottles in the combo */}
                   <div className="relative flex items-center justify-center -space-x-12 w-full h-full pt-4 px-4">
-                    {products.map((prod, index) => (
+                    {bundleProducts.map((prod, index) => (
                       <div 
                         key={prod.id} 
                         className="relative transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:z-30 w-32 h-48 md:w-44 md:h-60"
@@ -389,7 +274,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                     {/* Category / Formulations count */}
                     <div className="flex items-center justify-between text-[9px] font-mono text-charcoal/40 uppercase tracking-widest">
                       <span>{bundle.badge}</span>
-                      <span>{products.length} Products</span>
+                      <span>{bundleProducts.length} Products</span>
                     </div>
 
                     {/* Stack Name */}
@@ -483,7 +368,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
               <div className="space-y-3">
                 <span className="text-[9px] font-mono font-bold uppercase text-charcoal/40 block">Products in this Combo</span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {selectedDetailStack.productIds.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean).map((prod) => (
+                  {selectedDetailStack.productIds.map(id => products.find(p => p.id === id)).filter(Boolean).map((prod) => (
                     <div 
                       key={prod.id}
                       onClick={() => {

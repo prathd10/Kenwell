@@ -80,6 +80,11 @@ export default function Footer({ setCurrentSection }) {
                   Track Order
                 </button>
               </li>
+              <li>
+                <button onClick={() => setCurrentSection('verify')} className="hover:text-champagne transition-colors cursor-pointer">
+                  Verify Product
+                </button>
+              </li>
             </ul>
           </div>
 

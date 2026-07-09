@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { PRODUCTS } from '../data'
+import { useProducts } from '../context/ProductsContext'
 import ProductCard from './ProductCard'
 
 export default function ProductCatalog({ 
@@ -16,6 +16,7 @@ export default function ProductCatalog({
   wishlistItems = [],
   onAddToCart
 }) {
+  const { products } = useProducts()
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('featured')
   const [showFiltersPanel, setShowFiltersPanel] = useState(false)
@@ -35,18 +36,18 @@ export default function ProductCatalog({
   // Curated lists based on competitor benchmarks
   const collectionIds = useMemo(() => {
     return {
-      bestsellers: [1, 2, 6, 12, 19, 21],
-      men: [2, 4, 6, 12, 19, 20, 23],
-      women: [1, 2, 3, 8, 14, 15, 16]
+      bestsellers: ['multivitamin-with-probiotics', 'chelated-magnesium-glycinate', 'triple-strength-fish-oil', 'nad', 'ksm-66-ashwagandha', 'prebiotics-probiotics'],
+      men: ['chelated-magnesium-glycinate', 'zinc-picolonate-magnesium', 'triple-strength-fish-oil', 'nad', 'ksm-66-ashwagandha', 'dht-blocker', 'berberine-hcl'],
+      women: ['multivitamin-with-probiotics', 'chelated-magnesium-glycinate', 'vitamin-d3-k2-calcium', 'joint-support', 'vitamin-c', 'glutathione-reduced', 'vitamin-b12']
     }
   }, [])
 
   // Filter products based on collection, search, series, and health goals
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
+    return products.filter((product) => {
       // 1. Collection check
       if (collection !== 'all' && collectionIds[collection]) {
-        if (!collectionIds[collection].includes(product.id)) {
+        if (!collectionIds[collection].includes(product.slug)) {
           return false
         }
       }
@@ -69,16 +70,16 @@ export default function ProductCatalog({
 
       return matchesSearch && matchesSeries && matchesGoal
     })
-  }, [collection, collectionIds, searchQuery, selectedSeries, selectedGoal])
+  }, [products, collection, collectionIds, searchQuery, selectedSeries, selectedGoal])
 
   // Dynamically extract all unique health goals from active products list
   const allGoals = useMemo(() => {
     const goalsSet = new Set()
-    
+
     // Filter base products by collection first to only show goals relevant to Men/Women/Bestsellers
     const baseProducts = collection !== 'all' && collectionIds[collection]
-      ? PRODUCTS.filter(p => collectionIds[collection].includes(p.id))
-      : PRODUCTS
+      ? products.filter(p => collectionIds[collection].includes(p.slug))
+      : products
 
     baseProducts.forEach((product) => {
       if (product.healthGoals) {
@@ -86,7 +87,7 @@ export default function ProductCatalog({
       }
     })
     return ['All', ...Array.from(goalsSet).sort()]
-  }, [collection, collectionIds])
+  }, [products, collection, collectionIds])
 
   // Get custom title/subtitle based on the active collection
   const headerContent = useMemo(() => {

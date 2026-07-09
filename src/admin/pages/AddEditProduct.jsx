@@ -43,7 +43,13 @@ export default function AddEditProduct() {
     name: '', slug: '', short_description: '', description: '',
     price: '', compare_price: '', stock_quantity: '0',
     is_active: true, tags: '',
+    series: '', productForm: '', servings: '',
+    healthGoals: '', benefits: '', accentColor: '#7A8C5A',
   })
+  const [howToUse, setHowToUse] = useState({ dosage: '', timing: '', stacking: '', warnings: '' })
+  const [nutritionalFacts, setNutritionalFacts] = useState({ servingSize: '', servingsPerContainer: '' })
+  const [ingredients, setIngredients] = useState([])
+  const [scienceText, setScienceText] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [categories, setCategories] = useState([])
   const [images, setImages] = useState([])
@@ -68,13 +74,35 @@ export default function AddEditProduct() {
           stock_quantity: String(data.stock_quantity ?? 0),
           is_active: data.is_active ?? true,
           tags: (data.tags || []).join(', '),
+          series: data.series || '',
+          productForm: data.form || '',
+          servings: data.servings ? String(data.servings) : '',
+          healthGoals: (data.health_goals || []).join(', '),
+          benefits: (data.benefits || []).join(', '),
+          accentColor: data.accent_color || '#7A8C5A',
         })
+        setHowToUse({
+          dosage: data.how_to_use?.dosage || '',
+          timing: data.how_to_use?.timing || '',
+          stacking: data.how_to_use?.stacking || '',
+          warnings: data.how_to_use?.warnings || '',
+        })
+        setNutritionalFacts({
+          servingSize: data.nutritional_facts?.servingSize || '',
+          servingsPerContainer: data.nutritional_facts?.servingsPerContainer || '',
+        })
+        setIngredients(data.nutritional_facts?.ingredients || [])
+        setScienceText(data.science_text || '')
         setCategoryId(data.category_id || '')
         setImages(data.images || [])
         setSlugEdited(true)
       })
     }
   }, [id, isEdit])
+
+  const addIngredient = () => setIngredients(prev => [...prev, { name: '', amount: '', dv: '' }])
+  const removeIngredient = (idx) => setIngredients(prev => prev.filter((_, i) => i !== idx))
+  const setIngredient = (idx, key, val) => setIngredients(prev => prev.map((ing, i) => i === idx ? { ...ing, [key]: val } : ing))
 
   const set = (key, val) => {
     setForm(f => {
@@ -114,6 +142,7 @@ export default function AddEditProduct() {
       slug: form.slug.trim(),
       category_id: categoryId || null,
       short_description: form.short_description.trim() || null,
+      tagline: form.short_description.trim() || null,
       description: form.description.trim() || null,
       price: Number(form.price),
       compare_price: form.compare_price ? Number(form.compare_price) : null,
@@ -121,6 +150,20 @@ export default function AddEditProduct() {
       is_active: form.is_active,
       images,
       tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+      series: form.series || null,
+      form: form.productForm || null,
+      servings: form.servings ? parseInt(form.servings, 10) : null,
+      health_goals: form.healthGoals ? form.healthGoals.split(',').map(t => t.trim()).filter(Boolean) : [],
+      benefits: form.benefits ? form.benefits.split(',').map(t => t.trim()).filter(Boolean) : [],
+      accent_color: form.accentColor || null,
+      how_to_use: howToUse,
+      nutritional_facts: {
+        servingSize: nutritionalFacts.servingSize,
+        servingsPerContainer: nutritionalFacts.servingsPerContainer,
+        headers: ['Amount Per Serving', '% Daily Value (RDA)'],
+        ingredients: ingredients.filter(ing => ing.name.trim()),
+      },
+      science_text: scienceText.trim() || null,
       updated_at: new Date().toISOString(),
     }
 
@@ -344,6 +387,256 @@ export default function AddEditProduct() {
                 boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
               }} />
             </button>
+          </div>
+        </Section>
+
+        {/* Classification */}
+        <Section title="Classification">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+            <div>
+              <label style={labelStyle}>Series</label>
+              <select
+                value={form.series}
+                onChange={e => set('series', e.target.value)}
+                style={{ ...inputStyle, cursor: 'pointer' }}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              >
+                <option value="">Select series</option>
+                <option value="Core Series">Core Series</option>
+                <option value="Wellness Series">Wellness Series</option>
+                <option value="Liposomal Series">Liposomal Series</option>
+                <option value="Performance Series">Performance Series</option>
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Form</label>
+              <select
+                value={form.productForm}
+                onChange={e => set('productForm', e.target.value)}
+                style={{ ...inputStyle, cursor: 'pointer' }}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              >
+                <option value="">Select form</option>
+                <option value="Tablets">Tablets</option>
+                <option value="Softgels">Softgels</option>
+                <option value="Capsules">Capsules</option>
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Servings</label>
+              <input
+                type="number"
+                min="0"
+                value={form.servings}
+                onChange={e => set('servings', e.target.value)}
+                placeholder="30"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+          </div>
+        </Section>
+
+        {/* Health & Benefits */}
+        <Section title="Health &amp; Benefits">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <label style={labelStyle}>Health Goals</label>
+              <input
+                type="text"
+                value={form.healthGoals}
+                onChange={e => set('healthGoals', e.target.value)}
+                placeholder="Immunity, Energy, Sleep  (comma-separated)"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Benefits</label>
+              <input
+                type="text"
+                value={form.benefits}
+                onChange={e => set('benefits', e.target.value)}
+                placeholder="Supports gut health, Boosts energy  (comma-separated)"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+          </div>
+        </Section>
+
+        {/* How To Use */}
+        <Section title="How To Use">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <label style={labelStyle}>Dosage</label>
+              <input
+                type="text"
+                value={howToUse.dosage}
+                onChange={e => setHowToUse(h => ({ ...h, dosage: e.target.value }))}
+                placeholder="Take 1 tablet daily"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Timing</label>
+              <input
+                type="text"
+                value={howToUse.timing}
+                onChange={e => setHowToUse(h => ({ ...h, timing: e.target.value }))}
+                placeholder="In the morning, with breakfast"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Stacking</label>
+              <input
+                type="text"
+                value={howToUse.stacking}
+                onChange={e => setHowToUse(h => ({ ...h, stacking: e.target.value }))}
+                placeholder="Combine with X for Y"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Warnings</label>
+              <input
+                type="text"
+                value={howToUse.warnings}
+                onChange={e => setHowToUse(h => ({ ...h, warnings: e.target.value }))}
+                placeholder="Consult your doctor if pregnant or nursing."
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+          </div>
+        </Section>
+
+        {/* Nutrition Facts */}
+        <Section title="Nutrition Facts">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
+            <div>
+              <label style={labelStyle}>Serving Size</label>
+              <input
+                type="text"
+                value={nutritionalFacts.servingSize}
+                onChange={e => setNutritionalFacts(f => ({ ...f, servingSize: e.target.value }))}
+                placeholder="1 Tablet"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Servings Per Container</label>
+              <input
+                type="text"
+                value={nutritionalFacts.servingsPerContainer}
+                onChange={e => setNutritionalFacts(f => ({ ...f, servingsPerContainer: e.target.value }))}
+                placeholder="30"
+                style={inputStyle}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
+          </div>
+
+          <label style={labelStyle}>Ingredients</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {ingredients.map((ing, i) => (
+              <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={ing.name}
+                  onChange={e => setIngredient(i, 'name', e.target.value)}
+                  placeholder="Ingredient name"
+                  style={{ ...inputStyle, flex: 2 }}
+                  onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                  onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+                />
+                <input
+                  type="text"
+                  value={ing.amount}
+                  onChange={e => setIngredient(i, 'amount', e.target.value)}
+                  placeholder="Amount"
+                  style={{ ...inputStyle, flex: 1 }}
+                  onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                  onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+                />
+                <input
+                  type="text"
+                  value={ing.dv}
+                  onChange={e => setIngredient(i, 'dv', e.target.value)}
+                  placeholder="% DV"
+                  style={{ ...inputStyle, flex: 1 }}
+                  onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                  onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeIngredient(i)}
+                  style={{ width: 32, height: 32, flexShrink: 0, borderRadius: '50%', background: '#fef2f2', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addIngredient}
+              style={{ alignSelf: 'flex-start', display: 'inline-flex', alignItems: 'center', gap: 6, padding: '0.5rem 0.9rem', borderRadius: 8, border: '1.5px dashed #DDD8CA', background: '#F4F1EA', color: '#7A8C5A', cursor: 'pointer', fontSize: '0.8rem', fontFamily: '"DM Sans", sans-serif' }}
+            >
+              + Add ingredient
+            </button>
+          </div>
+        </Section>
+
+        {/* Science */}
+        <Section title="Science">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <label style={labelStyle}>Accent Color</label>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <input
+                  type="color"
+                  value={form.accentColor}
+                  onChange={e => set('accentColor', e.target.value)}
+                  style={{ width: 44, height: 38, padding: 2, border: '1.5px solid #DDD8CA', borderRadius: 8, cursor: 'pointer', background: 'white' }}
+                />
+                <input
+                  type="text"
+                  value={form.accentColor}
+                  onChange={e => set('accentColor', e.target.value)}
+                  style={{ ...inputStyle, fontFamily: 'monospace', fontSize: '0.85rem' }}
+                  onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                  onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+                />
+              </div>
+            </div>
+            <div>
+              <label style={labelStyle}>Science Text</label>
+              <textarea
+                value={scienceText}
+                onChange={e => setScienceText(e.target.value)}
+                placeholder={'Explain the mechanism of action…\n\nCitations:\n1. Author, et al. (Year). Title. Journal.'}
+                rows={8}
+                style={{ ...inputStyle, resize: 'vertical' }}
+                onFocus={e => (e.target.style.borderColor = '#2E402B')}
+                onBlur={e => (e.target.style.borderColor = '#DDD8CA')}
+              />
+            </div>
           </div>
         </Section>
 

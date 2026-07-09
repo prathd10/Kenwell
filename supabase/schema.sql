@@ -303,4 +303,189 @@ CREATE POLICY "public_insert_partner_inquiries"
 CREATE POLICY "admin_all_partner_inquiries"
   ON partner_inquiries FOR ALL USING (auth.role() = 'authenticated');
 
+-- ============================================================
+-- Products: rich content columns (migration from src/data.js)
+-- ============================================================
+
+ALTER TABLE products
+  ADD COLUMN IF NOT EXISTS series               TEXT,   -- "Core Series" | "Wellness Series" | "Liposomal Series" | "Performance Series"
+  ADD COLUMN IF NOT EXISTS form                  TEXT,   -- "Tablets" | "Softgels" | "Capsules"
+  ADD COLUMN IF NOT EXISTS servings              INTEGER,
+  ADD COLUMN IF NOT EXISTS tagline               TEXT,
+  ADD COLUMN IF NOT EXISTS health_goals          TEXT[]  DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS benefits              TEXT[]  DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS accent_color          TEXT,
+  ADD COLUMN IF NOT EXISTS how_to_use            JSONB   DEFAULT '{}'::jsonb,  -- { dosage, timing, stacking, warnings }
+  ADD COLUMN IF NOT EXISTS nutritional_facts     JSONB   DEFAULT '{}'::jsonb,  -- { servingSize, servingsPerContainer, headers:[a,b], ingredients:[{name,amount,dv}] }
+  ADD COLUMN IF NOT EXISTS science_text          TEXT;
+
+-- ============================================================
+-- Stacks (product bundles/combos)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS stacks (
+  id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name            TEXT NOT NULL,
+  slug            TEXT UNIQUE NOT NULL,
+  description     TEXT,
+  tagline         TEXT,
+  badge           TEXT,
+  focus           TEXT[]  DEFAULT '{}',
+  synergy         TEXT,
+  schedule        JSONB   DEFAULT '{}'::jsonb,  -- { morning, afternoon, evening }
+  is_active       BOOLEAN DEFAULT TRUE,
+  created_at      TIMESTAMPTZ DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Which products belong to a stack, in what order, and at what
+-- discounted per-unit price when bought as part of the combo.
+CREATE TABLE IF NOT EXISTS stack_products (
+  id                UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  stack_id          UUID NOT NULL REFERENCES stacks(id) ON DELETE CASCADE,
+  product_id        UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  discounted_price  DECIMAL(10,2),  -- NULL => no override, use product.price
+  sort_order        INTEGER NOT NULL DEFAULT 0,
+  UNIQUE (stack_id, product_id)
+);
+
+CREATE OR REPLACE TRIGGER trg_stacks_updated_at
+  BEFORE UPDATE ON stacks
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE stacks          ENABLE ROW LEVEL SECURITY;
+ALTER TABLE stack_products  ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "public_read_active_stacks" ON stacks FOR SELECT USING (is_active = true);
+CREATE POLICY "admin_all_stacks" ON stacks FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "public_read_stack_products" ON stack_products FOR SELECT USING (true);
+CREATE POLICY "admin_all_stack_products" ON stack_products FOR ALL USING (auth.role() = 'authenticated');
+
+-- ============================================================
+-- Product Authenticity Verification
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS auth_code_batches (
+  id            UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  label         TEXT NOT NULL,                    -- e.g. "First Batch — July 2026"
+  sku_plan      JSONB NOT NULL DEFAULT '[]'::jsonb, -- [{ product_id, quantity }, ...] requested
+  status        TEXT NOT NULL DEFAULT 'in_progress', -- 'in_progress' | 'completed'
+  created_at    TIMESTAMPTZ DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS product_auth_codes (
+  id            UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  code          TEXT UNIQUE NOT NULL,              -- e.g. "7K4M-9XQP-R2"
+  product_id    UUID REFERENCES products(id) ON DELETE SET NULL,
+  batch_id      UUID REFERENCES auth_code_batches(id) ON DELETE SET NULL,
+  verified_at   TIMESTAMPTZ,                       -- NULL = not yet verified
+  verify_count  INTEGER NOT NULL DEFAULT 0,         -- total scans, for future fraud-signal review
+  created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_product_auth_codes_batch_product
+  ON product_auth_codes(batch_id, product_id);
+
+CREATE OR REPLACE TRIGGER trg_auth_code_batches_updated_at
+  BEFORE UPDATE ON auth_code_batches
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE auth_code_batches   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE product_auth_codes  ENABLE ROW LEVEL SECURITY;
+
+-- Admin only — no public policy on either table. Public interacts
+-- exclusively through verify_product_code() below.
+CREATE POLICY "admin_all_auth_code_batches" ON auth_code_batches
+  FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "admin_all_product_auth_codes" ON product_auth_codes
+  FOR ALL USING (auth.role() = 'authenticated');
+
+-- ============================================================
+-- Verification RPC — the only public entry point.
+-- SECURITY DEFINER lets it bypass RLS internally; the function
+-- itself only ever returns a status + product name/image, never
+-- raw rows, and only mutates the single matched row.
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION verify_product_code(p_code TEXT)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_row product_auth_codes%ROWTYPE;
+  v_product products%ROWTYPE;
+BEGIN
+  SELECT * INTO v_row FROM product_auth_codes WHERE code = upper(trim(p_code));
+
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('status', 'invalid');
+  END IF;
+
+  SELECT * INTO v_product FROM products WHERE id = v_row.product_id;
+
+  IF v_row.verified_at IS NULL THEN
+    UPDATE product_auth_codes
+      SET verified_at = NOW(), verify_count = verify_count + 1
+      WHERE id = v_row.id
+      RETURNING * INTO v_row;
+
+    RETURN jsonb_build_object(
+      'status', 'first_verification',
+      'verified_at', v_row.verified_at,
+      'product_name', v_product.name,
+      'product_image', v_product.images[1]
+    );
+  ELSE
+    UPDATE product_auth_codes
+      SET verify_count = verify_count + 1
+      WHERE id = v_row.id;
+
+    RETURN jsonb_build_object(
+      'status', 'already_verified',
+      'verified_at', v_row.verified_at,
+      'product_name', v_product.name,
+      'product_image', v_product.images[1]
+    );
+  END IF;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION verify_product_code(TEXT) TO anon, authenticated;
+
+-- ============================================================
+-- Per-product generated vs. verified rollup, for the admin
+-- dashboard. Admin-only — same lockdown philosophy as the
+-- underlying tables (invoker-rights view, so RLS on
+-- product_auth_codes still applies per-caller; explicitly
+-- revoked from anon as a second layer of defense).
+-- ============================================================
+
+CREATE OR REPLACE VIEW product_auth_code_stats AS
+SELECT
+  p.id                AS product_id,
+  p.name              AS product_name,
+  p.slug              AS product_slug,
+  COUNT(pac.id)                                              AS total_codes,
+  COUNT(pac.id) FILTER (WHERE pac.verified_at IS NOT NULL)   AS verified_codes
+FROM products p
+LEFT JOIN product_auth_codes pac ON pac.product_id = p.id
+GROUP BY p.id, p.name, p.slug;
+
+REVOKE ALL ON product_auth_code_stats FROM anon;
+GRANT SELECT ON product_auth_code_stats TO authenticated;
+
+-- ============================================================
+-- UGC Videos: link testimonials to a real product (for product
+-- page video sections), alongside the existing free-text tag.
+-- ============================================================
+
+ALTER TABLE ugc_videos
+  ADD COLUMN IF NOT EXISTS product_id UUID REFERENCES products(id) ON DELETE SET NULL;
+
+CREATE INDEX IF NOT EXISTS idx_ugc_videos_product ON ugc_videos(product_id);
+
 

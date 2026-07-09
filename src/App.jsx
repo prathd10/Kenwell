@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { useProducts } from './context/ProductsContext'
+import { useCart } from './context/CartContext'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import ProductCatalog from './components/ProductCatalog'
@@ -13,24 +15,34 @@ import TrackOrder from './components/TrackOrder'
 import StoreLocator from './components/StoreLocator'
 import PartnerWithUs from './components/PartnerWithUs'
 import AnalyticsTracker from './components/AnalyticsTracker'
+import VerifyProduct from './components/VerifyProduct'
 
 
 export default function App() {
+  const { loading: productsLoading } = useProducts()
+  const {
+    cartItems, wishlistItems, addToCart, removeFromCart,
+    updateCartQuantity, clearCart, toggleWishlist,
+  } = useCart()
   const [currentSection, setCurrentSection] = useState('home')
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [stackItems, setStackItems] = useState([])
   const [quizAnswers, setQuizAnswers] = useState({})
-  
-  // Lifted Catalog Filters & Cart/Wishlist States
+
+  // Lifted Catalog Filters
   const [selectedSeries, setSelectedSeries] = useState('All')
   const [selectedGoal, setSelectedGoal] = useState('All')
-  const [wishlistItems, setWishlistItems] = useState([])
-  const [cartItems, setCartItems] = useState([])
 
   // Custom scrolling behaviour when section changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [currentSection])
+
+  // Deep-link support: a scanned authenticity QR lands on /?code=XXXX
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get('code')
+    if (code) setCurrentSection('verify')
+  }, [])
 
   // Listen for goal/series filter events dispatched by Hero tiles
   useEffect(() => {
@@ -70,39 +82,6 @@ export default function App() {
     setSelectedProduct(product)
   }
 
-  const toggleWishlist = (product) => {
-    if (wishlistItems.some(item => item.id === product.id)) {
-      setWishlistItems(wishlistItems.filter(item => item.id !== product.id))
-    } else {
-      setWishlistItems([...wishlistItems, product])
-    }
-  }
-
-  const addToCart = (product) => {
-    const existing = cartItems.find(item => item.id === product.id)
-    if (existing) {
-      setCartItems(cartItems.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item))
-    } else {
-      setCartItems([...cartItems, { ...product, quantity: 1 }])
-    }
-  }
-
-  const removeFromCart = (productId) => {
-    setCartItems(cartItems.filter(item => item.id !== productId))
-  }
-
-  const updateCartQuantity = (productId, qty) => {
-    if (qty <= 0) {
-      removeFromCart(productId)
-    } else {
-      setCartItems(cartItems.map(item => item.id === productId ? { ...item, quantity: qty } : item))
-    }
-  }
-
-  const clearCart = () => {
-    setCartItems([])
-  }
-
   const handleSelectFilter = (type, value) => {
     if (type === 'series') {
       setSelectedSeries(value)
@@ -121,6 +100,15 @@ export default function App() {
       setSelectedSeries('All')
       setSelectedGoal('All')
     }
+  }
+
+  if (productsLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F4F1EA' }}>
+        <div style={{ width: 32, height: 32, border: '2.5px solid #2E402B', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    )
   }
 
   return (
@@ -255,6 +243,10 @@ export default function App() {
         
         {currentSection === 'track' && (
           <TrackOrder />
+        )}
+
+        {currentSection === 'verify' && (
+          <VerifyProduct />
         )}
         
         {currentSection === 'about' && (

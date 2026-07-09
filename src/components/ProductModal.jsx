@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function ProductModal({ product, onClose, onAddToStack, isInStack, onToggleWishlist, isInWishlist, onAddToCart }) {
   const [activeTab, setActiveTab] = useState('overview')
@@ -45,6 +46,14 @@ export default function ProductModal({ product, onClose, onAddToStack, isInStack
           <div className="mt-8 text-center z-10">
             <h2 className="font-serif text-2xl font-bold text-primary-green mt-3">{product.name}</h2>
             <p className="font-mono text-sm font-semibold text-charcoal/60 mt-1">₹{product.price} • {product.servings} Servings</p>
+            {product.slug && (
+              <Link
+                to={`/products/${product.slug}`}
+                className="inline-block mt-3 text-[11px] font-semibold uppercase tracking-wider text-sage hover:text-primary-green transition-colors underline"
+              >
+                View Full Details →
+              </Link>
+            )}
           </div>
         </div>
 

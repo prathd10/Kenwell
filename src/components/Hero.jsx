@@ -1,37 +1,37 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { PRODUCTS } from '../data'
+import { useProducts } from '../context/ProductsContext'
 import UGCSection from './UGCSection'
 import ProductCard from './ProductCard'
 
 /* ── Image map ─────────────────────────────────────────────────── */
 const LOCAL_BOTTLE_MAP = {
-  1: '/bottle_multivitamin.png',
-  2: '/bottle_magnesium.png',
-  3: '/bottle_vitamin_d3.png',
-  4: '/bottle_zinc_magnesium.png',
-  5: '/bottle_fish_oil.png',
-  6: '/bottle_fish_oil.png',
-  7: '/bottle_fish_oil.png',
-  8: '/bottle_joint_support.png',
-  9: '/bottle_milk_thistle.png',
-  10: '/bottle_nac.png',
-  11: '/bottle_tudca.png',
-  12: '/bottle_nad.png',
-  13: '/bottle_milk_thistle.png',
-  14: '/bottle_vitamin_c.png',
-  15: '/bottle_glutathione.png',
-  16: '/bottle_vitamin_d3.png',
-  17: '/bottle_coq10.png',
-  18: '/bottle_melatonin.png',
-  19: '/bottle_ashwagandha.png',
-  20: '/bottle_berberine.png',
-  21: '/bottle_probiotics.png',
+  'multivitamin-with-probiotics': '/bottle_multivitamin.png',
+  'chelated-magnesium-glycinate': '/bottle_magnesium.png',
+  'vitamin-d3-k2-calcium': '/bottle_vitamin_d3.png',
+  'zinc-picolonate-magnesium': '/bottle_zinc_magnesium.png',
+  'single-strength-fish-oil': '/bottle_fish_oil.png',
+  'triple-strength-fish-oil': '/bottle_fish_oil.png',
+  'vegetarian-omega': '/bottle_fish_oil.png',
+  'joint-support': '/bottle_joint_support.png',
+  'milk-thistle': '/bottle_milk_thistle.png',
+  'nac': '/bottle_nac.png',
+  'tudca': '/bottle_tudca.png',
+  'nad': '/bottle_nad.png',
+  'liver-support-blend': '/bottle_milk_thistle.png',
+  'vitamin-c': '/bottle_vitamin_c.png',
+  'glutathione-reduced': '/bottle_glutathione.png',
+  'vitamin-b12': '/bottle_vitamin_d3.png',
+  'coq10-ubiquinone': '/bottle_coq10.png',
+  'melatonin-sleep-support': '/bottle_melatonin.png',
+  'ksm-66-ashwagandha': '/bottle_ashwagandha.png',
+  'dht-blocker': '/bottle_berberine.png',
+  'prebiotics-probiotics': '/bottle_probiotics.png',
 }
 
 /* ── Constants ─────────────────────────────────────────────────── */
 const HERO_SLIDES = [
   {
-    id: 19,
+    slug: 'ksm-66-ashwagandha',
     headline: 'Proven Stress Relief',
     sub: 'Ashwagandha · Naturally lowers stress levels',
     badge: 'Core Series',
@@ -41,7 +41,7 @@ const HERO_SLIDES = [
     bgImage: 'https://images.unsplash.com/photo-1618220179428-22790b46a014?q=80&w=2000&auto=format&fit=crop',
   },
   {
-    id: 12,
+    slug: 'nad',
     headline: 'More Energy & Healthy Aging',
     sub: 'NAD+ · Boosts your natural body energy',
     badge: 'Liposomal Series',
@@ -51,7 +51,7 @@ const HERO_SLIDES = [
     bgImage: 'https://images.unsplash.com/photo-1600170311833-c2cf5280ce49?q=80&w=2000&auto=format&fit=crop',
   },
   {
-    id: 15,
+    slug: 'glutathione-reduced',
     headline: 'The Ultimate Detox',
     sub: 'Glutathione · Clears toxins & brightens skin',
     badge: 'Liposomal Series',
@@ -96,7 +96,7 @@ const CATEGORIES = [
   },
 ]
 
-const BESTSELLER_IDS = [19, 2, 12, 15, 6, 1]
+const BESTSELLER_SLUGS = ['ksm-66-ashwagandha', 'chelated-magnesium-glycinate', 'nad', 'glutathione-reduced', 'triple-strength-fish-oil', 'multivitamin-with-probiotics']
 
 const TRUST_SVG_CLS = 'w-6 h-6 text-sage'
 const TRUST_POINTS = [
@@ -136,7 +136,7 @@ function Stars({ n = 5 }) {
 }
 
 function getLocalSrc(product) {
-  return LOCAL_BOTTLE_MAP[product.id] || '/bottle_multivitamin.png'
+  return LOCAL_BOTTLE_MAP[product?.slug] || '/bottle_multivitamin.png'
 }
 
 
@@ -153,6 +153,7 @@ export default function Hero({
   onAddToStack,
   stackItems
 }) {
+  const { products } = useProducts()
   const [slide, setSlide] = useState(0)
   const [fading, setFading] = useState(false)
   const [heroImgErr, setHeroImgErr] = useState(false)
@@ -198,15 +199,15 @@ export default function Hero({
   }, [goTo])
 
   const activeSlide = HERO_SLIDES[slide]
-  const activeProduct = PRODUCTS.find(p => p.id === activeSlide.id)
+  const activeProduct = products.find(p => p.slug === activeSlide.slug)
 
   const nextSlide = HERO_SLIDES[(slide + 1) % HERO_SLIDES.length]
-  const nextProduct = PRODUCTS.find(p => p.id === nextSlide.id)
+  const nextProduct = products.find(p => p.slug === nextSlide.slug)
 
   const nextNextSlide = HERO_SLIDES[(slide + 2) % HERO_SLIDES.length]
-  const nextNextProduct = PRODUCTS.find(p => p.id === nextNextSlide.id)
+  const nextNextProduct = products.find(p => p.slug === nextNextSlide.slug)
 
-  const bestsellers = BESTSELLER_IDS.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean)
+  const bestsellers = BESTSELLER_SLUGS.map(slug => products.find(p => p.slug === slug)).filter(Boolean)
 
   const filterGoal = (goal) => window.dispatchEvent(new CustomEvent('kenwell:filterGoal', { detail: goal }))
   const filterSeries = (series) => window.dispatchEvent(new CustomEvent('kenwell:filterSeries', { detail: series }))

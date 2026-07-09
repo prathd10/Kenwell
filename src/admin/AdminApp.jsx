@@ -8,6 +8,9 @@ import Products from './pages/Products'
 import AddEditProduct from './pages/AddEditProduct'
 import Stores from './pages/Stores'
 import AddEditStore from './pages/AddEditStore'
+import Stacks from './pages/Stacks'
+import AddEditStack from './pages/AddEditStack'
+import AuthCodes from './pages/AuthCodes'
 import UGCVideos from './pages/UGCVideos'
 import PartnerRequests from './pages/PartnerRequests'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -34,6 +37,10 @@ export default function AdminApp() {
         <Route path="products" element={<Products />} />
         <Route path="products/new" element={<AddEditProduct />} />
         <Route path="products/:id/edit" element={<AddEditProduct />} />
+        <Route path="stacks" element={<Stacks />} />
+        <Route path="stacks/new" element={<AddEditStack />} />
+        <Route path="stacks/:id/edit" element={<AddEditStack />} />
+        <Route path="auth-codes" element={<AuthCodes />} />
         <Route path="stores" element={<Stores />} />
         <Route path="stores/new" element={<AddEditStore />} />
         <Route path="stores/:id/edit" element={<AddEditStore />} />

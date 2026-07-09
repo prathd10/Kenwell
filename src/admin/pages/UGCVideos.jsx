@@ -10,6 +10,7 @@ function empty(maxOrder) {
     handle: '',
     role: '',
     product: '',
+    product_id: null,
     video_url: '',
     thumbnail_url: '',
     caption: '',
@@ -20,6 +21,7 @@ function empty(maxOrder) {
 
 export default function UGCVideos() {
   const [videos, setVideos] = useState([])
+  const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null)   // id (or '__new__') of row being edited
   const [draft, setDraft] = useState(null)
@@ -32,12 +34,13 @@ export default function UGCVideos() {
   /* ── Load ──────────────────────────────────────────────────── */
   async function load() {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('ugc_videos')
-      .select('*')
-      .order('sort_order', { ascending: true })
+    const [{ data, error }, { data: productData }] = await Promise.all([
+      supabase.from('ugc_videos').select('*').order('sort_order', { ascending: true }),
+      supabase.from('products').select('id, name').eq('is_active', true).order('name'),
+    ])
     if (error) setError(error.message)
     else setVideos(data || [])
+    setProducts(productData || [])
     setLoading(false)
   }
 
@@ -81,6 +84,7 @@ export default function UGCVideos() {
       handle: draft.handle,
       role: draft.role,
       product: draft.product,
+      product_id: draft.product_id || null,
       video_url: draft.video_url,
       thumbnail_url: draft.thumbnail_url || null,
       caption: draft.caption || null,
@@ -221,7 +225,7 @@ export default function UGCVideos() {
               <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #F4F1EA', display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#7A8C5A', textTransform: 'uppercase', letterSpacing: '0.08em' }}>New Video</span>
               </div>
-              <EditForm draft={draft} setDraft={setDraft} inputStyle={inputStyle} labelStyle={labelStyle} onSave={handleSaveDraft} onCancel={handleCancel} saving={saving} />
+              <EditForm draft={draft} setDraft={setDraft} products={products} inputStyle={inputStyle} labelStyle={labelStyle} onSave={handleSaveDraft} onCancel={handleCancel} saving={saving} />
             </div>
           )}
 
@@ -276,7 +280,7 @@ export default function UGCVideos() {
               {/* Expanded edit form */}
               {editing === v.id && draft && (
                 <div style={{ borderTop: '1px solid #F4F1EA' }}>
-                  <EditForm draft={draft} setDraft={setDraft} inputStyle={inputStyle} labelStyle={labelStyle} onSave={handleSaveDraft} onCancel={handleCancel} saving={saving} />
+                  <EditForm draft={draft} setDraft={setDraft} products={products} inputStyle={inputStyle} labelStyle={labelStyle} onSave={handleSaveDraft} onCancel={handleCancel} saving={saving} />
                 </div>
               )}
             </div>
@@ -297,7 +301,7 @@ export default function UGCVideos() {
 }
 
 /* ── Shared edit form ──────────────────────────────────────────── */
-function EditForm({ draft, setDraft, inputStyle, labelStyle, onSave, onCancel, saving }) {
+function EditForm({ draft, setDraft, products, inputStyle, labelStyle, onSave, onCancel, saving }) {
   return (
     <div style={{ padding: '1.25rem 1.5rem', background: '#FAFAF8' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -314,7 +318,21 @@ function EditForm({ draft, setDraft, inputStyle, labelStyle, onSave, onCancel, s
           <input style={inputStyle} value={draft.role} onChange={e => setDraft({ ...draft, role: e.target.value })} placeholder="e.g. CrossFit Athlete" />
         </div>
         <div>
-          <label style={labelStyle}>Featured Product</label>
+          <label style={labelStyle}>Linked Product <span style={{ color: '#C9B99A', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(shows this video on that product's page)</span></label>
+          <select
+            style={{ ...inputStyle, cursor: 'pointer' }}
+            value={draft.product_id || ''}
+            onChange={e => {
+              const p = products.find(p => p.id === e.target.value)
+              setDraft({ ...draft, product_id: e.target.value || null, product: p ? p.name : draft.product })
+            }}
+          >
+            <option value="">No product linked</option>
+            {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+        </div>
+        <div style={{ gridColumn: '1 / -1' }}>
+          <label style={labelStyle}>Featured Product Label <span style={{ color: '#C9B99A', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(display text shown on the card — auto-filled from the linked product above, editable)</span></label>
           <input style={inputStyle} value={draft.product} onChange={e => setDraft({ ...draft, product: e.target.value })} placeholder="e.g. KSM-66 Ashwagandha" />
         </div>
         <div style={{ gridColumn: '1 / -1' }}>

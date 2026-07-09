@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function ProductCard({ product, onQuickView, onAddToStack, isInStack, onToggleWishlist, isInWishlist, onAddToCart }) {
   const [imgError, setImgError] = useState(false)
@@ -30,13 +31,20 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
   }
 
   // Generate deterministic review rating metrics for ecommerce trust
+  const idHash = useMemo(() => {
+    const str = String(product.slug || product.id)
+    let hash = 0
+    for (let i = 0; i < str.length; i++) hash += str.charCodeAt(i)
+    return hash
+  }, [product.slug, product.id])
+
   const rating = useMemo(() => {
-    return (4.5 + (product.id % 5) * 0.1).toFixed(1)
-  }, [product.id])
+    return (4.5 + (idHash % 5) * 0.1).toFixed(1)
+  }, [idHash])
 
   const reviewCount = useMemo(() => {
-    return 74 + (product.id * 17) % 180
-  }, [product.id])
+    return 74 + (idHash * 17) % 180
+  }, [idHash])
 
   const mrp = useMemo(() => {
     return Math.round(product.price * 1.25)
@@ -119,12 +127,19 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             <span className="text-charcoal/50 font-mono text-[9px] uppercase">{product.form}</span>
           </div>
           
-          {/* Product Name */}
-          <h3 
-            onClick={() => onQuickView(product)}
-            className="font-serif text-base font-bold text-primary-green hover:text-sage transition-colors cursor-pointer line-clamp-1"
-          >
-            {product.name}
+          {/* Product Name — real link for crawlability/sharing, but a normal click keeps the fast quick-view flow */}
+          <h3 className="font-serif text-base font-bold line-clamp-1">
+            <Link
+              to={`/products/${product.slug}`}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return
+                e.preventDefault()
+                onQuickView(product)
+              }}
+              className="text-primary-green hover:text-sage transition-colors"
+            >
+              {product.name}
+            </Link>
           </h3>
           
           {/* Tagline */}
