@@ -51,11 +51,12 @@ export default function Navbar({
     <nav className="sticky top-0 z-50 glass-panel backdrop-blur-md border-b border-cream-dark shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
-          {/* Logo without Emoji */}
-          <div 
-            onClick={() => handleNavClick('home')} 
+          {/* Logo */}
+          <div
+            onClick={() => handleNavClick('home')}
             className="flex items-center space-x-2 cursor-pointer group"
           >
+            <img src="/kenwell-mark.png" alt="" className="h-8 w-auto" />
             <span className="font-serif text-2xl font-bold tracking-widest text-primary-green uppercase">
               Kenwell
             </span>
@@ -574,9 +575,12 @@ export default function Navbar({
       }}>
         {/* Drawer Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid #E8E3D9' }}>
-          <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.18em', color: '#1C2D1A', textTransform: 'uppercase' }}>
-            Kenwell
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <img src="/kenwell-mark.png" alt="" style={{ height: 22, width: 'auto' }} />
+            <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.18em', color: '#1C2D1A', textTransform: 'uppercase' }}>
+              Kenwell
+            </span>
+          </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7A8C5A', padding: 4, display: 'flex', alignItems: 'center' }}

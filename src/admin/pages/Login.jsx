@@ -51,11 +51,7 @@ export default function Login() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '3rem' }}>
             <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(122,140,90,0.2)', border: '1px solid rgba(122,140,90,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
-                <path d="M8 2C5 6 5 14 8 18C11 14 11 6 8 2Z" fill="#7A8C5A" />
-                <path d="M8 10C5 8 2 9 2 12C5 13 7 12 8 10Z" fill="#B89F70" opacity="0.85"/>
-                <path d="M8 10C11 8 14 9 14 12C11 13 9 12 8 10Z" fill="#7A8C5A" opacity="0.6"/>
-              </svg>
+              <img src="/kenwell-mark-light.png" alt="" style={{ width: 20, height: 'auto' }} />
             </div>
             <div>
               <div style={{ fontFamily: '"Cormorant Garamond", serif', color: '#F4F1EA', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.14em' }}>KENWELL</div>
@@ -102,6 +98,7 @@ export default function Login() {
         <div style={{ width: '100%', maxWidth: 380 }}>
           {/* Mobile logo */}
           <div className="md:hidden" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <img src="/kenwell-mark.png" alt="" style={{ height: 36, width: 'auto', margin: '0 auto 8px' }} />
             <div style={{ fontFamily: '"Cormorant Garamond", serif', color: '#1C2D1A', fontSize: '2rem', fontWeight: 700, letterSpacing: '0.12em' }}>KENWELL</div>
             <div style={{ color: '#7A8C5A', fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginTop: 4 }}>Wellness &amp; Nutrition</div>
           </div>

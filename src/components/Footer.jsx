@@ -20,6 +20,7 @@ export default function Footer({ setCurrentSection }) {
           {/* Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
+              <img src="/kenwell-mark-light.png" alt="" className="h-8 w-auto" />
               <span className="font-serif text-2xl font-bold tracking-widest text-bg-primary uppercase">
                 Kenwell
               </span>

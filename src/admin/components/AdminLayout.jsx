@@ -51,11 +51,7 @@ function Sidebar({ onClose }) {
       <div style={{ padding: '1.75rem 1.5rem 1.5rem', position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
           <div style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(122,140,90,0.25)', border: '1px solid rgba(122,140,90,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
-              <path d="M7 1C4 5 4 13 7 17C10 13 10 5 7 1Z" fill="#7A8C5A" />
-              <path d="M7 9C4 7 1 8 1 11C4 12 6 11 7 9Z" fill="#B89F70" opacity="0.8"/>
-              <path d="M7 9C10 7 13 8 13 11C10 12 8 11 7 9Z" fill="#7A8C5A" opacity="0.6"/>
-            </svg>
+            <img src="/kenwell-mark-light.png" alt="" style={{ width: 18, height: 'auto' }} />
           </div>
           <div>
             <div style={{ fontFamily: '"Cormorant Garamond", serif', color: '#F4F1EA', fontSize: '1.1rem', fontWeight: 700, letterSpacing: '0.12em', lineHeight: 1 }}>
@@ -185,6 +181,7 @@ export default function AdminLayout() {
           <button onClick={() => setOpen(!open)} style={{ color: '#F4F1EA', background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}>
             <Menu size={22} />
           </button>
+          <img src="/kenwell-mark-light.png" alt="" style={{ height: 20, width: 'auto' }} />
           <span style={{ fontFamily: '"Cormorant Garamond", serif', color: '#F4F1EA', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.12em' }}>KENWELL</span>
         </div>
 
