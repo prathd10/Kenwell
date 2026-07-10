@@ -5,6 +5,7 @@
 // for that exact path (filesystem match takes priority over the SPA
 // catch-all rewrite), so crawlers/link-preview bots see real content
 // without executing JS — the normal CSR app still takes over once JS loads.
+import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
 import { preview } from 'vite'
 import { chromium } from 'playwright-core'

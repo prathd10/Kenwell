@@ -1,6 +1,7 @@
 // One-off migration: seeds Supabase `products`/`stacks` tables and ImageKit
 // from the hardcoded src/data.js PRODUCTS array and StackBuilder.jsx BUNDLES.
-// Run: node --env-file=.env scripts/migrate-data.mjs (or `npm run migrate:data`)
+// Run: node scripts/migrate-data.mjs (or `npm run migrate:data`)
+import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
 import { readFileSync } from 'node:fs'
 import { PRODUCTS, PRODUCT_IMAGE_MAP, FALLBACK_IMAGES } from '../src/data.js'
