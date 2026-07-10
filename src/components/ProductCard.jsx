@@ -51,10 +51,13 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
   }, [product.price])
 
   return (
-    <div className="group relative flex flex-col h-full rounded-2xl glass-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg border border-white/60 overflow-hidden">
+    <div className="group relative flex flex-col h-full rounded-2xl glass-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg !border-bg-secondary overflow-hidden">
       
       {/* Product Image Container */}
-      <div className={`relative w-full aspect-square overflow-hidden flex items-center justify-center group-hover:bg-cream-dark/20 transition-colors ${getImageBg(product.series)}`}>
+      <Link 
+        to={`/products/${product.slug}`}
+        className={`relative w-full aspect-square overflow-hidden flex items-center justify-center group-hover:bg-cream-dark/20 transition-colors ${getImageBg(product.series)}`}
+      >
         
         {/* Dynamic Background to remove empty space feeling */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8)_0%,transparent_100%)] opacity-80 mix-blend-overlay"></div>
@@ -64,7 +67,11 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
         {/* Floating Wishlist Heart */}
         {onToggleWishlist && (
           <button
-            onClick={() => onToggleWishlist(product)}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onToggleWishlist(product)
+            }}
             className={`absolute top-4 right-4 p-2 rounded-full backdrop-blur-md transition-all duration-300 z-40 cursor-pointer border ${
               isInWishlist 
                 ? 'bg-sage/20 border-sage/40 text-sage' 
@@ -93,7 +100,7 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             <img 
               src={product.image} 
               alt={product.name} 
-              className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-full h-full object-contain p-2 transition-all duration-500 group-hover:-translate-y-1 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="lazy"
               decoding="async"
               onLoad={() => setImgLoaded(true)}
@@ -109,7 +116,7 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             <span className="text-[10px] font-mono text-charcoal/50 uppercase tracking-wider">kenwell</span>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Product Text Details */}
       <div className="flex-grow flex flex-col justify-between p-4 pt-3">
@@ -127,15 +134,9 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             <span className="text-charcoal/50 font-mono text-[9px] uppercase">{product.form}</span>
           </div>
           
-          {/* Product Name — real link for crawlability/sharing, but a normal click keeps the fast quick-view flow */}
           <h3 className="font-serif text-base font-bold line-clamp-1">
             <Link
               to={`/products/${product.slug}`}
-              onClick={(e) => {
-                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return
-                e.preventDefault()
-                onQuickView(product)
-              }}
               className="text-primary-green hover:text-sage transition-colors"
             >
               {product.name}
@@ -161,42 +162,47 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
 
         </div>
 
-        <div className="mt-3 pt-2.5 border-t border-cream-dark/50 flex items-end justify-between">
-          {/* Price with strikethrough & discount percent */}
-          <div className="text-left">
-            <span className="text-[9px] text-charcoal/40 uppercase block leading-none font-mono">Price</span>
-            <div className="flex items-baseline space-x-1 mt-0.5">
-              <span className="font-mono text-base font-bold text-primary-green">₹{product.price}</span>
-              <span className="font-mono text-[10px] text-charcoal/40 line-through">₹{mrp}</span>
-              <span className="text-[9px] font-semibold text-sage">20% OFF</span>
+        <div className="mt-3 pt-2.5 border-t border-cream-dark/50">
+          {/* Price row */}
+          <div className="flex items-center justify-between">
+            <div className="text-left">
+              <div className="flex items-baseline gap-1 flex-wrap">
+                <span className="font-mono text-base font-bold text-primary-green">₹{product.price}</span>
+                <span className="font-mono text-[10px] text-charcoal/40 line-through">₹{mrp}</span>
+                <span className="text-[9px] font-semibold text-sage whitespace-nowrap">20% off</span>
+              </div>
             </div>
-          </div>
 
-          {/* Action CTAs */}
-          <div className="flex space-x-2.5 items-center">
-            {/* Quick View Button */}
-            <button
-              onClick={() => onQuickView(product)}
-              className="text-[10px] font-semibold text-charcoal/60 hover:text-primary-green transition-colors uppercase tracking-wider py-1 cursor-pointer"
-              title="Quick View Details"
-            >
-              Info
-            </button>
-            
-            {/* Add to Cart Icon Button */}
-            {onAddToCart && (
+            {/* Action buttons */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {/* Quick View — eye icon */}
               <button
-                onClick={() => onAddToCart(product)}
-                className="p-1.5 rounded-full bg-bg-secondary text-primary-green hover:bg-sage hover:text-white border border-cream-dark/50 transition-all duration-300 shadow-sm cursor-pointer shrink-0"
-                title="Add to Cart"
+                onClick={() => onQuickView(product)}
+                className="p-1.5 rounded-full text-charcoal/40 hover:text-primary-green hover:bg-bg-secondary transition-colors cursor-pointer"
+                title="Quick View"
               >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
               </button>
-            )}
+
+              {/* Add to Cart */}
+              {onAddToCart && (
+                <button
+                  onClick={() => onAddToCart(product)}
+                  className="p-1.5 rounded-full bg-bg-secondary text-primary-green hover:bg-sage hover:text-white border border-cream-dark/50 transition-all duration-300 cursor-pointer shrink-0"
+                  title="Add to Cart"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
         </div>
+
 
       </div>
 

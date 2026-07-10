@@ -142,8 +142,8 @@ export default function ProductCatalog({
   }
 
   return (
-    <div className="py-8 px-4 md:px-8 max-w-7xl mx-auto space-y-8">
-      
+    <div className="bg-white min-h-screen w-full">
+      <div className="py-12 px-4 md:px-8 max-w-7xl mx-auto space-y-8">
       {/* Page Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4">
         <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">
@@ -434,7 +434,7 @@ export default function ProductCatalog({
       {/* Products Grid */}
       <div className="w-full">
         {sortedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
             {sortedProducts.map((product) => (
               <ProductCard
                 key={product.id}
@@ -466,6 +466,7 @@ export default function ProductCatalog({
           </div>
         )}
       </div>
+    </div>
     </div>
   )
 }

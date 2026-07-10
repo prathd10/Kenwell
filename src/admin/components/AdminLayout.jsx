@@ -158,21 +158,22 @@ export default function AdminLayout() {
   const [open, setOpen] = useState(true)
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#EFECE4', fontFamily: '"DM Sans", sans-serif' }}>
+    <div className="flex min-h-screen bg-[#EFECE4] font-body relative">
       {/* Collapsible sidebar */}
       <div
-        style={{
-          flexShrink: 0,
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
-          width: open ? 240 : 0,
-          overflow: 'hidden',
-          transition: 'width 0.25s ease',
-        }}
+        className={`fixed md:sticky top-0 left-0 z-50 h-screen overflow-hidden transition-all duration-300 shadow-2xl md:shadow-none bg-[#1C2D1A] ${open ? 'w-[240px]' : 'w-0'}`}
+        style={{ flexShrink: 0 }}
       >
-        <Sidebar onClose={() => {}} />
+        <Sidebar onClose={() => { if(window.innerWidth < 768) setOpen(false) }} />
       </div>
+
+      {/* Overlay for mobile when sidebar is open */}
+      {open && (
+        <div 
+          className="fixed inset-0 bg-black/40 z-40 md:hidden backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
       {/* Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
@@ -185,7 +186,7 @@ export default function AdminLayout() {
           <span style={{ fontFamily: '"Cormorant Garamond", serif', color: '#F4F1EA', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.12em' }}>KENWELL</span>
         </div>
 
-        <main style={{ flex: 1, padding: '2.25rem 2rem', maxWidth: 1200, width: '100%' }}>
+        <main className="flex-1 p-4 md:p-9 w-full max-w-[1200px] mx-auto overflow-x-hidden">
           <Outlet />
         </main>
       </div>

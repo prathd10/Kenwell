@@ -487,5 +487,11 @@ ALTER TABLE ugc_videos
   ADD COLUMN IF NOT EXISTS product_id UUID REFERENCES products(id) ON DELETE SET NULL;
 
 CREATE INDEX IF NOT EXISTS idx_ugc_videos_product ON ugc_videos(product_id);
-
-
+-- ============================================================
+-- Rich Product Content (series, tagline, benefits, how_to_use,
+-- nutritional_facts, science_text, health_goals, accent_color)
+--
+-- The ALTER TABLE columns above create the structure.
+-- To populate data for all 17 products, run the separate file:
+--   supabase/migration_product_rich_content.sql
+-- ============================================================

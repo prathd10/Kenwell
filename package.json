@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run prerender",
-    "prerender": "node scripts/prerender.mjs",
+    "prerender": "node --env-file=.env scripts/prerender.mjs",
     "preview": "vite preview",
     "migrate:data": "node --env-file=.env scripts/migrate-data.mjs"
   },

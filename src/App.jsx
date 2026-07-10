@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useProducts } from './context/ProductsContext'
 import { useCart } from './context/CartContext'
 import Navbar from './components/Navbar'
@@ -19,6 +20,7 @@ import VerifyProduct from './components/VerifyProduct'
 
 
 export default function App() {
+  const navigate = useNavigate()
   const { loading: productsLoading } = useProducts()
   const {
     cartItems, wishlistItems, addToCart, removeFromCart,
@@ -79,7 +81,7 @@ export default function App() {
   }
 
   const handleQuickView = (product) => {
-    setSelectedProduct(product)
+    navigate(`/products/${product.slug}`)
   }
 
   const handleSelectFilter = (type, value) => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useProducts } from '../context/ProductsContext'
 import UGCSection from './UGCSection'
 import ProductCard from './ProductCard'
@@ -300,12 +301,12 @@ export default function Hero({
               <p className="text-charcoal/70 text-xs sm:text-lg leading-relaxed max-w-lg pr-2">{activeSlide.sub}</p>
 
               <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 pt-1">
-                <button
-                  onClick={() => onQuickView(activeProduct)}
-                  className="bg-primary-green hover:bg-sage text-white px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer text-center"
+                <Link
+                  to={`/products/${activeSlide.slug}`}
+                  className="bg-primary-green hover:bg-sage text-white px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer text-center flex items-center justify-center"
                 >
                   {activeSlide.cta}
-                </button>
+                </Link>
                 <button
                   onClick={() => setCurrentSection('shop')}
                   className="border-2 border-primary-green/25 hover:border-primary-green text-primary-green bg-white/60 backdrop-blur-sm hover:bg-white/80 px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-widest font-semibold transition-all cursor-pointer text-center"

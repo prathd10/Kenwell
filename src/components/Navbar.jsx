@@ -57,7 +57,7 @@ export default function Navbar({
             className="flex items-center space-x-2 cursor-pointer group"
           >
             <img src="/kenwell-mark.png" alt="" className="h-8 w-auto" />
-            <span className="font-serif text-2xl font-bold tracking-widest text-primary-green uppercase">
+            <span className="font-serif text-2xl font-bold tracking-widest uppercase" style={{color:'#3A2010'}}>
               Kenwell
             </span>
           </div>
@@ -70,11 +70,8 @@ export default function Navbar({
                   <div key={item.id} className="relative group py-2">
                     <button
                       onClick={() => handleNavClick('shop')}
-                      className={`font-medium text-sm tracking-wider uppercase transition-all duration-300 hover:text-sage cursor-pointer flex items-center gap-1 ${
-                        currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women'
-                          ? 'text-primary-green font-semibold' 
-                          : 'text-charcoal/70'
-                      }`}
+                      className={`font-medium text-sm tracking-wider uppercase transition-all duration-300 hover:text-sage cursor-pointer flex items-center gap-1`}
+                      style={{color: (currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women') ? '#3A2010' : 'rgba(58,32,16,0.65)'}}
                     >
                       <span>Shop</span>
                       <svg className="w-3 h-3 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,11 +152,8 @@ export default function Navbar({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative font-medium text-sm tracking-wider uppercase transition-all duration-300 py-2 hover:text-sage cursor-pointer ${
-                    currentSection === item.id 
-                      ? 'text-primary-green font-semibold' 
-                      : 'text-charcoal/70'
-                  }`}
+                  className={`relative font-medium text-sm tracking-wider uppercase transition-all duration-300 py-2 hover:text-sage cursor-pointer ${currentSection === item.id ? 'font-semibold' : ''}`}
+                  style={{color: currentSection === item.id ? '#3A2010' : 'rgba(58,32,16,0.65)'}}
                 >
                   {item.name}
                   {item.badge && (
@@ -180,7 +174,8 @@ export default function Navbar({
             {/* Wishlist Button */}
             <button
               onClick={() => setWishlistOpen(true)}
-              className="relative p-2 text-charcoal/70 hover:text-primary-green transition-colors cursor-pointer"
+              className="relative p-2 transition-colors cursor-pointer"
+              style={{color:'rgba(58,32,16,0.65)'}}
               title="Open Wishlist"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
@@ -196,7 +191,8 @@ export default function Navbar({
             {/* Cart Button */}
             <button
               onClick={() => setCartOpen(true)}
-              className="relative p-2 text-charcoal/70 hover:text-primary-green transition-colors cursor-pointer"
+              className="relative p-2 transition-colors cursor-pointer"
+              style={{color:'rgba(58,32,16,0.65)'}}
               title="Open Cart"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
@@ -215,7 +211,8 @@ export default function Navbar({
             {/* Wishlist Button */}
             <button
               onClick={() => setWishlistOpen(true)}
-              className="relative p-2 text-charcoal/70 hover:text-primary-green transition-colors"
+              className="relative p-2 transition-colors"
+              style={{color:'rgba(58,32,16,0.65)'}}
               title="Open Wishlist"
             >
               <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -231,7 +228,8 @@ export default function Navbar({
             {/* Cart Button */}
             <button
               onClick={() => setCartOpen(true)}
-              className="relative p-2 text-charcoal/70 hover:text-primary-green transition-colors"
+              className="relative p-2 transition-colors"
+              style={{color:'rgba(58,32,16,0.65)'}}
               title="Open Cart"
             >
               <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -246,7 +244,8 @@ export default function Navbar({
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-charcoal p-2 focus:outline-none"
+              className="p-2 focus:outline-none"
+              style={{color:'#3A2010'}}
               aria-label="Toggle menu"
             >
               <svg 

@@ -135,15 +135,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stat cards */}
-      <div 
-        className="stats-grid"
-        style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(2, 1fr)', 
-          gap: 14, 
-          marginBottom: '1.5rem' 
-        }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard icon={Eye} label="Total Views" value={stats.views} sub="+12% from last month" color={CARD_ACCENTS[0]} index={0} />
         <StatCard icon={MousePointerClick} label="Clicks" value={stats.clicks} sub="+5% from last month" color={CARD_ACCENTS[1]} index={1} />
         <StatCard icon={Package} label="Products" value={stats.active || 66} sub="Active in catalog" color={CARD_ACCENTS[2]} index={2} />
@@ -162,7 +154,7 @@ export default function Dashboard() {
       </div>
 
       {/* Bottom panels */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }} className="dash-grid">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Distribution chart */}
         <div style={{ background: 'white', borderRadius: 14, overflow: 'hidden', boxShadow: '0 2px 12px rgba(28,45,26,0.06)' }}>
           <div style={{ padding: '1.375rem 1.5rem', borderBottom: '1px solid #F4F1EA', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
