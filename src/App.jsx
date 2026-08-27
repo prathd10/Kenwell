@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProducts } from './context/ProductsContext'
 import { useCart } from './context/CartContext'
@@ -26,7 +26,37 @@ export default function App() {
     cartItems, wishlistItems, addToCart, removeFromCart,
     updateCartQuantity, clearCart, toggleWishlist,
   } = useCart()
-  const [currentSection, setCurrentSection] = useState('home')
+  // Read initial section from URL hash so direct links work
+  const [currentSection, _setSection] = useState(() => {
+    const hash = window.location.hash.slice(1)
+    return hash || 'home'
+  })
+
+  // Wrapped setter that also pushes a browser history entry so back/forward work
+  const setCurrentSection = useCallback((section) => {
+    _setSection(section)
+    const hash = section === 'home' ? '' : `#${section}`
+    window.history.pushState({ kw_section: section }, '', hash || window.location.pathname)
+  }, [])
+
+  // Handle browser back / forward
+  useEffect(() => {
+    // Replace the initial history state so we have something to pop back to
+    window.history.replaceState(
+      { kw_section: currentSection },
+      '',
+      currentSection === 'home' ? window.location.pathname : `#${currentSection}`
+    )
+    const onPop = (e) => {
+      const section = e.state?.kw_section ||
+        (window.location.hash ? window.location.hash.slice(1) : 'home')
+      _setSection(section || 'home')
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [stackItems, setStackItems] = useState([])
   const [quizAnswers, setQuizAnswers] = useState({})

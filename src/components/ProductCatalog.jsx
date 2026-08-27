@@ -255,7 +255,7 @@ export default function ProductCatalog({
               background: '#fff',
               position: 'sticky', top: 0, zIndex: 10,
             }}>
-              <h2 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0, letterSpacing: '0.08em', textTransform: 'uppercase', fontStyle: 'italic' }}>
+              <h2 style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0, letterSpacing: '0.08em', textTransform: 'uppercase', fontStyle: 'italic' }}>
                 Filters
               </h2>
               <button
@@ -280,7 +280,7 @@ export default function ProductCatalog({
               
               {/* Search input */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Montserrat, sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
                   Search
                 </span>
                 <div style={{ position: 'relative' }}>
@@ -302,7 +302,7 @@ export default function ProductCatalog({
                       border: '1.5px solid #DDD8CA',
                       borderRadius: 12,
                       fontSize: '0.75rem',
-                      fontFamily: '"DM Sans", sans-serif',
+                      fontFamily: '"Jost", sans-serif',
                       color: '#1C2D1A',
                       outline: 'none',
                       boxSizing: 'border-box',
@@ -321,7 +321,7 @@ export default function ProductCatalog({
 
               {/* Categories Section */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Montserrat, sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
                   Categories
                 </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -343,7 +343,7 @@ export default function ProductCatalog({
                           borderRadius: 9,
                           border: 'none',
                           cursor: 'pointer',
-                          fontFamily: 'Montserrat, sans-serif',
+                          fontFamily: 'Jost", sans-serif',
                           fontSize: '0.7rem',
                           fontWeight: isActive ? 700 : 500,
                           textTransform: 'uppercase',
@@ -374,7 +374,7 @@ export default function ProductCatalog({
 
               {/* Health Goals Section */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Montserrat, sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
                   Health Goals
                 </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 260, overflowY: 'auto', paddingRight: 4 }}>
@@ -396,7 +396,7 @@ export default function ProductCatalog({
                           borderRadius: 9,
                           border: 'none',
                           cursor: 'pointer',
-                          fontFamily: 'Montserrat, sans-serif',
+                          fontFamily: 'Jost", sans-serif',
                           fontSize: '0.7rem',
                           fontWeight: isActive ? 700 : 500,
                           textTransform: 'uppercase',

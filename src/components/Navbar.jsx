@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+import { useProducts } from '../context/ProductsContext'
 import CheckoutModal from './CheckoutModal'
 
 export default function Navbar({ 
@@ -20,6 +21,36 @@ export default function Navbar({
   const [cartOpen, setCartOpen] = useState(false)
   const [wishlistOpen, setWishlistOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const searchInputRef = useRef(null)
+
+  // Products for search
+  const { products } = useProducts()
+
+  // Live search results
+  const searchResults = React.useMemo(() => {
+    const q = searchQuery.toLowerCase().trim()
+    if (!q || q.length < 2) return []
+    return (products || [])
+      .filter(p => p.is_active && (
+        p.name?.toLowerCase().includes(q) ||
+        p.categories?.name?.toLowerCase().includes(q) ||
+        p.series?.toLowerCase().includes(q) ||
+        (p.tags || []).some(t => t.toLowerCase().includes(q)) ||
+        (p.health_goals || []).some(g => g.toLowerCase().includes(q))
+      ))
+      .slice(0, 6)
+  }, [searchQuery, products])
+
+  const openSearch = () => {
+    setSearchOpen(true)
+    setTimeout(() => searchInputRef.current?.focus(), 80)
+  }
+  const closeSearch = () => {
+    setSearchOpen(false)
+    setSearchQuery('')
+  }
 
   // Decoupled cart opener event listener
   React.useEffect(() => {
@@ -50,27 +81,27 @@ export default function Navbar({
     <>
     <nav className="sticky top-0 z-50 glass-panel backdrop-blur-md border-b border-cream-dark shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20 items-center">
+        <div className="flex justify-between h-[68px] items-center">
           {/* Logo */}
           <div
             onClick={() => handleNavClick('home')}
             className="flex items-center space-x-2 cursor-pointer group"
           >
-            <img src="/kenwell-mark.png" alt="" className="h-8 w-auto" />
-            <span className="font-serif text-2xl font-bold tracking-widest uppercase" style={{color:'#3A2010'}}>
+            <img src="/kenwell-mark.png" alt="" className="h-7 w-auto" />
+            <span style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.45rem', fontWeight: 400, letterSpacing: '0.06em', color: '#3A2010', textTransform: 'uppercase', lineHeight: 1 }}>
               Kenwell
             </span>
           </div>
 
           {/* Desktop Nav - 5 Exact Links with Shop Dropdown */}
-          <div className="hidden md:flex space-x-8 items-center">
+          <div className="hidden md:flex space-x-5 items-center">
             {navItems.map((item) => {
               if (item.id === 'shop') {
                 return (
                   <div key={item.id} className="relative group py-2">
                     <button
                       onClick={() => handleNavClick('shop')}
-                      className={`font-medium text-sm tracking-wider uppercase transition-all duration-300 hover:text-sage cursor-pointer flex items-center gap-1`}
+                      className={`font-medium text-[11px] tracking-widest uppercase transition-all duration-300 hover:text-sage cursor-pointer flex items-center gap-1`}
                       style={{color: (currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women') ? '#3A2010' : 'rgba(58,32,16,0.65)'}}
                     >
                       <span>Shop</span>
@@ -152,7 +183,7 @@ export default function Navbar({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative font-medium text-sm tracking-wider uppercase transition-all duration-300 py-2 hover:text-sage cursor-pointer ${currentSection === item.id ? 'font-semibold' : ''}`}
+                  className={`relative font-medium text-[11px] tracking-widest uppercase transition-all duration-300 py-2 hover:text-sage cursor-pointer ${currentSection === item.id ? 'font-semibold' : ''}`}
                   style={{color: currentSection === item.id ? '#3A2010' : 'rgba(58,32,16,0.65)'}}
                 >
                   {item.name}
@@ -169,8 +200,42 @@ export default function Navbar({
             })}
           </div>
 
-          {/* Header Action Icons: Wishlist & Cart */}
-          <div className="hidden md:flex items-center space-x-4">
+          {/* Header Action Icons: Search, Track Order, Wishlist & Cart */}
+          <div className="hidden md:flex items-center space-x-2">
+
+            {/* Track Order small link */}
+            <button
+              onClick={() => setCurrentSection('track')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                background: 'rgba(58,32,16,0.06)', border: 'none', cursor: 'pointer',
+                padding: '4px 10px', borderRadius: 99,
+                fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.07em',
+                textTransform: 'uppercase', color: 'rgba(58,32,16,0.6)',
+                fontFamily: '"Jost", sans-serif', transition: 'all 0.15s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#2E402B'; e.currentTarget.style.color = '#F4F1EA' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(58,32,16,0.06)'; e.currentTarget.style.color = 'rgba(58,32,16,0.6)' }}
+              title="Track your order"
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              Track Order
+            </button>
+
+            {/* Search Button */}
+            <button
+              onClick={openSearch}
+              className="relative p-2 transition-colors cursor-pointer"
+              style={{color:'rgba(58,32,16,0.65)'}}
+              title="Search products"
+            >
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" d="M21 21l-4.35-4.35"/>
+              </svg>
+            </button>
+
             {/* Wishlist Button */}
             <button
               onClick={() => setWishlistOpen(true)}
@@ -178,7 +243,7 @@ export default function Navbar({
               style={{color:'rgba(58,32,16,0.65)'}}
               title="Open Wishlist"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
               {wishlistItems.length > 0 && (
@@ -195,7 +260,7 @@ export default function Navbar({
               style={{color:'rgba(58,32,16,0.65)'}}
               title="Open Cart"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
               {cartItems.length > 0 && (
@@ -207,7 +272,19 @@ export default function Navbar({
           </div>
 
           {/* Mobile Actions & Menu Trigger */}
-          <div className="flex md:hidden items-center space-x-3">
+          <div className="flex md:hidden items-center space-x-2">
+            {/* Search Button */}
+            <button
+              onClick={openSearch}
+              className="relative p-2 transition-colors"
+              style={{color:'rgba(58,32,16,0.65)'}}
+              title="Search"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" d="M21 21l-4.35-4.35"/>
+              </svg>
+            </button>
+
             {/* Wishlist Button */}
             <button
               onClick={() => setWishlistOpen(true)}
@@ -266,7 +343,110 @@ export default function Navbar({
       </div>
     </nav>
 
+      {/* SEARCH OVERLAY — full-width panel that slides down from below the navbar */}
+      {searchOpen && (
+        <div
+          style={{
+            position: 'fixed', top: 68, left: 0, right: 0, zIndex: 9998,
+            background: 'rgba(28,45,26,0.35)',
+            backdropFilter: 'blur(3px)',
+            height: 'calc(100vh - 68px)',
+            animation: 'fadeIn 0.15s ease',
+          }}
+          onClick={closeSearch}
+        >
+          {/* Search panel */}
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: 'white',
+              borderBottom: '1px solid #E8E3D9',
+              boxShadow: '0 8px 40px rgba(28,45,26,0.15)',
+              animation: 'slideDown 0.2s cubic-bezier(0.4,0,0.2,1)',
+            }}
+          >
+            {/* Search input row */}
+            <div style={{ maxWidth: 760, margin: '0 auto', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <svg style={{ width: 20, height: 20, color: '#7A8C5A', flexShrink: 0 }} fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" d="M21 21l-4.35-4.35"/>
+              </svg>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                onKeyDown={e => e.key === 'Escape' && closeSearch()}
+                placeholder="Search products, ingredients, health goals…"
+                style={{
+                  flex: 1, border: 'none', outline: 'none', background: 'transparent',
+                  fontSize: '1rem', color: '#1C2D1A', fontFamily: '"Jost", sans-serif',
+                }}
+              />
+              <button
+                onClick={closeSearch}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(28,45,26,0.4)', fontSize: '1.25rem', padding: 4, lineHeight: 1 }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Results */}
+            {searchQuery.length >= 2 && (
+              <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 1.5rem 1.25rem', borderTop: '1px solid #F4F1EA' }}>
+                {searchResults.length === 0 ? (
+                  <p style={{ padding: '1.25rem 0', color: '#C9B99A', fontSize: '0.875rem', fontFamily: '"Jost", sans-serif', textAlign: 'center' }}>
+                    No products found for <strong style={{ color: '#7A8C5A' }}>"{searchQuery}"</strong>
+                  </p>
+                ) : (
+                  <div style={{ paddingTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <div style={{ fontSize: '0.65rem', color: '#C9B99A', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: '"Jost", sans-serif', marginBottom: 6 }}>
+                      {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
+                    </div>
+                    {searchResults.map(product => (
+                      <button
+                        key={product.id}
+                        onClick={() => { closeSearch(); onQuickView(product) }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 14,
+                          padding: '0.6rem 0.75rem', borderRadius: 10,
+                          background: 'none', border: 'none', cursor: 'pointer',
+                          width: '100%', textAlign: 'left',
+                          transition: 'background 0.12s',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#F4F1EA'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                      >
+                        {/* Thumbnail */}
+                        <div style={{ width: 44, height: 44, borderRadius: 8, overflow: 'hidden', border: '1px solid #E8E3D9', flexShrink: 0, background: '#F4F1EA' }}>
+                          {product.images?.[0] && (
+                            <img src={product.images[0]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          )}
+                        </div>
+                        {/* Info */}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontFamily: '"Fredoka One", cursive', fontSize: '0.975rem', fontWeight: 600, color: '#1C2D1A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {product.name}
+                          </div>
+                          <div style={{ fontSize: '0.7rem', color: '#7A8C5A', fontFamily: '"Jost", sans-serif', marginTop: 2 }}>
+                            {product.categories?.name ?? ''}{product.series ? ` · ${product.series}` : ''}
+                          </div>
+                        </div>
+                        {/* Price */}
+                        <div style={{ fontFamily: '"Fredoka One", cursive', fontSize: '0.975rem', fontWeight: 600, color: '#2E402B', flexShrink: 0 }}>
+                          ₹{Number(product.price).toLocaleString('en-IN')}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* CART DRAWER OVERLAY — outside <nav> to avoid backdrop-filter stacking context trapping fixed children */}
+
       {cartOpen && (
         <div
           style={{
@@ -306,7 +486,7 @@ export default function Navbar({
                 <svg style={{ width: 20, height: 20, color: '#2E402B' }} fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0 }}>
+                <h3 style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0 }}>
                   Shopping Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
                 </h3>
               </div>
@@ -335,11 +515,11 @@ export default function Navbar({
                     <div style={{ flexGrow: 1 }}>
                       <h4
                         onClick={() => { setCartOpen(false); onQuickView(item) }}
-                        style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '0.875rem', fontWeight: 700, color: '#2E402B', cursor: 'pointer', margin: '0 0 0.25rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                        style={{ fontFamily: '"Fredoka One", cursive', fontSize: '0.875rem', fontWeight: 700, color: '#2E402B', cursor: 'pointer', margin: '0 0 0.25rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                       >
                         {item.name}
                       </h4>
-                      <p style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Montserrat, sans-serif', margin: '0 0 0.5rem' }}>{item.form} • {item.servings} Servs</p>
+                      <p style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', margin: '0 0 0.5rem' }}>{item.form} • {item.servings} Servs</p>
 
                       {/* Quantity & Price */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -354,7 +534,7 @@ export default function Navbar({
                             style={{ padding: '2px 10px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem', color: 'rgba(28,45,26,0.6)', fontFamily: 'monospace' }}
                           >+</button>
                         </div>
-                        <span style={{ fontFamily: 'Montserrat, monospace', fontSize: '0.75rem', fontWeight: 700, color: '#2E402B' }}>₹{item.price * item.quantity}</span>
+                        <span style={{ fontFamily: 'Jost", sans-serif', fontSize: '0.75rem', fontWeight: 700, color: '#2E402B' }}>₹{item.price * item.quantity}</span>
                       </div>
                     </div>
                   </div>
@@ -388,7 +568,7 @@ export default function Navbar({
                     <span style={{ color: '#7A8C5A', fontWeight: 700, textTransform: 'uppercase' }}>Free</span>
                   </div>
                   <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, #C9B99A, transparent)', margin: '0.75rem 0' }} />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 700, color: '#2E402B', fontFamily: '"Cormorant Garamond", serif' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 700, color: '#2E402B', fontFamily: '"Fredoka One", cursive' }}>
                     <span>Total Investment</span>
                     <span>₹{cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0)}</span>
                   </div>
@@ -458,7 +638,7 @@ export default function Navbar({
                 <svg style={{ width: 20, height: 20, color: '#7A8C5A' }} fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-                <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0 }}>
+                <h3 style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0 }}>
                   Your Wishlist ({wishlistItems.length})
                 </h3>
               </div>
@@ -487,7 +667,7 @@ export default function Navbar({
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.25rem' }}>
                         <h4
                           onClick={() => { setWishlistOpen(false); onQuickView(item) }}
-                          style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '0.875rem', fontWeight: 700, color: '#2E402B', cursor: 'pointer', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '80%' }}
+                          style={{ fontFamily: '"Fredoka One", cursive', fontSize: '0.875rem', fontWeight: 700, color: '#2E402B', cursor: 'pointer', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '80%' }}
                         >
                           {item.name}
                         </h4>
@@ -499,7 +679,7 @@ export default function Navbar({
                           ✕
                         </button>
                       </div>
-                      <p style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Montserrat, sans-serif', margin: '0 0 0.5rem' }}>{item.form} • ₹{item.price}</p>
+                      <p style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', margin: '0 0 0.5rem' }}>{item.form} • ₹{item.price}</p>
 
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button
@@ -576,7 +756,7 @@ export default function Navbar({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid #E8E3D9' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <img src="/kenwell-mark.png" alt="" style={{ height: 22, width: 'auto' }} />
-            <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.18em', color: '#1C2D1A', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.25rem', fontWeight: 400, letterSpacing: '0.06em', color: '#1C2D1A', textTransform: 'uppercase' }}>
               Kenwell
             </span>
           </div>
@@ -600,7 +780,7 @@ export default function Navbar({
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 width: '100%', padding: '0.875rem 1.5rem',
                 background: 'none', border: 'none', cursor: 'pointer',
-                fontFamily: '"Cormorant Garamond", serif', fontSize: '1.5rem', fontWeight: 600,
+                fontFamily: '"Fredoka One", cursive', fontSize: '1.5rem', fontWeight: 600,
                 color: (currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women') ? '#1C2D1A' : '#4A5568',
                 borderLeft: (currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women') ? '3px solid #B89F70' : '3px solid transparent',
                 textAlign: 'left', letterSpacing: '0.01em',
@@ -632,7 +812,7 @@ export default function Navbar({
                     display: 'block', width: '100%', textAlign: 'left',
                     padding: '0.45rem 1.5rem 0.45rem 2.25rem',
                     background: 'none', border: 'none', cursor: 'pointer',
-                    fontFamily: '"DM Sans", sans-serif', fontSize: '0.8rem',
+                    fontFamily: '"Jost", sans-serif', fontSize: '0.8rem',
                     color: '#6B7280', letterSpacing: '0.07em', textTransform: 'uppercase',
                   }}
                 >
@@ -648,6 +828,7 @@ export default function Navbar({
             { id: 'scanner', label: 'Lab Scanner' },
             { id: 'library', label: 'Science Library' },
             { id: 'stores', label: 'Store Locator' },
+            { id: 'track', label: 'Track Order' },
             { id: 'partner', label: 'Become a Partner' },
             { id: 'about', label: 'About Us' },
           ].map(item => (
@@ -658,7 +839,7 @@ export default function Navbar({
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 width: '100%', padding: '0.875rem 1.5rem',
                 background: 'none', border: 'none', cursor: 'pointer',
-                fontFamily: '"Cormorant Garamond", serif', fontSize: '1.5rem', fontWeight: 600,
+                fontFamily: '"Fredoka One", cursive', fontSize: '1.5rem', fontWeight: 600,
                 color: currentSection === item.id ? '#1C2D1A' : '#4A5568',
                 borderLeft: currentSection === item.id ? '3px solid #B89F70' : '3px solid transparent',
                 textAlign: 'left', letterSpacing: '0.01em',
@@ -676,7 +857,7 @@ export default function Navbar({
 
         {/* Drawer Footer */}
         <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid #E8E3D9' }}>
-          <p style={{ fontSize: '0.65rem', color: '#C9B99A', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: '"DM Sans", sans-serif' }}>
+          <p style={{ fontSize: '0.65rem', color: '#C9B99A', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: '"Jost", sans-serif' }}>
             Kenwell · Wellness &amp; Nutrition
           </p>
         </div>

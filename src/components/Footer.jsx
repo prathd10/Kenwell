@@ -21,7 +21,7 @@ export default function Footer({ setCurrentSection }) {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <img src="/kenwell-mark-light.png" alt="" className="h-8 w-auto" />
-              <span className="font-serif text-2xl font-bold tracking-widest text-bg-primary uppercase">
+              <span style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.45rem', fontWeight: 400, letterSpacing: '0.06em', color: '#F4F1EA', textTransform: 'uppercase', lineHeight: 1 }}>
                 Kenwell
               </span>
             </div>

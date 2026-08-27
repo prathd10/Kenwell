@@ -495,3 +495,27 @@ CREATE INDEX IF NOT EXISTS idx_ugc_videos_product ON ugc_videos(product_id);
 -- To populate data for all 17 products, run the separate file:
 --   supabase/migration_product_rich_content.sql
 -- ============================================================
+
+-- ============================================================
+-- Analytics v2: Rich Tracking Columns
+-- Run this migration in Supabase SQL Editor to enable full
+-- traffic-source, unique-visitor, and device analytics.
+-- ============================================================
+
+ALTER TABLE analytics
+  ADD COLUMN IF NOT EXISTS session_id      TEXT,          -- anonymous visitor ID (UUID stored in localStorage)
+  ADD COLUMN IF NOT EXISTS source          TEXT,          -- 'direct' | 'seo' | 'social' | 'meta' | 'email' | 'other'
+  ADD COLUMN IF NOT EXISTS medium          TEXT,          -- utm_medium value (e.g. 'organic', 'cpc', 'social')
+  ADD COLUMN IF NOT EXISTS campaign        TEXT,          -- utm_campaign value
+  ADD COLUMN IF NOT EXISTS referrer        TEXT,          -- raw document.referrer (first 255 chars)
+  ADD COLUMN IF NOT EXISTS device          TEXT,          -- 'mobile' | 'tablet' | 'desktop'
+  ADD COLUMN IF NOT EXISTS country         TEXT,          -- e.g. 'India'
+  ADD COLUMN IF NOT EXISTS city            TEXT,          -- e.g. 'Mumbai'
+  ADD COLUMN IF NOT EXISTS is_new_visitor  BOOLEAN DEFAULT TRUE;  -- FALSE if session_id seen before
+
+-- Performance indexes for dashboard aggregation queries
+CREATE INDEX IF NOT EXISTS idx_analytics_session    ON analytics(session_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_source     ON analytics(source);
+CREATE INDEX IF NOT EXISTS idx_analytics_created    ON analytics(created_at);
+CREATE INDEX IF NOT EXISTS idx_analytics_event_type ON analytics(event_type);
+

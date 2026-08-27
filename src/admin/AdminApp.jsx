@@ -13,6 +13,7 @@ import AddEditStack from './pages/AddEditStack'
 import AuthCodes from './pages/AuthCodes'
 import UGCVideos from './pages/UGCVideos'
 import PartnerRequests from './pages/PartnerRequests'
+import Analytics from './pages/Analytics'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './components/AdminLayout'
 
@@ -46,6 +47,7 @@ export default function AdminApp() {
         <Route path="stores/:id/edit" element={<AddEditStore />} />
         <Route path="partner-requests" element={<PartnerRequests />} />
         <Route path="ugc" element={<UGCVideos />} />
+        <Route path="analytics" element={<Analytics />} />
       </Route>
     </Routes>
   )

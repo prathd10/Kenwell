@@ -11,10 +11,11 @@
   --color-cream-dark: #DDD8CA;
   --color-gold-accent: #B89F70;
   
-  --font-serif: "Cormorant Garamond", serif;
-  --font-body: "DM Sans", sans-serif;
-  --font-title: "DM Serif Display", serif;
-  --font-mono: "Montserrat", sans-serif;
+  --font-serif: "Fredoka One", cursive;
+  --font-body: "Jost", sans-serif;
+  --font-title: "Fredoka One", cursive;
+  --font-mono: "Jost", sans-serif;
+  --font-brand: "Fredoka One", cursive;
   
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
@@ -39,6 +40,11 @@
 @keyframes slideInLeft {
   from { transform: translateX(-100%); }
   to   { transform: translateX(0); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes float {
@@ -81,12 +87,14 @@
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-charcoal);
-  font-family: var(--font-body);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  font-weight: 600;
+  font-family: "Fredoka One", cursive;
+  font-weight: 400; /* Fredoka One only has one weight */
+  letter-spacing: 0.02em;
 }
 
 /* Glassmorphism utility classes */
