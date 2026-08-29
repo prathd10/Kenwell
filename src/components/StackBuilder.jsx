@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import BackButton from './BackButton'
 import { useProducts } from '../context/ProductsContext'
 
 export default function StackBuilder({ onQuickView, onAddToCart }) {
@@ -94,6 +95,8 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
           Carefully chosen products that work better together. Buy them as a combo to save money and get the best results for your health.
         </p>
       </div>
+
+      <BackButton />
 
       {/* Tabs */}
       <div className="flex justify-center mb-8">

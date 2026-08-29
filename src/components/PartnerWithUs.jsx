@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import BackButton from './BackButton'
 import { supabase } from '../lib/supabase'
 
 export default function PartnerWithUs({ setCurrentSection }) {
@@ -112,6 +113,8 @@ export default function PartnerWithUs({ setCurrentSection }) {
           </p>
         </div>
       </div>
+
+      <BackButton className='mb-6' />
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         <div className="glass-panel rounded-3xl shadow-xl p-6 md:p-10 bg-white/95">

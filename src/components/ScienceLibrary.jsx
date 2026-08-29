@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import BackButton from './BackButton'
 import { ARTICLES } from '../data'
 
 // Map of scientific terms to their definitions for hover tooltips
@@ -114,6 +115,8 @@ export default function ScienceLibrary() {
           Learn the science behind our supplements. Read easy-to-understand articles about how our products help your body.
         </p>
       </div>
+
+      <BackButton />
 
       {/* Search & Filter Bar */}
       <div className="glass-panel p-6 rounded-2xl border border-white/50 flex flex-col md:flex-row justify-between items-center gap-4">

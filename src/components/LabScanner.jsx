@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import BackButton from './BackButton'
 import { useProducts } from '../context/ProductsContext'
 
 export default function LabScanner() {
@@ -57,6 +58,8 @@ export default function LabScanner() {
           Slide 3 Discovery Counter Integration. Verify your batch Certificate of Analysis (CoA), purity percentages, heavy metals panel, and geographic botanical origin.
         </p>
       </div>
+
+      <BackButton />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         

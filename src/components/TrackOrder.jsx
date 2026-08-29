@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import BackButton from './BackButton'
 import { supabase } from '../lib/supabase'
 
 export default function TrackOrder() {
@@ -124,6 +125,8 @@ export default function TrackOrder() {
           Track Your Order
         </h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
+
+      <BackButton className='mb-6' />
         <p className="text-charcoal/70 text-sm leading-relaxed">
           Enter your 8-digit Order ID and email/phone to check the delivery progress.
         </p>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import BackButton from './BackButton'
 import { useProducts } from '../context/ProductsContext'
 
 export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection }) {
@@ -170,14 +171,17 @@ export default function WellnessQuiz({ onAddStackToBuilder, setCurrentSection })
       
       {/* Page Header */}
       {!showResult && (
-        <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Health Quiz</span>
-          <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Find Your Perfect Plan</h1>
-          <div className="gold-divider max-w-xs mx-auto"></div>
-          <p className="text-charcoal/70 text-sm leading-relaxed">
-            Answer a few quick questions about your goals and lifestyle. We will build a custom supplement plan made just for your body.
-          </p>
-        </div>
+        <>
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Health Quiz</span>
+            <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Find Your Perfect Plan</h1>
+            <div className="gold-divider max-w-xs mx-auto"></div>
+            <p className="text-charcoal/70 text-sm leading-relaxed">
+              Answer a few quick questions about your goals and lifestyle. We will build a custom supplement plan made just for your body.
+            </p>
+          </div>
+          <BackButton />
+        </>
       )}
 
       {/* QUIZ QUESTION VIEWS */}

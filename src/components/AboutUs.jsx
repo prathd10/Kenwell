@@ -1,4 +1,5 @@
 import React from 'react'
+import BackButton from './BackButton'
 
 export default function AboutUs() {
   return (
@@ -11,6 +12,8 @@ export default function AboutUs() {
           We Have Nothing To Hide
         </h1>
         <div className="w-20 h-0.5 bg-sage"></div>
+
+      <BackButton className='mb-6' />
         <p className="text-charcoal/80 font-serif text-xl italic leading-relaxed">
           "Kenwell was founded on a simple premise: supplements should be clean, clinically studied, and 100% transparent. No proprietary formulas, no synthetic binders, and no marketing jargon."
         </p>

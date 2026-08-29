@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import BackButton from './BackButton'
 import { supabase } from '../lib/supabase'
 
 export default function VerifyProduct() {
@@ -63,6 +64,8 @@ export default function VerifyProduct() {
           Verify Your Product
         </h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
+
+      <BackButton className='mb-6' />
         {stage === 'form' && (
           <p className="text-charcoal/70 text-sm leading-relaxed">
             Enter the unique code printed on your product's authenticity sticker to confirm it's genuine.

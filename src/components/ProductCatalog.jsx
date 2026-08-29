@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useProducts } from '../context/ProductsContext'
 import ProductCard from './ProductCard'
+import BackButton from './BackButton'
 
 export default function ProductCatalog({ 
   onQuickView, 
@@ -157,6 +158,9 @@ export default function ProductCatalog({
           {headerContent.desc}
         </p>
       </div>
+
+      {/* Back Button */}
+      <BackButton />
 
       {/* Catalog Control Bar */}
       <div className="space-y-4">

@@ -85,7 +85,7 @@ export default function Navbar({
           {/* Logo */}
           <div
             onClick={() => handleNavClick('home')}
-            className="flex items-center space-x-2 cursor-pointer group"
+            className="flex items-center space-x-2 cursor-pointer group flex-1"
           >
             <img src="/kenwell-mark.png" alt="" className="h-7 w-auto" />
             <span style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.45rem', fontWeight: 400, letterSpacing: '0.06em', color: '#3A2010', textTransform: 'uppercase', lineHeight: 1 }}>
@@ -200,29 +200,8 @@ export default function Navbar({
             })}
           </div>
 
-          {/* Header Action Icons: Search, Track Order, Wishlist & Cart */}
-          <div className="hidden md:flex items-center space-x-2">
-
-            {/* Track Order small link */}
-            <button
-              onClick={() => setCurrentSection('track')}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 4,
-                background: 'rgba(58,32,16,0.06)', border: 'none', cursor: 'pointer',
-                padding: '4px 10px', borderRadius: 99,
-                fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.07em',
-                textTransform: 'uppercase', color: 'rgba(58,32,16,0.6)',
-                fontFamily: '"Jost", sans-serif', transition: 'all 0.15s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#2E402B'; e.currentTarget.style.color = '#F4F1EA' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(58,32,16,0.06)'; e.currentTarget.style.color = 'rgba(58,32,16,0.6)' }}
-              title="Track your order"
-            >
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
-              </svg>
-              Track Order
-            </button>
+          {/* Header Action Icons: Search, Wishlist & Cart */}
+          <div className="hidden md:flex items-center justify-end space-x-2 flex-1">
 
             {/* Search Button */}
             <button

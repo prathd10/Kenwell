@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import BackButton from './BackButton'
 import { supabase } from '../lib/supabase'
 
 export default function StoreLocator({ setCurrentSection }) {
