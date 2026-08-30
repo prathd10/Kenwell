@@ -17,47 +17,74 @@ export default function TrackOrder() {
     setOrder(null)
     setSearched(true)
 
-    // Normalize order ID input (e.g. ensure starts with '#')
-    let searchId = searchIdVal.trim().toUpperCase()
-    if (!searchId.startsWith('#')) {
-      searchId = '#' + searchId
+    // Normalize order ID (handle both with and without '#')
+    const rawId = searchIdVal.trim().toUpperCase()
+    const cleanId = rawId.replace(/^#+/, '')
+    const searchContact = contactVal.trim().toLowerCase()
+    const searchDigits = contactVal.replace(/\D/g, '')
+
+    const matchesContact = (o) => {
+      if (!contactVal.trim()) return true
+      const email = (o.customer_email || '').trim().toLowerCase()
+      const phone = (o.customer_phone || '').trim().toLowerCase()
+      const phoneDigits = (o.customer_phone || '').replace(/\D/g, '')
+
+      // Check email match
+      if (email && email === searchContact) return true
+
+      // Check phone match with flexible country code / spacing
+      if (searchDigits.length >= 6 && phoneDigits.length >= 6) {
+        if (
+          phoneDigits.endsWith(searchDigits) ||
+          searchDigits.endsWith(phoneDigits) ||
+          phoneDigits.includes(searchDigits) ||
+          searchDigits.includes(phoneDigits)
+        ) {
+          return true
+        }
+      }
+
+      return phone === searchContact
     }
 
-    const searchContact = contactVal.trim().toLowerCase()
+    const matchesId = (o) => {
+      const oFriendly = (o.friendly_id || '').toUpperCase()
+      const oClean = oFriendly.replace(/^#+/, '')
+      const oId = (o.id || '').toUpperCase()
+
+      return (
+        oFriendly === rawId ||
+        oFriendly === cleanId ||
+        oClean === cleanId ||
+        oClean === rawId ||
+        oId === rawId ||
+        (oId && cleanId && oId.startsWith(cleanId))
+      )
+    }
+
     let foundOrder = null
 
     try {
-      // 1. Query Supabase
+      // 1. Query Supabase with multiple matching formats
       const { data, error: dbError } = await supabase
         .from('orders')
         .select('*')
-        .eq('friendly_id', searchId)
+        .or(`friendly_id.eq.${cleanId},friendly_id.eq.#${cleanId},friendly_id.ilike.%${cleanId}%`)
 
       if (!dbError && data && data.length > 0) {
-        const potentialOrder = data[0]
-        
-        // Validate contact matches email or phone
-        if (
-          potentialOrder.customer_email.toLowerCase() === searchContact ||
-          potentialOrder.customer_phone.toLowerCase() === searchContact
-        ) {
-          foundOrder = potentialOrder
+        const potential = data.find(o => matchesId(o) && matchesContact(o)) || data.find(o => matchesId(o))
+        if (potential && matchesContact(potential)) {
+          foundOrder = potential
         }
       }
     } catch (err) {
-      console.warn('Supabase query failed, searching localStorage:', err)
+      console.warn('Supabase query error:', err)
     }
 
-    // 2. Query localStorage if not found in DB
+    // 2. Query localStorage as fallback/offline store
     if (!foundOrder) {
       const localOrders = JSON.parse(localStorage.getItem('kenwell_orders') || '[]')
-      const localMatch = localOrders.find(o => {
-        const matchId = o.friendly_id.toUpperCase() === searchId
-        const matchContact = 
-          o.customer_email.toLowerCase() === searchContact ||
-          o.customer_phone.toLowerCase() === searchContact
-        return matchId && matchContact
-      })
+      const localMatch = localOrders.find(o => matchesId(o) && matchesContact(o))
 
       if (localMatch) {
         foundOrder = localMatch
@@ -79,6 +106,28 @@ export default function TrackOrder() {
   }
 
   useEffect(() => {
+    // 1. Check URL query parameters (e.g. /#track?orderId=KW-123456&contact=name@example.com)
+    const searchParams = new URLSearchParams(window.location.search)
+    let urlOrderId = searchParams.get('orderId') || searchParams.get('id') || ''
+    let urlContact = searchParams.get('contact') || searchParams.get('email') || searchParams.get('phone') || ''
+
+    if (!urlOrderId && window.location.hash.includes('?')) {
+      const hashQuery = window.location.hash.split('?')[1]
+      const hashParams = new URLSearchParams(hashQuery)
+      urlOrderId = hashParams.get('orderId') || hashParams.get('id') || ''
+      urlContact = hashParams.get('contact') || hashParams.get('email') || hashParams.get('phone') || ''
+    }
+
+    if (urlOrderId) {
+      setOrderId(urlOrderId)
+      if (urlContact) {
+        setContactInfo(urlContact)
+        triggerTrack(urlOrderId, urlContact)
+      }
+      return
+    }
+
+    // 2. Check sessionStorage fallback
     const autoTrack = sessionStorage.getItem('kenwell_last_order')
     if (autoTrack) {
       try {
@@ -98,9 +147,9 @@ export default function TrackOrder() {
   // Get current step of tracking
   const getStepStatus = (status) => {
     switch (status) {
-      case 'Pending':
-        return 1
       case 'Paid':
+        return 1
+      case 'Shipped':
         return 2
       case 'Delivered':
         return 3
@@ -143,7 +192,7 @@ export default function TrackOrder() {
                 required
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
-                placeholder="e.g. #BA8D93AA"
+                placeholder="e.g. KW-QNZWO2"
                 className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30 font-mono"
               />
             </div>
@@ -154,7 +203,7 @@ export default function TrackOrder() {
                 required
                 value={contactInfo}
                 onChange={(e) => setContactInfo(e.target.value)}
-                placeholder="e.g. john@example.com"
+                placeholder="e.g. 8879092007 or name@example.com"
                 className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30"
               />
             </div>
@@ -212,7 +261,7 @@ export default function TrackOrder() {
 
                 <div className="flex justify-between items-start text-center">
                   
-                  {/* Step 1: Placed */}
+                  {/* Step 1: Paid */}
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                       step >= 1 
@@ -222,12 +271,12 @@ export default function TrackOrder() {
                       {step >= 1 ? '✓' : '1'}
                     </div>
                     <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 1 ? 'text-primary-green' : 'text-charcoal/40'}`}>
-                      Order Placed
+                      Paid
                     </span>
-                    <span className="text-[9px] text-charcoal/40 mt-0.5">Confirmed</span>
+                    <span className="text-[9px] text-charcoal/40 mt-0.5">Payment Confirmed</span>
                   </div>
 
-                  {/* Step 2: Paid */}
+                  {/* Step 2: Shipped */}
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                       step >= 2 
@@ -237,9 +286,9 @@ export default function TrackOrder() {
                       {step >= 2 ? '✓' : '2'}
                     </div>
                     <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 2 ? 'text-primary-green' : 'text-charcoal/40'}`}>
-                      Payment Paid
+                      Shipped
                     </span>
-                    <span className="text-[9px] text-charcoal/40 mt-0.5">Via Razorpay</span>
+                    <span className="text-[9px] text-charcoal/40 mt-0.5">In Transit</span>
                   </div>
 
                   {/* Step 3: Delivered */}

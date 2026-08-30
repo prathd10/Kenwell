@@ -28,8 +28,9 @@ export default function App() {
   } = useCart()
   // Read initial section from URL hash so direct links work
   const [currentSection, _setSection] = useState(() => {
-    const hash = window.location.hash.slice(1)
-    return hash || 'home'
+    const rawHash = window.location.hash.slice(1)
+    const baseSection = rawHash.split('?')[0]
+    return baseSection || 'home'
   })
 
   // Wrapped setter that also pushes a browser history entry so back/forward work
@@ -41,6 +42,12 @@ export default function App() {
 
   // Handle browser back / forward
   useEffect(() => {
+    const rawHash = window.location.hash.slice(1)
+    const baseSection = rawHash.split('?')[0]
+    if (baseSection && baseSection !== currentSection) {
+      _setSection(baseSection)
+    }
+
     // Replace the initial history state so we have something to pop back to
     window.history.replaceState(
       { kw_section: currentSection },
@@ -49,7 +56,7 @@ export default function App() {
     )
     const onPop = (e) => {
       const section = e.state?.kw_section ||
-        (window.location.hash ? window.location.hash.slice(1) : 'home')
+        (window.location.hash ? window.location.hash.slice(1).split('?')[0] : 'home')
       _setSection(section || 'home')
     }
     window.addEventListener('popstate', onPop)

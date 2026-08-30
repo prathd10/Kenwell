@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useProducts } from '../context/ProductsContext'
-import CheckoutModal from './CheckoutModal'
 
 export default function Navbar({ 
   currentSection, 
@@ -16,11 +16,11 @@ export default function Navbar({
   onQuickView,
   clearCart
 }) {
+  const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [shopExpanded, setShopExpanded] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [wishlistOpen, setWishlistOpen] = useState(false)
-  const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchInputRef = useRef(null)
@@ -556,7 +556,7 @@ export default function Navbar({
                 <button
                   onClick={() => {
                     setCartOpen(false)
-                    setCheckoutOpen(true)
+                    navigate('/checkout')
                   }}
                   style={{
                     display: 'block', width: '100%',
@@ -842,17 +842,6 @@ export default function Navbar({
         </div>
       </div>
     </div>
-    
-    <CheckoutModal
-      isOpen={checkoutOpen}
-      onClose={() => setCheckoutOpen(false)}
-      cartItems={cartItems}
-      totalAmount={cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0)}
-      onOrderSuccess={() => {
-        if (clearCart) clearCart()
-      }}
-      setCurrentSection={setCurrentSection}
-    />
     </>
   )
 }

@@ -241,20 +241,11 @@ export default function PartnerRequests() {
 
               {/* Status Update Control */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 0', borderTop: '1px solid #EAE5D9', marginTop: '1rem' }}>
-                <span style={{ fontWeight: 600 }}>Pipeline Tracking:</span>
-                <select
-                  value={selectedInquiry.status}
-                  onChange={e => handleUpdateStatus(selectedInquiry.id, e.target.value)}
-                  style={{
-                    padding: '0.45rem 1.25rem',
-                    border: '1.5px solid #DDD8CA', borderRadius: 8,
-                    fontSize: '0.8rem', fontFamily: '"DM Sans", sans-serif', outline: 'none', cursor: 'pointer'
-                  }}
-                >
-                  <option value="New">New Request</option>
-                  <option value="Contacted">Mark Contacted</option>
-                  <option value="Archived">Archive Entry</option>
-                </select>
+                <span style={{ fontWeight: 600, color: '#1C2D1A' }}>Pipeline Tracking:</span>
+                <PartnerStatusDropdown
+                  currentStatus={selectedInquiry.status}
+                  onChange={(newStatus) => handleUpdateStatus(selectedInquiry.id, newStatus)}
+                />
               </div>
             </div>
 
@@ -362,22 +353,11 @@ function InquiryRow({ inquiry: inq, isLast, onView, onDelete, onUpdateStatus, up
         </div>
       </td>
       <td style={{ padding: '0.875rem 1.25rem', textAlign: 'center' }}>
-        <select
-          value={inq.status}
-          onChange={e => onUpdateStatus(inq.id, e.target.value)}
+        <PartnerStatusDropdown
+          currentStatus={inq.status}
           disabled={updating}
-          style={{
-            padding: '4px 10px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 600,
-            background: inq.status === 'New' ? '#dbeafe' : inq.status === 'Contacted' ? '#dcfce7' : '#f3f4f6',
-            color: inq.status === 'New' ? '#1e40af' : inq.status === 'Contacted' ? '#166534' : '#374151',
-            border: 'none', outline: 'none', cursor: 'pointer', appearance: 'none',
-            textAlign: 'center', opacity: updating ? 0.6 : 1
-          }}
-        >
-          <option value="New">New</option>
-          <option value="Contacted">Contacted</option>
-          <option value="Archived">Archived</option>
-        </select>
+          onChange={(newStatus) => onUpdateStatus(inq.id, newStatus)}
+        />
       </td>
       <td style={{ padding: '0.875rem 1.25rem', textAlign: 'right' }}>
         <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
@@ -431,6 +411,119 @@ function TableSkeleton() {
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+function PartnerStatusDropdown({ currentStatus, onChange, disabled }) {
+  const [open, setOpen] = useState(false)
+  const STATUS_OPTIONS = [
+    { value: 'New', label: 'New Request', bg: '#F5EFE6', text: '#8C6D3B', border: '#E2D4C3', dot: '#B89F70' },
+    { value: 'Contacted', label: 'Contacted', bg: '#EAF2E8', text: '#2E402B', border: '#C0D5BD', dot: '#7A8C5A' },
+    { value: 'Archived', label: 'Archived', bg: '#ECEAE4', text: '#7A8C5A', border: '#DDD8CA', dot: '#C9B99A' },
+  ]
+  const current = STATUS_OPTIONS.find(s => s.value === currentStatus) || STATUS_OPTIONS[0]
+
+  useEffect(() => {
+    if (!open) return
+    const close = () => setOpen(false)
+    window.addEventListener('click', close)
+    return () => window.removeEventListener('click', close)
+  }, [open])
+
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }} onClick={e => e.stopPropagation()}>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen(!open)}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          background: current.bg,
+          color: current.text,
+          border: `1.5px solid ${current.border}`,
+          padding: '4px 10px',
+          borderRadius: 20,
+          fontSize: '0.72rem',
+          fontWeight: 700,
+          fontFamily: '"DM Sans", sans-serif',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          outline: 'none',
+          transition: 'all 0.15s ease',
+          opacity: disabled ? 0.6 : 1,
+        }}
+      >
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: current.dot }} />
+        <span>{current.label}</span>
+        <svg
+          style={{ width: 10, height: 10, transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s', color: current.text }}
+          fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 'calc(100% + 5px)',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#FFFFFF',
+            border: '1.5px solid #DDD8CA',
+            borderRadius: 12,
+            boxShadow: '0 10px 30px rgba(28,45,26,0.15)',
+            padding: 4,
+            zIndex: 100,
+            minWidth: 130,
+            textAlign: 'left',
+          }}
+        >
+          {STATUS_OPTIONS.map(opt => {
+            const isSelected = opt.value === currentStatus
+            return (
+              <div
+                key={opt.value}
+                onClick={() => {
+                  onChange(opt.value)
+                  setOpen(false)
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '7px 10px',
+                  borderRadius: 8,
+                  fontSize: '0.75rem',
+                  fontWeight: isSelected ? 700 : 500,
+                  color: opt.text,
+                  background: isSelected ? opt.bg : 'transparent',
+                  cursor: 'pointer',
+                  transition: 'background 0.1s',
+                  fontFamily: '"DM Sans", sans-serif',
+                }}
+                onMouseEnter={e => {
+                  if (!isSelected) e.currentTarget.style.background = '#F4F1EA'
+                }}
+                onMouseLeave={e => {
+                  if (!isSelected) e.currentTarget.style.background = 'transparent'
+                }}
+              >
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: opt.dot, flexShrink: 0 }} />
+                <span style={{ flexGrow: 1 }}>{opt.label}</span>
+                {isSelected && (
+                  <svg style={{ width: 12, height: 12, color: opt.text }} fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

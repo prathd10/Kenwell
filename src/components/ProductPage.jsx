@@ -8,6 +8,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import ProductCard from './ProductCard'
 import VideoCard from './VideoCard'
+import BackButton from './BackButton'
 
 export default function ProductPage() {
   const { slug } = useParams()
@@ -21,6 +22,21 @@ export default function ProductPage() {
   const [activeTab, setActiveTab] = useState('details')
 
   const product = products.find(p => p.slug === slug)
+
+  // Scroll to top whenever the product page loads or slug changes & unlock scroll
+  useEffect(() => {
+    document.body.style.overflow = ''
+    document.body.style.overflowY = 'auto'
+    document.documentElement.style.overflow = ''
+    document.documentElement.style.overflowY = 'auto'
+    window.scrollTo(0, 0)
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.overflowY = 'auto'
+      document.documentElement.style.overflow = ''
+      document.documentElement.style.overflowY = 'auto'
+    }
+  }, [slug])
 
   useEffect(() => {
     if (!product) return
@@ -109,13 +125,16 @@ export default function ProductPage() {
 
       <main className="flex-grow">
 
-        {/* ── Breadcrumb ── */}
+        {/* ── Top Navigation & Breadcrumb ── */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
-          <nav className="flex items-center gap-2 text-xs text-charcoal/40">
-            <Link to="/" className="hover:text-charcoal transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-charcoal/70">{product.name}</span>
-          </nav>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <BackButton />
+            <nav className="flex items-center gap-2 text-xs text-charcoal/40">
+              <Link to="/" className="hover:text-charcoal transition-colors">Home</Link>
+              <span>/</span>
+              <span className="text-charcoal/70">{product.name}</span>
+            </nav>
+          </div>
         </div>
 
         {/* ══════════════════════════════════════════

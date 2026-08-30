@@ -84,11 +84,58 @@
 }
 
 /* Base custom styles */
+html {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-charcoal);
   font-family: "Jost", sans-serif;
   font-weight: 400;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+/* ── Custom Dropdowns & Selects (Kenwell Theme) ────────────────── */
+select {
+  background-color: #FFFFFF;
+  color: #1C2D1A;
+  border: 1.5px solid #DDD8CA;
+  border-radius: 9px;
+  font-family: inherit;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E402B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.85rem 0.85rem;
+  padding-right: 2.25rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+select:focus {
+  border-color: #2E402B !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(122, 140, 90, 0.25) !important;
+}
+
+select option {
+  background-color: #FBF9F5 !important;
+  color: #1C2D1A !important;
+  font-family: inherit;
+  padding: 8px 12px;
+}
+
+select option:checked {
+  background-color: #2E402B !important;
+  color: #FFFFFF !important;
+}
+
+select option:hover {
+  background-color: #EAE5D9 !important;
+  color: #1C2D1A !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
