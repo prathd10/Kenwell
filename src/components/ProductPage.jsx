@@ -146,19 +146,24 @@ export default function ProductPage() {
             {/* Product Image — sticky only on desktop */}
             <div className="md:sticky md:top-24">
               <div
-                className="rounded-2xl overflow-hidden flex items-center justify-center p-8 md:p-12 border border-gray-100"
-                style={{ background: `linear-gradient(145deg, #f9f8f5 0%, ${product.accentColor || '#7A8C5A'}0d 100%)` }}
+                className="relative overflow-hidden rounded-2xl flex items-center justify-center p-8 md:p-12 border border-[#E4DFD3] bg-[#FAF8F5]"
+                style={{ background: `linear-gradient(145deg, #FAF8F5 0%, ${product.accentColor || '#616F3E'}15 100%)` }}
               >
+                {/* Botanical Pattern Watermark */}
+                <div 
+                  className="absolute inset-0 pointer-events-none opacity-[0.06] bg-repeat"
+                  style={{ backgroundImage: "url('/patterns/pattern-green.jpg')", backgroundSize: '240px auto' }}
+                />
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full max-h-[280px] md:max-h-[420px] object-contain drop-shadow-xl"
+                  className="relative z-10 w-full max-h-[280px] md:max-h-[420px] object-contain drop-shadow-xl"
                   loading="eager"
                   decoding="async"
                 />
               </div>
               {/* Trust badges under image */}
-              <div className="mt-4 flex items-center justify-center gap-6 text-[10px] text-charcoal/40 font-mono uppercase tracking-widest">
+              <div className="mt-4 flex items-center justify-center gap-6 text-[10px] text-[#203348]/50 font-mono uppercase tracking-widest">
                 <span>GMP Certified</span>
                 <span>·</span>
                 <span>ISO 9001</span>
@@ -168,16 +173,16 @@ export default function ProductPage() {
             </div>
 
             {/* Product Info */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 text-left">
 
               {/* Series & Name */}
               <div>
                 {product.series && (
-                  <p className="text-xs font-mono uppercase tracking-widest text-sage mb-2">{product.series}</p>
+                  <p className="text-xs font-mono uppercase tracking-widest text-[#616F3E] font-semibold mb-2">{product.series}</p>
                 )}
-                <h1 className="font-serif text-4xl font-bold text-charcoal leading-tight">{product.name}</h1>
+                <h1 className="font-serif text-4xl font-bold text-[#203348] leading-tight">{product.name}</h1>
                 {product.tagline && (
-                  <p className="mt-2 text-base text-charcoal/50 leading-snug">{product.tagline}</p>
+                  <p className="mt-2 text-base text-[#203348]/60 leading-snug">{product.tagline}</p>
                 )}
               </div>
 
@@ -185,7 +190,7 @@ export default function ProductPage() {
               {product.healthGoals?.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {product.healthGoals.map(goal => (
-                    <span key={goal} className="text-[11px] font-medium px-3 py-1 rounded-full border border-gray-200 text-charcoal/60 bg-gray-50">
+                    <span key={goal} className="text-[11px] font-medium px-3 py-1 rounded-full border border-[#E4DFD3] text-[#203348]/75 bg-[#F2EEE5]">
                       {goal}
                     </span>
                   ))}
@@ -193,19 +198,19 @@ export default function ProductPage() {
               )}
 
               {/* ── PRICE — most important ── */}
-              <div className="border-t border-b border-gray-100 py-5 flex items-center justify-between">
+              <div className="border-t border-b border-[#E4DFD3] py-5 flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-charcoal/40 mb-1">Price</p>
+                  <p className="text-[10px] font-mono uppercase tracking-widest text-[#203348]/50 mb-1">Price</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="font-mono text-3xl font-extrabold text-charcoal">₹{product.price}</span>
-                    <span className="font-mono text-sm text-charcoal/35 line-through">₹{mrp}</span>
-                    <span className="text-xs font-bold text-sage bg-sage/10 px-2 py-0.5 rounded-full">20% OFF</span>
+                    <span className="font-mono text-3xl font-extrabold text-[#203348]">₹{product.price}</span>
+                    <span className="font-mono text-sm text-[#203348]/40 line-through">₹{mrp}</span>
+                    <span className="text-xs font-bold text-[#A5492B] bg-[#A5492B]/10 px-2.5 py-0.5 rounded-full">20% OFF</span>
                   </div>
                   {product.servings && (
-                    <p className="text-xs text-charcoal/40 mt-1">{product.servings} servings · ₹{Math.round(product.price / product.servings)} per serving</p>
+                    <p className="text-xs text-[#203348]/50 mt-1">{product.servings} servings · ₹{Math.round(product.price / product.servings)} per serving</p>
                   )}
                 </div>
-                <div className="text-right text-xs text-charcoal/40">
+                <div className="text-right text-xs text-[#203348]/50">
                   {product.form && <p className="font-mono uppercase tracking-wider">{product.form}</p>}
                 </div>
               </div>
@@ -214,8 +219,7 @@ export default function ProductPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => addToCart(product)}
-                  className="flex-1 py-4 rounded-xl text-sm font-semibold uppercase tracking-wider text-white transition-all cursor-pointer shadow-sm hover:shadow-md hover:opacity-90"
-                  style={{ background: '#2E402B' }}
+                  className="flex-1 py-4 rounded-xl text-sm font-semibold uppercase tracking-wider text-white transition-all cursor-pointer shadow-sm hover:shadow-md bg-[#203348] hover:bg-[#A5492B]"
                 >
                   Add to Cart
                 </button>
@@ -223,8 +227,8 @@ export default function ProductPage() {
                   onClick={() => toggleWishlist(product)}
                   className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${
                     isInWishlist
-                      ? 'border-sage bg-sage/10 text-sage'
-                      : 'border-gray-200 text-charcoal/40 hover:border-charcoal/30 hover:text-charcoal'
+                      ? 'border-[#A5492B] bg-[#A5492B]/10 text-[#A5492B]'
+                      : 'border-[#E4DFD3] text-[#203348]/40 hover:border-[#203348]/40 hover:text-[#203348]'
                   }`}
                   title={isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
                 >
@@ -237,11 +241,11 @@ export default function ProductPage() {
               {/* ── KEY BENEFITS — third most important ── */}
               {product.benefits?.length > 0 && (
                 <div>
-                  <p className="text-xs font-mono uppercase tracking-widest text-charcoal/40 mb-3">Why it works</p>
+                  <p className="text-xs font-mono uppercase tracking-widest text-[#203348]/50 mb-3">Why it works</p>
                   <ul className="space-y-2.5">
                     {product.benefits.map((benefit, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-sm text-charcoal/80 leading-snug">
-                        <span className="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ background: '#2E402B' }}>
+                      <li key={idx} className="flex items-start gap-3 text-sm text-[#203348]/80 leading-snug">
+                        <span className="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 bg-[#616F3E]">
                           <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
@@ -255,7 +259,7 @@ export default function ProductPage() {
 
               {/* Description */}
               {product.description && (
-                <p className="text-sm text-charcoal/55 leading-relaxed border-t border-gray-100 pt-5">
+                <p className="text-sm text-[#203348]/60 leading-relaxed border-t border-[#E4DFD3] pt-5">
                   {product.description}
                 </p>
               )}
@@ -266,18 +270,18 @@ export default function ProductPage() {
         {/* ══════════════════════════════════════════
             TABS — Details / Supplement Facts / Science
         ══════════════════════════════════════════ */}
-        <section className="border-t border-gray-100 mt-2">
+        <section className="border-t border-[#E4DFD3] mt-2">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Tab Bar — horizontally scrollable on mobile */}
-            <div className="flex border-b border-gray-100 overflow-x-auto scrollbar-none">
+            <div className="flex border-b border-[#E4DFD3] overflow-x-auto scrollbar-none">
               {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-6 py-4 text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer border-b-2 -mb-[1px] ${
                     activeTab === tab.id
-                      ? 'border-charcoal text-charcoal'
-                      : 'border-transparent text-charcoal/40 hover:text-charcoal/70'
+                      ? 'border-[#203348] text-[#203348]'
+                      : 'border-transparent text-[#203348]/40 hover:text-[#203348]/70'
                   }`}
                 >
                   {tab.label}
@@ -286,7 +290,7 @@ export default function ProductPage() {
             </div>
 
             {/* Tab Content */}
-            <div className="py-10">
+            <div className="py-10 text-left">
 
               {/* ── DETAILS TAB ── */}
               {activeTab === 'details' && (
@@ -295,15 +299,15 @@ export default function ProductPage() {
                   {/* Dosage */}
                   {product.howToUse?.dosage && (
                     <div>
-                      <h3 className="font-serif text-lg font-bold text-charcoal mb-4">How to Take</h3>
+                      <h3 className="font-serif text-lg font-bold text-[#203348] mb-4">How to Take</h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="border border-gray-200 rounded-xl p-5 bg-white">
-                          <p className="text-[10px] font-mono uppercase tracking-widest text-charcoal/60 mb-2">Dosage</p>
-                          <p className="text-sm font-semibold text-charcoal">{product.howToUse.dosage}</p>
+                        <div className="border border-[#E4DFD3] rounded-xl p-5 bg-[#FAF8F5]">
+                          <p className="text-[10px] font-mono uppercase tracking-widest text-[#203348]/60 mb-2">Dosage</p>
+                          <p className="text-sm font-semibold text-[#203348]">{product.howToUse.dosage}</p>
                         </div>
-                        <div className="border border-gray-200 rounded-xl p-5 bg-white">
-                          <p className="text-[10px] font-mono uppercase tracking-widest text-charcoal/60 mb-2">Best Time to Take</p>
-                          <p className="text-sm text-charcoal/80 leading-relaxed">{product.howToUse.timing}</p>
+                        <div className="border border-[#E4DFD3] rounded-xl p-5 bg-[#FAF8F5]">
+                          <p className="text-[10px] font-mono uppercase tracking-widest text-[#203348]/60 mb-2">Best Time to Take</p>
+                          <p className="text-sm text-[#203348]/80 leading-relaxed">{product.howToUse.timing}</p>
                         </div>
                       </div>
                     </div>
@@ -311,17 +315,17 @@ export default function ProductPage() {
 
                   {/* Stacking */}
                   {product.howToUse?.stacking && (
-                    <div className="border border-gray-200 rounded-xl p-5">
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-charcoal/60 mb-2">Stack With</p>
-                      <p className="text-sm text-charcoal/80 leading-relaxed">{product.howToUse.stacking}</p>
+                    <div className="border border-[#E4DFD3] rounded-xl p-5 bg-[#FAF8F5]">
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-[#203348]/60 mb-2">Stack With</p>
+                      <p className="text-sm text-[#203348]/80 leading-relaxed">{product.howToUse.stacking}</p>
                     </div>
                   )}
 
                   {/* Warning */}
                   {product.howToUse?.warnings && (
-                    <div className="border border-amber-300 rounded-xl p-5 bg-amber-50">
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-amber-700 mb-2">⚠ Caution</p>
-                      <p className="text-sm text-amber-900/80 leading-relaxed">{product.howToUse.warnings}</p>
+                    <div className="border border-[#A5492B]/40 rounded-xl p-5 bg-[#A5492B]/5">
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-[#A5492B] font-bold mb-2">⚠ Caution</p>
+                      <p className="text-sm text-[#203348]/80 leading-relaxed">{product.howToUse.warnings}</p>
                     </div>
                   )}
                 </div>
@@ -331,24 +335,24 @@ export default function ProductPage() {
               {activeTab === 'nutrition' && product.nutritionalFacts?.ingredients?.length > 0 && (
                 <div className="max-w-sm">
                   {/* Official-style supplement facts panel */}
-                  <div className="border-2 border-black p-4 bg-white text-black text-xs font-sans">
-                    <h3 className="font-black text-2xl leading-tight border-b-[6px] border-black pb-1 mb-2">Supplement Facts</h3>
-                    <div className="border-b border-black py-1.5 flex justify-between">
+                  <div className="border-2 border-[#203348] p-4 bg-white text-[#203348] text-xs font-sans">
+                    <h3 className="font-black text-2xl leading-tight border-b-[6px] border-[#203348] pb-1 mb-2">Supplement Facts</h3>
+                    <div className="border-b border-[#203348] py-1.5 flex justify-between">
                       <span>Serving Size</span>
                       <span className="font-bold">{product.nutritionalFacts.servingSize}</span>
                     </div>
-                    <div className="border-b-4 border-black py-1.5 flex justify-between">
+                    <div className="border-b-4 border-[#203348] py-1.5 flex justify-between">
                       <span>Servings Per Container</span>
                       <span className="font-bold">{product.nutritionalFacts.servingsPerContainer}</span>
                     </div>
-                    <div className="flex justify-between font-bold border-b-2 border-black py-1 text-[10px]">
+                    <div className="flex justify-between font-bold border-b-2 border-[#203348] py-1 text-[10px]">
                       <span>{product.nutritionalFacts.headers?.[0]}</span>
                       <span>{product.nutritionalFacts.headers?.[1]}</span>
                     </div>
-                    <div className="divide-y divide-black/20">
+                    <div className="divide-y divide-[#203348]/20">
                       {product.nutritionalFacts.ingredients.map((ing, idx) => (
                         <div key={idx} className="flex justify-between py-1.5">
-                          <span className={ing.name.startsWith('  ') ? 'pl-4 italic text-black/60' : 'font-semibold'}>
+                          <span className={ing.name.startsWith('  ') ? 'pl-4 italic text-[#203348]/60' : 'font-semibold'}>
                             {ing.name}
                           </span>
                           <div className="flex gap-5 shrink-0">
@@ -358,7 +362,7 @@ export default function ProductPage() {
                         </div>
                       ))}
                     </div>
-                    <div className="border-t-4 border-black pt-2 mt-1 text-[9px] text-black/60 leading-relaxed">
+                    <div className="border-t-4 border-[#203348] pt-2 mt-1 text-[9px] text-[#203348]/60 leading-relaxed">
                       * Percent Daily Values (RDA) are based on ICMR/RDA guidelines.<br />
                       ** Daily Value not established.
                     </div>
@@ -370,19 +374,19 @@ export default function ProductPage() {
               {activeTab === 'science' && product.scienceText && (
                 <div className="max-w-3xl space-y-8">
                   <div>
-                    <h3 className="font-serif text-xl font-bold text-charcoal mb-4">Clinical Mechanism</h3>
-                    <div className="text-sm text-charcoal/70 leading-relaxed whitespace-pre-wrap space-y-3">
+                    <h3 className="font-serif text-xl font-bold text-[#203348] mb-4">Clinical Mechanism</h3>
+                    <div className="text-sm text-[#203348]/75 leading-relaxed whitespace-pre-wrap space-y-3">
                       {product.scienceText.split('Citations:')[0].trim()}
                     </div>
                   </div>
 
                   {product.scienceText.includes('Citations:') && (
-                    <div className="border-t border-gray-100 pt-6">
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-charcoal/40 mb-4">Scientific References</p>
+                    <div className="border-t border-[#E4DFD3] pt-6">
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-[#203348]/50 mb-4">Scientific References</p>
                       <div className="space-y-3">
                         {product.scienceText.split('Citations:')[1].trim().split('\n').filter(l => l.trim()).map((citation, idx) => (
-                          <div key={idx} className="flex items-start gap-3 text-xs text-charcoal/55 leading-relaxed">
-                            <span className="text-sage font-bold shrink-0 mt-0.5">[{idx + 1}]</span>
+                          <div key={idx} className="flex items-start gap-3 text-xs text-[#203348]/60 leading-relaxed">
+                            <span className="text-[#616F3E] font-bold shrink-0 mt-0.5">[{idx + 1}]</span>
                             <p>{citation.replace(/^\d+\.\s*/, '')}</p>
                           </div>
                         ))}
@@ -398,7 +402,7 @@ export default function ProductPage() {
 
         {/* ── Video Testimonials ── */}
         {videos.length > 0 && (
-          <section className="py-14 bg-charcoal">
+          <section className="py-14 bg-[#203348]">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <h2 className="font-serif text-2xl font-bold text-white mb-6">Real Customer Videos</h2>
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-stretch">
@@ -412,9 +416,9 @@ export default function ProductPage() {
 
         {/* ── Related Products ── */}
         {relatedProducts.length > 0 && (
-          <section className="border-t border-gray-100 py-14">
+          <section className="border-t border-[#E4DFD3] py-14">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="font-serif text-2xl font-bold text-charcoal mb-8">You May Also Like</h2>
+              <h2 className="font-serif text-2xl font-bold text-[#203348] mb-8">You May Also Like</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {relatedProducts.map(p => (
                   <ProductCard

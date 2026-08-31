@@ -57,17 +57,17 @@ export default function VerifyProduct() {
     <div className="py-16 px-4 max-w-3xl mx-auto space-y-10 min-h-[60vh] text-left">
       {/* Header */}
       <div className="text-center max-w-md mx-auto space-y-3">
-        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">
+        <span className="text-[#616F3E] font-mono uppercase tracking-wider text-xs font-semibold">
           Authenticity Check
         </span>
-        <h1 className="text-4xl font-serif text-primary-green">
+        <h1 className="text-4xl font-serif text-[#203348]">
           Verify Your Product
         </h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
 
       <BackButton className='mb-6' />
         {stage === 'form' && (
-          <p className="text-charcoal/70 text-sm leading-relaxed">
+          <p className="text-[#203348]/70 text-sm leading-relaxed">
             Enter the unique code printed on your product's authenticity sticker to confirm it's genuine.
           </p>
         )}
@@ -75,10 +75,10 @@ export default function VerifyProduct() {
 
       {/* VERIFY FORM — hidden once a result is showing */}
       {stage === 'form' && (
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/60 shadow-lg bg-white/40">
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#E4DFD3] shadow-lg">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1.5">
+              <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1.5">
                 Authenticity Code
               </label>
               <input
@@ -87,14 +87,14 @@ export default function VerifyProduct() {
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="e.g. 7K4M-9XQP-R2"
-                className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30 font-mono uppercase"
+                className="w-full bg-[#FAF8F5] border border-[#E4DFD3] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 font-mono uppercase text-[#203348]"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-primary-green hover:bg-sage text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md hover:shadow-lg text-center flex justify-center items-center gap-2"
+              className="w-full py-3.5 bg-[#A5492B] hover:bg-[#203348] text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md hover:shadow-lg text-center flex justify-center items-center gap-2"
             >
               {loading ? 'Checking...' : 'Verify Product'}
             </button>
@@ -112,7 +112,7 @@ export default function VerifyProduct() {
           )}
 
           {result?.status === 'invalid' && (
-            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-amber-500/30 shadow-md bg-amber-500/5 flex items-start gap-4">
+            <div className="bg-amber-500/5 p-6 sm:p-8 rounded-3xl border border-amber-500/30 shadow-md flex items-start gap-4">
               <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
                 <span className="font-bold text-lg text-amber-700">?</span>
               </div>
@@ -127,16 +127,16 @@ export default function VerifyProduct() {
           )}
 
           {result?.status === 'first_verification' && (
-            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-sage/40 shadow-md bg-sage/5 flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-sage/20 flex items-center justify-center shrink-0">
-                <span className="font-bold text-lg text-sage">✓</span>
+            <div className="bg-[#616F3E]/5 p-6 sm:p-8 rounded-3xl border border-[#616F3E]/40 shadow-md flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-[#616F3E]/20 flex items-center justify-center shrink-0">
+                <span className="font-bold text-lg text-[#616F3E]">✓</span>
               </div>
               <div>
-                <h3 className="font-serif text-lg font-bold text-primary-green">Genuine Kenwell Product</h3>
+                <h3 className="font-serif text-lg font-bold text-[#203348]">Genuine Kenwell Product</h3>
                 {result.product_name && (
-                  <p className="text-sm text-charcoal/80 mt-1 font-semibold">{result.product_name}</p>
+                  <p className="text-sm text-[#203348]/80 mt-1 font-semibold">{result.product_name}</p>
                 )}
-                <p className="text-sm text-charcoal/70 mt-1 leading-relaxed">
+                <p className="text-sm text-[#203348]/70 mt-1 leading-relaxed">
                   Verified today, {formattedDate(result.verified_at)}. This is the first time this
                   code has been checked.
                 </p>
@@ -145,19 +145,19 @@ export default function VerifyProduct() {
           )}
 
           {result?.status === 'already_verified' && (
-            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-red-500/25 shadow-md bg-red-500/5 flex items-start gap-4">
+            <div className="bg-red-500/5 p-6 sm:p-8 rounded-3xl border border-red-500/25 shadow-md flex items-start gap-4">
               <div className="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center shrink-0">
                 <span className="font-bold text-lg text-red-700">!</span>
               </div>
               <div>
                 <h3 className="font-serif text-lg font-bold text-red-800">Already Verified</h3>
                 {result.product_name && (
-                  <p className="text-sm text-charcoal/80 mt-1 font-semibold">{result.product_name}</p>
+                  <p className="text-sm text-[#203348]/80 mt-1 font-semibold">{result.product_name}</p>
                 )}
-                <p className="text-sm text-charcoal/70 mt-1 leading-relaxed">
+                <p className="text-sm text-[#203348]/70 mt-1 leading-relaxed">
                   This code was first verified on {formattedDate(result.verified_at)}. If you just
                   purchased this product and are seeing this message, please{' '}
-                  <a href="mailto:help@kenwell.in" className="text-primary-green underline">
+                  <a href="mailto:help@kenwell.in" className="text-[#A5492B] underline font-semibold">
                     contact us
                   </a>{' '}
                   — it may indicate the product wasn't sourced from an authorized seller.
@@ -170,7 +170,7 @@ export default function VerifyProduct() {
             <div className="text-center">
               <button
                 onClick={handleCheckAnother}
-                className="px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider text-primary-green border border-primary-green/30 hover:bg-primary-green hover:text-white transition-all cursor-pointer"
+                className="px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider text-[#203348] border border-[#203348]/30 hover:bg-[#203348] hover:text-white transition-all cursor-pointer"
               >
                 Check Another Code
               </button>

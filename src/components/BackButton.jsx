@@ -11,7 +11,7 @@ export default function BackButton({ className = "", label = "Back" }) {
             window.location.href = '/';
           }
         }}
-        className="flex items-center space-x-2 text-[13px] md:text-[14px] text-sage hover:text-primary-green transition-colors cursor-pointer"
+        className="flex items-center space-x-2 text-[13px] md:text-[14px] text-[#616F3E] hover:text-[#203348] font-semibold transition-colors cursor-pointer"
         title="Go Back"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

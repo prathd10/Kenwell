@@ -51,11 +51,11 @@ export default function LabScanner() {
       
       {/* Page Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4">
-        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Label Integrity Portal</span>
-        <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Lab Transparency Scanner</h1>
+        <span className="text-[#616F3E] font-mono uppercase tracking-wider text-xs font-semibold">Label Integrity Portal</span>
+        <h1 className="text-4xl md:text-5xl font-serif text-[#203348]">Lab Transparency Scanner</h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
-        <p className="text-charcoal/70 text-sm leading-relaxed">
-          Slide 3 Discovery Counter Integration. Verify your batch Certificate of Analysis (CoA), purity percentages, heavy metals panel, and geographic botanical origin.
+        <p className="text-[#203348]/70 text-sm leading-relaxed">
+          Verify your batch Certificate of Analysis (CoA), purity percentages, heavy metals panel, and geographic botanical origin.
         </p>
       </div>
 
@@ -65,11 +65,11 @@ export default function LabScanner() {
         
         {/* Left Column: Simulated Phone Scanner Screen */}
         <div className="lg:col-span-5 flex flex-col items-center">
-          <div className="relative w-full max-w-[360px] h-[580px] bg-charcoal rounded-[40px] border-8 border-cream-dark shadow-2xl p-4 overflow-hidden flex flex-col justify-between text-white font-sans">
+          <div className="relative w-full max-w-[360px] h-[580px] bg-[#203348] rounded-[40px] border-8 border-[#E4DFD3] shadow-2xl p-4 overflow-hidden flex flex-col justify-between text-white font-sans">
             
             {/* Phone Speaker & Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-cream-dark rounded-b-2xl z-20 flex justify-center items-center">
-              <div className="w-12 h-1 bg-charcoal/50 rounded-full"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#E4DFD3] rounded-b-2xl z-20 flex justify-center items-center">
+              <div className="w-12 h-1 bg-[#203348]/50 rounded-full"></div>
             </div>
 
             {/* Scanning viewport */}
@@ -89,7 +89,7 @@ export default function LabScanner() {
 
               {/* Scanning Active Overlay Sweep Line */}
               {scanning && (
-                <div className="absolute top-0 left-0 right-0 h-1 bg-sage animate-[bounce_2s_infinite] shadow-[0_0_15px_#7A8C5A] z-20"></div>
+                <div className="absolute top-0 left-0 right-0 h-1 bg-[#616F3E] animate-[bounce_2s_infinite] shadow-[0_0_15px_#616F3E] z-20"></div>
               )}
 
               {/* Viewport UI states */}
@@ -110,25 +110,25 @@ export default function LabScanner() {
 
               {selectedProduct && scanning && (
                 <div className="z-10 text-center space-y-3">
-                  <div className="w-24 h-24 border-2 border-sage rounded-2xl mx-auto flex items-center justify-center">
-                    <svg className="w-10 h-10 text-sage animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-24 h-24 border-2 border-[#616F3E] rounded-2xl mx-auto flex items-center justify-center">
+                    <svg className="w-10 h-10 text-[#616F3E] animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 6H16" />
                     </svg>
                   </div>
-                  <h4 className="text-sm font-semibold tracking-wider uppercase text-sage">Scanning Batch QR...</h4>
+                  <h4 className="text-sm font-semibold tracking-wider uppercase text-[#616F3E]">Scanning Batch QR...</h4>
                   <p className="text-[10px] text-white/50">{selectedProduct.name}</p>
                 </div>
               )}
 
               {selectedProduct && reportRetrieved && (
                 <div className="z-10 text-center space-y-4 p-4 animate-in fade-in duration-300">
-                  <div className="w-16 h-16 bg-sage/20 border border-sage/50 text-sage rounded-full mx-auto flex items-center justify-center">
-                    <svg className="w-8 h-8 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 bg-[#616F3E]/20 border border-[#616F3E]/50 text-[#616F3E] rounded-full mx-auto flex items-center justify-center">
+                    <svg className="w-8 h-8 text-[#616F3E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                   <div>
-                    <span className="text-[9px] font-mono text-sage tracking-wider uppercase">Authenticity Verified</span>
+                    <span className="text-[9px] font-mono text-[#616F3E] tracking-wider uppercase">Authenticity Verified</span>
                     <h4 className="font-serif text-base font-bold text-white mt-1">{selectedProduct.name}</h4>
                     <p className="text-[10px] text-white/40 mt-0.5">Batch #KNW-2026-A22</p>
                   </div>
@@ -144,10 +144,10 @@ export default function LabScanner() {
               {/* Target Scan Reticle Box */}
               {!scanning && !reportRetrieved && (
                 <div className="absolute w-44 h-44 border-2 border-white/20 rounded-3xl flex items-center justify-center">
-                  <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-sage -mt-1 -ml-1 rounded-tl-lg"></div>
-                  <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-sage -mt-1 -mr-1 rounded-tr-lg"></div>
-                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-sage -mb-1 -ml-1 rounded-bl-lg"></div>
-                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-sage -mb-1 -mr-1 rounded-br-lg"></div>
+                  <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-[#616F3E] -mt-1 -ml-1 rounded-tl-lg"></div>
+                  <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-[#616F3E] -mt-1 -mr-1 rounded-tr-lg"></div>
+                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-[#616F3E] -mb-1 -ml-1 rounded-bl-lg"></div>
+                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-[#616F3E] -mb-1 -mr-1 rounded-br-lg"></div>
                   <span className="text-[9px] font-mono tracking-widest text-white/30 uppercase">Align QR Code</span>
                 </div>
               )}
@@ -155,7 +155,7 @@ export default function LabScanner() {
             </div>
 
             {/* Select product list in-phone */}
-            <div className="h-44 flex flex-col justify-end py-2 bg-charcoal/80">
+            <div className="h-44 flex flex-col justify-end py-2 bg-[#203348]/90">
               <span className="block text-[8px] font-mono uppercase text-white/40 tracking-wider text-left mb-1.5">Select Formula to verify</span>
               <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-none">
                 {products.slice(0, 10).map((prod) => (
@@ -165,7 +165,7 @@ export default function LabScanner() {
                     disabled={scanning}
                     className={`flex-shrink-0 px-3 py-2 rounded-xl text-[10px] font-semibold text-left transition-all border w-28 cursor-pointer ${
                       selectedProduct?.id === prod.id 
-                        ? 'bg-sage border-sage text-white' 
+                        ? 'bg-[#616F3E] border-[#616F3E] text-white' 
                         : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
                     }`}
                   >
@@ -182,17 +182,22 @@ export default function LabScanner() {
         {/* Right Column: Lab CoA Sheet & Sourcing Map */}
         <div className="lg:col-span-7 flex flex-col justify-between">
           {reportRetrieved && selectedProduct ? (
-            <div className="glass-panel p-8 rounded-3xl border border-white/50 space-y-6 text-left animate-in fade-in duration-400">
+            <div className="relative overflow-hidden bg-white p-8 rounded-3xl border border-[#E4DFD3] shadow-md space-y-6 text-left animate-in fade-in duration-400">
+              {/* Botanical watermark */}
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-[0.04] bg-repeat"
+                style={{ backgroundImage: "url('/patterns/pattern-green.jpg')", backgroundSize: '300px auto' }}
+              />
               
               {/* CoA Title Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-cream-dark/50 pb-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-[#E4DFD3] pb-4">
                 <div>
-                  <h3 className="font-serif text-2xl font-bold text-primary-green">Certificate of Analysis (CoA)</h3>
-                  <p className="text-xs text-charcoal/50 font-mono mt-0.5">
-                    Batch Code: <span className="font-bold text-primary-green">KNW-2026-A22</span> | Manufacture: March 2026
+                  <h3 className="font-serif text-2xl font-bold text-[#203348]">Certificate of Analysis (CoA)</h3>
+                  <p className="text-xs text-[#203348]/50 font-mono mt-0.5">
+                    Batch Code: <span className="font-bold text-[#203348]">KNW-2026-A22</span> | Manufacture: March 2026
                   </p>
                 </div>
-                <div className="bg-sage/10 text-sage border border-sage/20 rounded-full px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider">
+                <div className="bg-[#616F3E]/10 text-[#616F3E] border border-[#616F3E]/20 rounded-full px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider">
                   Pass / Approved
                 </div>
               </div>
@@ -201,25 +206,25 @@ export default function LabScanner() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 {/* Active Purity Assay */}
-                <div className="bg-white/40 border border-cream-dark/40 rounded-xl p-4 space-y-3">
-                  <h4 className="font-mono text-[9px] uppercase tracking-wider text-charcoal/50 font-bold border-b border-cream-dark/50 pb-1">Chemical Assay Purity</h4>
+                <div className="bg-[#FAF8F5] border border-[#E4DFD3] rounded-xl p-4 space-y-3">
+                  <h4 className="font-mono text-[9px] uppercase tracking-wider text-[#203348]/50 font-bold border-b border-[#E4DFD3] pb-1">Chemical Assay Purity</h4>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-primary-green">{getSourcingLocation(selectedProduct.slug).active}</span>
-                    <span className="font-mono text-sage font-bold">103.2%</span>
+                    <span className="font-semibold text-[#203348]">{getSourcingLocation(selectedProduct.slug).active}</span>
+                    <span className="font-mono text-[#616F3E] font-bold">103.2%</span>
                   </div>
-                  <p className="text-[10px] text-charcoal/60 leading-relaxed">
+                  <p className="text-[10px] text-[#203348]/60 leading-relaxed">
                     HPLC verified active compound levels match 100%+ label guidelines with zero synthetic overages.
                   </p>
                 </div>
 
                 {/* Sourcing Location Card */}
-                <div className="bg-white/40 border border-cream-dark/40 rounded-xl p-4 space-y-3">
-                  <h4 className="font-mono text-[9px] uppercase tracking-wider text-charcoal/50 font-bold border-b border-cream-dark/50 pb-1">Origin Sourcing Check</h4>
+                <div className="bg-[#FAF8F5] border border-[#E4DFD3] rounded-xl p-4 space-y-3">
+                  <h4 className="font-mono text-[9px] uppercase tracking-wider text-[#203348]/50 font-bold border-b border-[#E4DFD3] pb-1">Origin Sourcing Check</h4>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-primary-green">Botanical Origin</span>
-                    <span className="font-mono text-sage font-bold">{getSourcingLocation(selectedProduct.slug).source}</span>
+                    <span className="font-semibold text-[#203348]">Botanical Origin</span>
+                    <span className="font-mono text-[#616F3E] font-bold">{getSourcingLocation(selectedProduct.slug).source}</span>
                   </div>
-                  <p className="text-[10px] text-charcoal/60 leading-relaxed">
+                  <p className="text-[10px] text-[#203348]/60 leading-relaxed">
                     Raw extract harvested directly from regional source; verified trace coordinates.
                   </p>
                 </div>
@@ -227,55 +232,55 @@ export default function LabScanner() {
               </div>
 
               {/* Lab Panel Table */}
-              <div className="border border-cream-dark rounded-xl overflow-hidden text-xs">
+              <div className="border border-[#E4DFD3] rounded-xl overflow-hidden text-xs">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-bg-secondary/40 font-mono text-[9px] uppercase tracking-wider border-b border-cream-dark">
+                    <tr className="bg-[#F2EEE5] font-mono text-[9px] uppercase tracking-wider border-b border-[#E4DFD3] text-[#203348]">
                       <th className="p-3">Assay Parameter</th>
                       <th className="p-3">Specification Limit</th>
                       <th className="p-3">Tested Result</th>
                       <th className="p-3 text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-cream-dark/40">
+                  <tbody className="divide-y divide-[#E4DFD3]">
                     <tr>
-                      <td className="p-3 font-semibold">Lead (Pb)</td>
-                      <td className="p-3 font-mono text-charcoal/60">&lt; 0.5 ppm</td>
-                      <td className="p-3 font-mono font-bold text-primary-green">0.02 ppm</td>
-                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                      <td className="p-3 font-semibold text-[#203348]">Lead (Pb)</td>
+                      <td className="p-3 font-mono text-[#203348]/60">&lt; 0.5 ppm</td>
+                      <td className="p-3 font-mono font-bold text-[#203348]">0.02 ppm</td>
+                      <td className="p-3 text-right font-bold text-[#616F3E]">Pass</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-semibold">Arsenic (As)</td>
-                      <td className="p-3 font-mono text-charcoal/60">&lt; 0.5 ppm</td>
-                      <td className="p-3 font-mono font-bold text-primary-green">&lt; 0.01 ppm</td>
-                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                      <td className="p-3 font-semibold text-[#203348]">Arsenic (As)</td>
+                      <td className="p-3 font-mono text-[#203348]/60">&lt; 0.5 ppm</td>
+                      <td className="p-3 font-mono font-bold text-[#203348]">&lt; 0.01 ppm</td>
+                      <td className="p-3 text-right font-bold text-[#616F3E]">Pass</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-semibold">Cadmium (Cd)</td>
-                      <td className="p-3 font-mono text-charcoal/60">&lt; 0.3 ppm</td>
-                      <td className="p-3 font-mono font-bold text-primary-green">&lt; 0.01 ppm</td>
-                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                      <td className="p-3 font-semibold text-[#203348]">Cadmium (Cd)</td>
+                      <td className="p-3 font-mono text-[#203348]/60">&lt; 0.3 ppm</td>
+                      <td className="p-3 font-mono font-bold text-[#203348]">&lt; 0.01 ppm</td>
+                      <td className="p-3 text-right font-bold text-[#616F3E]">Pass</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-semibold">Total Yeast & Mold</td>
-                      <td className="p-3 font-mono text-charcoal/60">&lt; 100 CFU/g</td>
-                      <td className="p-3 font-mono font-bold text-primary-green">Absent</td>
-                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                      <td className="p-3 font-semibold text-[#203348]">Total Yeast & Mold</td>
+                      <td className="p-3 font-mono text-[#203348]/60">&lt; 100 CFU/g</td>
+                      <td className="p-3 font-mono font-bold text-[#203348]">Absent</td>
+                      <td className="p-3 text-right font-bold text-[#616F3E]">Pass</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-semibold">E. Coli & Salmonella</td>
-                      <td className="p-3 font-mono text-charcoal/60">Absent / 10g</td>
-                      <td className="p-3 font-mono font-bold text-primary-green">Absent</td>
-                      <td className="p-3 text-right font-bold text-sage">Pass</td>
+                      <td className="p-3 font-semibold text-[#203348]">E. Coli & Salmonella</td>
+                      <td className="p-3 font-mono text-[#203348]/60">Absent / 10g</td>
+                      <td className="p-3 font-mono font-bold text-[#203348]">Absent</td>
+                      <td className="p-3 text-right font-bold text-[#616F3E]">Pass</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
               {/* Transparent Excipient Badge */}
-              <div className="bg-bg-secondary/40 border border-cream-dark/50 rounded-2xl p-5 space-y-2">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-charcoal/40 font-bold block">100% Disclosure Excipient Profile</span>
-                <p className="text-xs text-charcoal/70 leading-relaxed">
+              <div className="bg-[#FAF8F5] border border-[#E4DFD3] rounded-2xl p-5 space-y-2">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-[#203348]/40 font-bold block">100% Disclosure Excipient Profile</span>
+                <p className="text-xs text-[#203348]/70 leading-relaxed">
                   In addition to the active molecular raw compounds, this batch utilizes: <strong>{getSourcingLocation(selectedProduct.slug).base}</strong>. Absolutely zero titanium dioxide, talc, artificial colorings, or synthetic glazing agents were used in formulation.
                 </p>
               </div>
@@ -283,45 +288,45 @@ export default function LabScanner() {
             </div>
           ) : (
             /* Standby State with Brand image card */
-            <div className="glass-panel p-8 rounded-3xl border border-white/50 flex flex-col justify-center items-center text-center space-y-6 min-h-[480px]">
+            <div className="bg-white p-8 rounded-3xl border border-[#E4DFD3] shadow-md flex flex-col justify-center items-center text-center space-y-6 min-h-[480px]">
               
-              <div className="relative w-full max-w-[480px] h-60 rounded-2xl overflow-hidden bg-cream-dark shadow-md">
+              <div className="relative w-full max-w-[480px] h-60 rounded-2xl overflow-hidden bg-[#FAF8F5] shadow-md border border-[#E4DFD3]">
                 <img 
                   src="/scannable qr and counter.jpeg" 
                   alt="Kenwell Tabletop Counter Concept" 
                   className="w-full h-full object-cover"
                   onError={(e) => { e.target.style.display = 'none' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/20 to-transparent flex flex-col justify-end p-6 text-left text-white">
-                  <span className="text-xs font-mono text-champagne uppercase tracking-widest font-semibold">We Have Nothing To Hide</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#203348]/80 via-[#203348]/30 to-transparent flex flex-col justify-end p-6 text-left text-white">
+                  <span className="text-xs font-mono text-[#A5492B] uppercase tracking-widest font-bold">We Have Nothing To Hide</span>
                   <h3 className="font-serif text-2xl font-bold mt-1">Transparency First Sourcing</h3>
                 </div>
               </div>
               
               <div className="max-w-md space-y-3">
-                <h3 className="font-serif text-2xl font-semibold text-primary-green">Acknowledge Active Batches</h3>
-                <p className="text-sm text-charcoal/70 leading-relaxed">
+                <h3 className="font-serif text-2xl font-semibold text-[#203348]">Acknowledge Active Batches</h3>
+                <p className="text-sm text-[#203348]/70 leading-relaxed">
                   Every single bottle shipped features a unique scannable QR code on the back label. Scan this code using your mobile device or select a formula on the phone mock layout to trace third-party testing logs and active ingredients assays.
                 </p>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-charcoal/50 font-mono">
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-[#203348]/60 font-mono">
                 <span className="flex items-center gap-1">
-                  <svg className="w-3 h-3 text-sage animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 text-[#616F3E] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                   </svg>
                   heavy metals tested
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <svg className="w-3 h-3 text-sage animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 text-[#616F3E] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                   </svg>
                   active molecule assays
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <svg className="w-3 h-3 text-sage animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 text-[#616F3E] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                   </svg>
                   excipient disclosure

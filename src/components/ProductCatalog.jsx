@@ -147,14 +147,14 @@ export default function ProductCatalog({
       <div className="py-12 px-4 md:px-8 max-w-7xl mx-auto space-y-8">
       {/* Page Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4">
-        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">
+        <span className="text-[#616F3E] font-mono uppercase tracking-wider text-xs font-semibold">
           {headerContent.badge}
         </span>
-        <h1 className="text-4xl md:text-5xl font-serif text-primary-green">
+        <h1 className="text-4xl md:text-5xl font-serif text-[#203348]">
           {headerContent.title}
         </h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
-        <p className="text-charcoal/70 text-sm leading-relaxed">
+        <p className="text-[#203348]/70 text-sm leading-relaxed">
           {headerContent.desc}
         </p>
       </div>
@@ -166,12 +166,12 @@ export default function ProductCatalog({
       <div className="space-y-4">
         {/* Counter */}
         <div className="text-left">
-          <span className="font-mono text-xs text-charcoal/50 uppercase tracking-widest">
+          <span className="font-mono text-xs text-[#203348]/50 uppercase tracking-widest">
             {sortedProducts.length} formulations
           </span>
         </div>
         
-        <div className="border-t border-cream-dark/40 my-4"></div>
+        <div className="border-t border-[#E4DFD3] my-4"></div>
 
         {/* Filters Toggle & Sort Row */}
         <div className="flex justify-between items-center py-2">
@@ -179,9 +179,9 @@ export default function ProductCatalog({
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowFiltersPanel(true)}
-              className="font-mono text-xs uppercase tracking-widest text-charcoal/80 flex items-center gap-2.5 hover:text-primary-green transition-colors cursor-pointer"
+              className="font-mono text-xs uppercase tracking-widest text-[#203348]/80 flex items-center gap-2.5 hover:text-[#616F3E] transition-colors cursor-pointer"
             >
-              <svg className="w-4 h-4 text-charcoal/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-[#203348]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
               <span>Filters</span>
@@ -189,7 +189,7 @@ export default function ProductCatalog({
             {(selectedSeries !== 'All' || selectedGoal !== 'All' || searchQuery) && (
               <button 
                 onClick={handleClearFilters}
-                className="text-[10px] uppercase font-mono tracking-widest text-sage hover:underline cursor-pointer"
+                className="text-[10px] uppercase font-mono tracking-widest text-[#A5492B] hover:underline cursor-pointer font-bold"
               >
                 Reset
               </button>
@@ -201,7 +201,7 @@ export default function ProductCatalog({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-transparent border border-cream-dark/80 text-charcoal rounded-full px-5 py-2 text-xs font-mono tracking-wider focus:outline-none focus:border-sage cursor-pointer"
+              className="bg-transparent border border-[#E4DFD3] text-[#203348] rounded-full px-5 py-2 text-xs font-mono tracking-wider focus:outline-none focus:border-[#616F3E] cursor-pointer"
             >
               <option value="featured">Featured</option>
               <option value="price-asc">Price: Low to High</option>
@@ -224,7 +224,7 @@ export default function ProductCatalog({
             zIndex: 99999,
             display: 'flex',
             justifyContent: 'flex-start',
-            background: 'rgba(28, 45, 26, 0.4)',
+            background: 'rgba(32, 51, 72, 0.45)',
             backdropFilter: 'blur(4px)',
             WebkitBackdropFilter: 'blur(4px)',
             animation: 'fadeIn 0.2s ease',
@@ -241,12 +241,12 @@ export default function ProductCatalog({
             style={{
               width: '100%',
               maxWidth: 320,
-              background: '#F4F1EA',
+              background: '#FAF8F5',
               height: '100%', // Stretches perfectly to fill the stretched wrapper container
-              boxShadow: '8px 0 40px rgba(28,45,26,0.18)',
+              boxShadow: '8px 0 40px rgba(32,51,72,0.18)',
               display: 'flex',
               flexDirection: 'column',
-              borderRight: '1px solid #DDD8CA',
+              borderRight: '1px solid #E4DFD3',
               animation: 'slideInLeft 0.3s cubic-bezier(0.4,0,0.2,1)',
               overflowY: 'auto',
             }}
@@ -254,12 +254,12 @@ export default function ProductCatalog({
             {/* Header */}
             <div style={{
               padding: '1.5rem',
-              borderBottom: '1px solid rgba(221,216,202,0.5)',
+              borderBottom: '1px solid #E4DFD3',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               background: '#fff',
               position: 'sticky', top: 0, zIndex: 10,
             }}>
-              <h2 style={{ fontFamily: '"Fredoka One", cursive', fontSize: '1.25rem', fontWeight: 700, color: '#2E402B', margin: 0, letterSpacing: '0.08em', textTransform: 'uppercase', fontStyle: 'italic' }}>
+              <h2 style={{ fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif', fontSize: '1.2rem', fontWeight: 600, color: '#203348', margin: 0, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 Filters
               </h2>
               <button
@@ -268,12 +268,12 @@ export default function ProductCatalog({
                   background: 'none', border: 'none', cursor: 'pointer',
                   width: 28, height: 28, borderRadius: '50%',
                   display: 'flex', alignItems: 'center', justifyRight: 'center', justifyContent: 'center',
-                  fontSize: '0.85rem', color: 'rgba(28,45,26,0.4)',
-                  backgroundColor: 'rgba(28,45,26,0.04)',
+                  fontSize: '0.85rem', color: 'rgba(32,51,72,0.4)',
+                  backgroundColor: 'rgba(32,51,72,0.04)',
                   transition: 'all 0.15s',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(28,45,26,0.08)'; e.currentTarget.style.color = '#1C2D1A' }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(28,45,26,0.04)'; e.currentTarget.style.color = 'rgba(28,45,26,0.4)' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(32,51,72,0.08)'; e.currentTarget.style.color = '#203348' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(32,51,72,0.04)'; e.currentTarget.style.color = 'rgba(32,51,72,0.4)' }}
               >
                 ✕
               </button>
@@ -284,12 +284,12 @@ export default function ProductCatalog({
               
               {/* Search input */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(32,51,72,0.5)', fontFamily: 'system-ui, sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
                   Search
                 </span>
                 <div style={{ position: 'relative' }}>
                   <svg 
-                    style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 14, height: 14, color: 'rgba(28,45,26,0.4)' }} 
+                    style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 14, height: 14, color: 'rgba(32,51,72,0.4)' }} 
                     fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -303,11 +303,11 @@ export default function ProductCatalog({
                       width: '100%',
                       padding: '0.6rem 2.2rem 0.6rem 2.2rem',
                       background: '#fff',
-                      border: '1.5px solid #DDD8CA',
+                      border: '1.5px solid #E4DFD3',
                       borderRadius: 12,
                       fontSize: '0.75rem',
-                      fontFamily: '"Jost", sans-serif',
-                      color: '#1C2D1A',
+                      fontFamily: 'inherit',
+                      color: '#203348',
                       outline: 'none',
                       boxSizing: 'border-box',
                     }}
@@ -315,7 +315,7 @@ export default function ProductCatalog({
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'rgba(28,45,26,0.4)' }}
+                      style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: 'rgba(32,51,72,0.4)' }}
                     >
                       ✕
                     </button>
@@ -325,7 +325,7 @@ export default function ProductCatalog({
 
               {/* Categories Section */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(32,51,72,0.5)', fontFamily: 'system-ui, sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
                   Categories
                 </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -347,24 +347,24 @@ export default function ProductCatalog({
                           borderRadius: 9,
                           border: 'none',
                           cursor: 'pointer',
-                          fontFamily: 'Jost", sans-serif',
+                          fontFamily: 'inherit',
                           fontSize: '0.7rem',
                           fontWeight: isActive ? 700 : 500,
                           textTransform: 'uppercase',
                           letterSpacing: '0.08em',
-                          background: isActive ? '#2E402B' : 'transparent',
-                          color: isActive ? '#F4F1EA' : 'rgba(28,45,26,0.6)',
+                          background: isActive ? '#203348' : 'transparent',
+                          color: isActive ? '#FAF8F5' : 'rgba(32,51,72,0.7)',
                           transition: 'all 0.15s',
                         }}
                         onMouseEnter={e => {
                           if (!isActive) {
-                            e.currentTarget.style.color = '#2E402B'
-                            e.currentTarget.style.background = 'rgba(28,45,26,0.05)'
+                            e.currentTarget.style.color = '#203348'
+                            e.currentTarget.style.background = 'rgba(32,51,72,0.05)'
                           }
                         }}
                         onMouseLeave={e => {
                           if (!isActive) {
-                            e.currentTarget.style.color = 'rgba(28,45,26,0.6)'
+                            e.currentTarget.style.color = 'rgba(32,51,72,0.7)'
                             e.currentTarget.style.background = 'transparent'
                           }
                         }}
@@ -378,7 +378,7 @@ export default function ProductCatalog({
 
               {/* Health Goals Section */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: '0.65rem', color: 'rgba(28,45,26,0.5)', fontFamily: 'Jost", sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.65rem', color: 'rgba(32,51,72,0.5)', fontFamily: 'system-ui, sans-serif', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
                   Health Goals
                 </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 260, overflowY: 'auto', paddingRight: 4 }}>
@@ -400,24 +400,24 @@ export default function ProductCatalog({
                           borderRadius: 9,
                           border: 'none',
                           cursor: 'pointer',
-                          fontFamily: 'Jost", sans-serif',
+                          fontFamily: 'inherit',
                           fontSize: '0.7rem',
                           fontWeight: isActive ? 700 : 500,
                           textTransform: 'uppercase',
                           letterSpacing: '0.08em',
-                          background: isActive ? '#7A8C5A' : 'transparent',
-                          color: isActive ? '#F4F1EA' : 'rgba(28,45,26,0.6)',
+                          background: isActive ? '#616F3E' : 'transparent',
+                          color: isActive ? '#FAF8F5' : 'rgba(32,51,72,0.7)',
                           transition: 'all 0.15s',
                         }}
                         onMouseEnter={e => {
                           if (!isActive) {
-                            e.currentTarget.style.color = '#7A8C5A'
-                            e.currentTarget.style.background = 'rgba(122,140,90,0.05)'
+                            e.currentTarget.style.color = '#616F3E'
+                            e.currentTarget.style.background = 'rgba(97,111,62,0.05)'
                           }
                         }}
                         onMouseLeave={e => {
                           if (!isActive) {
-                            e.currentTarget.style.color = 'rgba(28,45,26,0.6)'
+                            e.currentTarget.style.color = 'rgba(32,51,72,0.7)'
                             e.currentTarget.style.background = 'transparent'
                           }
                         }}
@@ -453,17 +453,17 @@ export default function ProductCatalog({
             ))}
           </div>
         ) : (
-          <div className="glass-panel p-16 rounded-2xl border border-cream-dark text-center space-y-4 max-w-md mx-auto flex flex-col items-center">
-            <svg className="w-12 h-12 text-sage/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-[#FAF8F5] p-16 rounded-2xl border border-[#E4DFD3] text-center space-y-4 max-w-md mx-auto flex flex-col items-center">
+            <svg className="w-12 h-12 text-[#616F3E]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <h3 className="font-serif text-2xl font-semibold text-primary-green">No Formulations Found</h3>
-            <p className="text-sm text-charcoal/70">
+            <h3 className="font-serif text-2xl font-semibold text-[#203348]">No Formulations Found</h3>
+            <p className="text-sm text-[#203348]/70">
               No products match your active search terms or filters. Try adjusting your goal selection or search keyword.
             </p>
             <button
               onClick={handleClearFilters}
-              className="bg-primary-green text-bg-primary px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-semibold hover:bg-sage transition-all cursor-pointer inline-block"
+              className="bg-[#A5492B] text-white px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-semibold hover:bg-[#203348] transition-all cursor-pointer inline-block"
             >
               Reset Catalog Filters
             </button>

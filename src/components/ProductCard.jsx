@@ -24,9 +24,9 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
   // Get series-specific background for image area
   const getImageBg = (series) => {
     switch (series) {
-      case 'Liposomal Series': return 'bg-gradient-to-b from-slate-600/5 to-slate-600/10'
-      case 'Core Series': return 'bg-gradient-to-b from-sage/5 to-cream-dark/50'
-      default: return 'bg-gradient-to-b from-champagne/10 to-cream-dark/40'
+      case 'Liposomal Series': return 'bg-gradient-to-b from-[#203348]/5 to-[#203348]/10'
+      case 'Core Series': return 'bg-gradient-to-b from-[#616F3E]/5 to-[#E4DFD3]/40'
+      default: return 'bg-gradient-to-b from-[#A5492B]/5 to-[#E4DFD3]/35'
     }
   }
 
@@ -51,18 +51,27 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
   }, [product.price])
 
   return (
-    <div className="group relative flex flex-col h-full rounded-2xl glass-panel transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg !border-bg-secondary overflow-hidden">
+    <div className="group relative flex flex-col h-full rounded-2xl bg-white border border-[#E4DFD3] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg overflow-hidden">
       
       {/* Product Image Container */}
       <Link 
         to={`/products/${product.slug}`}
-        className={`relative w-full aspect-square overflow-hidden flex items-center justify-center group-hover:bg-cream-dark/20 transition-colors ${getImageBg(product.series)}`}
+        className={`relative w-full aspect-square overflow-hidden flex items-center justify-center group-hover:bg-[#E4DFD3]/20 transition-colors ${getImageBg(product.series)}`}
       >
         
         {/* Dynamic Background to remove empty space feeling */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8)_0%,transparent_100%)] opacity-80 mix-blend-overlay"></div>
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-black/5 rounded-full blur-3xl"></div>
+
+        {/* Botanical Pattern Texture */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-[0.035] group-hover:opacity-[0.08] transition-opacity duration-500 bg-repeat"
+          style={{ 
+            backgroundImage: product.series === 'Liposomal Series' ? "url('/patterns/pattern-blue.jpg')" : product.series === 'Core Series' ? "url('/patterns/pattern-green.jpg')" : "url('/patterns/pattern-rust.jpg')",
+            backgroundSize: '180px auto'
+          }}
+        />
 
         {/* Floating Wishlist Heart */}
         {onToggleWishlist && (
@@ -74,8 +83,8 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             }}
             className={`absolute top-4 right-4 p-2 rounded-full backdrop-blur-md transition-all duration-300 z-40 cursor-pointer border ${
               isInWishlist 
-                ? 'bg-sage/20 border-sage/40 text-sage' 
-                : 'bg-white/80 border-white text-charcoal/40 hover:text-sage hover:bg-white shadow-sm'
+                ? 'bg-[#A5492B]/20 border-[#A5492B]/40 text-[#A5492B]' 
+                : 'bg-white/80 border-white text-[#203348]/40 hover:text-[#A5492B] hover:bg-white shadow-sm'
             }`}
             title={isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
           >
@@ -110,10 +119,10 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
         ) : (
           /* Branded fallback placeholder */
           <div className="absolute inset-0 flex items-center justify-center flex-col gap-2 z-20">
-            <div className="w-20 h-20 rounded-full bg-sage/20 flex items-center justify-center border-2 border-sage/30 shadow-inner">
-              <span className="font-serif text-2xl font-bold text-sage">{getInitials(product.name)}</span>
+            <div className="w-20 h-20 rounded-full bg-[#616F3E]/20 flex items-center justify-center border-2 border-[#616F3E]/30 shadow-inner">
+              <span className="font-serif text-2xl font-bold text-[#616F3E]">{getInitials(product.name)}</span>
             </div>
-            <span className="text-[10px] font-mono text-charcoal/50 uppercase tracking-wider">kenwell</span>
+            <span className="text-[10px] font-mono text-[#203348]/50 uppercase tracking-wider">kenwell</span>
           </div>
         )}
       </Link>
@@ -125,26 +134,26 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
           {/* Rating + Servings Row */}
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center space-x-1">
-              <svg className="w-3.5 h-3.5 text-amber-500 fill-current shrink-0" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5 text-[#A5492B] fill-current shrink-0" viewBox="0 0 24 24">
                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
               </svg>
-              <span className="font-bold text-charcoal/80 text-[10px]">{rating}</span>
-              <span className="text-charcoal/40 text-[9px]">({reviewCount})</span>
+              <span className="font-bold text-[#203348]/85 text-[10px]">{rating}</span>
+              <span className="text-[#203348]/40 text-[9px]">({reviewCount})</span>
             </div>
-            <span className="text-charcoal/50 font-mono text-[9px] uppercase">{product.form}</span>
+            <span className="text-[#203348]/50 font-mono text-[9px] uppercase">{product.form}</span>
           </div>
           
           <h3 className="font-serif text-base font-bold line-clamp-1">
             <Link
               to={`/products/${product.slug}`}
-              className="text-primary-green hover:text-sage transition-colors"
+              className="text-[#203348] hover:text-[#616F3E] transition-colors"
             >
               {product.name}
             </Link>
           </h3>
           
           {/* Tagline */}
-          <p className="text-[11px] text-charcoal/60 line-clamp-1 leading-relaxed">
+          <p className="text-[11px] text-[#203348]/60 line-clamp-1 leading-relaxed">
             {product.tagline}
           </p>
 
@@ -153,7 +162,7 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             {product.healthGoals.slice(0, 3).map((goal) => (
               <span 
                 key={goal} 
-                className="text-[9px] font-medium bg-bg-secondary text-charcoal/70 px-2 py-0.5 rounded"
+                className="text-[9px] font-medium bg-[#F2EEE5] text-[#203348]/75 px-2 py-0.5 rounded"
               >
                 {goal}
               </span>
@@ -162,14 +171,14 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
 
         </div>
 
-        <div className="mt-3 pt-2.5 border-t border-cream-dark/50">
+        <div className="mt-3 pt-2.5 border-t border-[#E4DFD3]">
           {/* Price row */}
           <div className="flex items-center justify-between">
             <div className="text-left">
               <div className="flex items-baseline gap-1 flex-wrap">
-                <span className="font-mono text-base font-bold text-primary-green">₹{product.price}</span>
-                <span className="font-mono text-[10px] text-charcoal/40 line-through">₹{mrp}</span>
-                <span className="text-[9px] font-semibold text-sage whitespace-nowrap">20% off</span>
+                <span className="font-mono text-base font-bold text-[#203348]">₹{product.price}</span>
+                <span className="font-mono text-[10px] text-[#203348]/40 line-through">₹{mrp}</span>
+                <span className="text-[9px] font-semibold text-[#A5492B] whitespace-nowrap">20% off</span>
               </div>
             </div>
 
@@ -178,7 +187,7 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
               {/* Quick View — eye icon */}
               <button
                 onClick={() => onQuickView(product)}
-                className="p-1.5 rounded-full text-charcoal/40 hover:text-primary-green hover:bg-bg-secondary transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-[#203348]/50 hover:text-[#203348] hover:bg-[#F2EEE5] transition-colors cursor-pointer"
                 title="Quick View"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -191,7 +200,7 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
               {onAddToCart && (
                 <button
                   onClick={() => onAddToCart(product)}
-                  className="p-1.5 rounded-full bg-bg-secondary text-primary-green hover:bg-sage hover:text-white border border-cream-dark/50 transition-all duration-300 cursor-pointer shrink-0"
+                  className="p-1.5 rounded-full bg-[#203348] text-white hover:bg-[#A5492B] transition-all duration-300 cursor-pointer shrink-0 shadow-xs"
                   title="Add to Cart"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">

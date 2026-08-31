@@ -55,22 +55,26 @@ export default function StoreLocator({ setCurrentSection }) {
   }
 
   return (
-    <div className="bg-bg-primary min-h-screen pb-16">
-      {/* Premium Dark Green Hero Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary-green to-[#1b2b19] text-white py-16 px-4 text-center">
-        {/* Animated backdrop grids */}
-        <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#DDD8CA_1px,transparent_1px),linear-gradient(to_bottom,#DDD8CA_1px,transparent_1px)] bg-[size:3rem_3rem]" />
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-sage/20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-champagne/10 blur-3xl pointer-events-none" />
+    <div className="bg-[#FAF8F5] min-h-screen pb-16">
+      {/* Brand Hero Header */}
+      <div className="relative overflow-hidden bg-[#203348] text-white py-16 px-4 text-center">
+        {/* Botanical pattern backdrop */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-20 bg-repeat"
+          style={{ backgroundImage: "url('/patterns/pattern-blue.jpg')", backgroundSize: '360px auto' }}
+        />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#203348]/40 via-transparent to-[#203348]/70" />
+        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#616F3E]/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#A5492B]/15 blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto relative z-10 space-y-4">
-          <span className="font-mono text-xs font-bold tracking-widest text-champagne uppercase bg-white/5 border border-white/10 px-4 py-1.5 rounded-full inline-block">
+          <span className="font-mono text-xs font-bold tracking-widest text-[#FAF8F5] uppercase bg-white/10 border border-white/20 px-4 py-1.5 rounded-full inline-block">
             Verified Authenticity
           </span>
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
             Kenwell Store Locator
           </h1>
-          <p className="text-bg-primary/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-body">
+          <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-body">
             Find official Kenwell flagship experience stores or certified retail partner outlets near you to purchase verified, authentic formulations.
           </p>
         </div>
@@ -78,16 +82,16 @@ export default function StoreLocator({ setCurrentSection }) {
 
       {/* Main Layout Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-        <div className="glass-panel rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[680px]">
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[680px] border border-[#E4DFD3]">
           
           {/* Sidebar Area: List and Filters (5 cols on lg) */}
-          <div className="lg:col-span-5 bg-white/50 border-r border-cream-dark/50 flex flex-col h-[700px] lg:h-[750px]">
+          <div className="lg:col-span-5 bg-[#FAF8F5]/50 border-r border-[#E4DFD3] flex flex-col h-[700px] lg:h-[750px]">
             
             {/* Filter Headers */}
-            <div className="p-6 border-b border-cream-dark/50 bg-white/80 space-y-4">
+            <div className="p-6 border-b border-[#E4DFD3] bg-white space-y-4">
               {/* Search Bar */}
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sage" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#616F3E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
@@ -95,12 +99,12 @@ export default function StoreLocator({ setCurrentSection }) {
                   placeholder="Enter city, state, or pincode..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-bg-primary/50 text-charcoal placeholder-charcoal/40 pl-11 pr-4 py-3 rounded-2xl border border-cream-dark focus:border-sage focus:outline-none transition-all duration-300 font-body text-sm"
+                  className="w-full bg-[#FAF8F5] text-[#203348] placeholder-[#203348]/40 pl-11 pr-4 py-3 rounded-2xl border border-[#E4DFD3] focus:border-[#616F3E] focus:outline-none transition-all duration-300 font-body text-sm"
                 />
                 {searchQuery && (
                   <button 
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal/40 hover:text-charcoal text-xs font-bold"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#203348]/40 hover:text-[#203348] text-xs font-bold"
                   >
                     Clear
                   </button>
@@ -108,15 +112,15 @@ export default function StoreLocator({ setCurrentSection }) {
               </div>
 
               {/* Store Type Filters */}
-              <div className="flex gap-2 p-1 bg-bg-primary/60 rounded-xl border border-cream-dark/40">
+              <div className="flex gap-2 p-1 bg-[#F2EEE5] rounded-xl border border-[#E4DFD3]">
                 {['All', 'Official Store', 'Store Partner'].map((type) => (
                   <button
                     key={type}
                     onClick={() => setSelectedType(type)}
                     className={`flex-1 text-[11px] font-bold tracking-wider uppercase py-2 px-3 rounded-lg transition-all duration-300 cursor-pointer ${
                       selectedType === type
-                        ? 'bg-primary-green text-white shadow-md'
-                        : 'text-charcoal/60 hover:text-charcoal hover:bg-white/50'
+                        ? 'bg-[#203348] text-white shadow-md'
+                        : 'text-[#203348]/60 hover:text-[#203348] hover:bg-white/50'
                     }`}
                   >
                     {type === 'All' ? 'All' : type.replace('Store ', '')}
@@ -126,25 +130,25 @@ export default function StoreLocator({ setCurrentSection }) {
             </div>
 
             {/* Store Listings */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#FAF9F5]/40">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#FAF8F5]">
               {loading ? (
                 // Shimmer Loader List
                 [1, 2, 3].map((n) => (
-                  <div key={n} className="p-5 rounded-2xl border border-cream-dark/30 bg-white/40 space-y-3 animate-pulse">
-                    <div className="h-4 w-1/3 bg-cream-dark/80 rounded-md" />
-                    <div className="h-5 w-2/3 bg-cream-dark/80 rounded-md" />
-                    <div className="h-3 w-5/6 bg-cream-dark/50 rounded-md" />
-                    <div className="h-8 w-1/2 bg-cream-dark/30 rounded-full mt-2" />
+                  <div key={n} className="p-5 rounded-2xl border border-[#E4DFD3] bg-white space-y-3 animate-pulse">
+                    <div className="h-4 w-1/3 bg-[#E4DFD3] rounded-md" />
+                    <div className="h-5 w-2/3 bg-[#E4DFD3] rounded-md" />
+                    <div className="h-3 w-5/6 bg-[#E4DFD3]/50 rounded-md" />
+                    <div className="h-8 w-1/2 bg-[#E4DFD3]/30 rounded-full mt-2" />
                   </div>
                 ))
               ) : filteredStores.length === 0 ? (
                 <div className="text-center py-16 px-4">
-                  <svg className="w-12 h-12 text-sage/40 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <svg className="w-12 h-12 text-[#616F3E]/40 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <h3 className="font-serif text-lg font-bold text-charcoal">No Stores Found</h3>
-                  <p className="text-charcoal/50 text-xs mt-1 max-w-xs mx-auto">
+                  <h3 className="font-serif text-lg font-bold text-[#203348]">No Stores Found</h3>
+                  <p className="text-[#203348]/50 text-xs mt-1 max-w-xs mx-auto">
                     We couldn't find any Kenwell stores or partner locations matching "{searchQuery}" under this category.
                   </p>
                 </div>
@@ -157,16 +161,16 @@ export default function StoreLocator({ setCurrentSection }) {
                       onClick={() => setSelectedStore(store)}
                       className={`p-5 rounded-2xl border transition-all duration-300 text-left cursor-pointer relative group ${
                         isSelected
-                          ? 'border-primary-green bg-white shadow-md scale-[1.01]'
-                          : 'border-cream-dark/30 bg-white/60 hover:bg-white hover:border-cream-dark/80'
+                          ? 'border-[#616F3E] bg-white shadow-md scale-[1.01]'
+                          : 'border-[#E4DFD3] bg-white/70 hover:bg-white hover:border-[#616F3E]/50'
                       }`}
                     >
                       {/* Store Card Header */}
                       <div className="flex justify-between items-start mb-2">
                         <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${
                           store.type === 'Official Store'
-                            ? 'bg-primary-green/10 text-primary-green'
-                            : 'bg-gold-accent/15 text-gold-accent'
+                            ? 'bg-[#616F3E]/10 text-[#616F3E]'
+                            : 'bg-[#A5492B]/10 text-[#A5492B]'
                         }`}>
                           {store.type}
                         </span>
@@ -175,7 +179,7 @@ export default function StoreLocator({ setCurrentSection }) {
                           <a
                             href={`tel:${store.phone}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="text-[10px] text-charcoal/50 hover:text-primary-green flex items-center gap-1 font-mono transition-colors"
+                            className="text-[10px] text-[#203348]/50 hover:text-[#616F3E] flex items-center gap-1 font-mono transition-colors"
                             title="Call Store"
                           >
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -186,17 +190,17 @@ export default function StoreLocator({ setCurrentSection }) {
                         )}
                       </div>
 
-                      <h3 className="font-serif text-lg font-bold text-charcoal leading-snug group-hover:text-primary-green transition-colors">
+                      <h3 className="font-serif text-lg font-bold text-[#203348] leading-snug group-hover:text-[#616F3E] transition-colors">
                         {store.name}
                       </h3>
 
-                      <p className="text-charcoal/70 text-xs mt-2 font-body leading-relaxed">
+                      <p className="text-[#203348]/70 text-xs mt-2 font-body leading-relaxed">
                         {store.address}, {store.city}, {store.state} - {store.postal_code}
                       </p>
 
                       {/* Store Card Actions */}
-                      <div className="mt-4 pt-3 border-t border-cream-dark/20 flex items-center justify-between">
-                        <span className="text-[11px] text-sage font-medium group-hover:translate-x-1 transform transition-transform duration-300 flex items-center gap-1">
+                      <div className="mt-4 pt-3 border-t border-[#E4DFD3] flex items-center justify-between">
+                        <span className="text-[11px] text-[#616F3E] font-medium group-hover:translate-x-1 transform transition-transform duration-300 flex items-center gap-1">
                           View details on map <span className="text-sm">→</span>
                         </span>
 
@@ -205,7 +209,7 @@ export default function StoreLocator({ setCurrentSection }) {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="bg-bg-primary text-primary-green hover:bg-primary-green hover:text-white text-[10px] font-bold tracking-wider uppercase py-1.5 px-3.5 rounded-full border border-cream-dark/60 transition-all duration-300 flex items-center gap-1"
+                          className="bg-[#A5492B] text-white hover:bg-[#203348] text-[10px] font-bold tracking-wider uppercase py-1.5 px-3.5 rounded-full transition-all duration-300 flex items-center gap-1 shadow-sm"
                         >
                           Directions
                           <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
@@ -219,17 +223,17 @@ export default function StoreLocator({ setCurrentSection }) {
               )}
 
               {/* Partnership CTA Card */}
-              <div className="p-5 rounded-2xl border border-gold-accent/30 bg-gold-accent/5 mt-4 space-y-3">
+              <div className="p-5 rounded-2xl border border-[#A5492B]/20 bg-[#A5492B]/5 mt-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold tracking-widest text-gold-accent bg-gold-accent/15 px-2.5 py-1 rounded-full uppercase font-mono">Partnership</span>
+                  <span className="text-[10px] font-bold tracking-widest text-[#A5492B] bg-[#A5492B]/15 px-2.5 py-1 rounded-full uppercase font-mono">Partnership</span>
                 </div>
-                <h4 className="font-serif text-base font-bold text-charcoal">Sell Kenwell Products</h4>
-                <p className="text-charcoal/60 text-xs font-body leading-relaxed">
+                <h4 className="font-serif text-base font-bold text-[#203348]">Sell Kenwell Products</h4>
+                <p className="text-[#203348]/70 text-xs font-body leading-relaxed">
                   Own a retail store or fitness outlet? Apply to carry our premium formulations and get listed on our map.
                 </p>
                 <button
                   onClick={() => setCurrentSection('partner')}
-                  className="w-full bg-primary-green hover:bg-sage text-white text-[10px] font-bold tracking-wider uppercase py-2 px-4 rounded-xl transition-all duration-300 shadow-sm cursor-pointer text-center block border-none"
+                  className="w-full bg-[#203348] hover:bg-[#A5492B] text-white text-[10px] font-bold tracking-wider uppercase py-2.5 px-4 rounded-xl transition-all duration-300 shadow-sm cursor-pointer text-center block border-none"
                 >
                   Apply for Partnership
                 </button>
@@ -238,7 +242,7 @@ export default function StoreLocator({ setCurrentSection }) {
           </div>
 
           {/* Map Display Area (7 cols on lg) */}
-          <div className="lg:col-span-7 bg-[#EAE5D9]/20 flex flex-col h-[400px] lg:h-[750px] relative overflow-hidden">
+          <div className="lg:col-span-7 bg-[#F2EEE5] flex flex-col h-[400px] lg:h-[750px] relative overflow-hidden">
             {selectedStore ? (
               <>
                 {/* Embed Map Frame */}
@@ -247,7 +251,7 @@ export default function StoreLocator({ setCurrentSection }) {
                     title={`Google Map for ${selectedStore.name}`}
                     width="100%"
                     height="100%"
-                    style={{ border: 0, filter: 'grayscale(0.1) contrast(1.02)' }}
+                    style={{ border: 0, filter: 'grayscale(0.05) contrast(1.02)' }}
                     allowFullScreen=""
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
@@ -256,31 +260,31 @@ export default function StoreLocator({ setCurrentSection }) {
                 </div>
 
                 {/* Overlaid Selected Store Detail Badge */}
-                <div className="absolute bottom-6 left-6 right-6 glass-panel rounded-2xl shadow-xl p-5 border border-white/60 space-y-3 z-30 animate-fadeIn pointer-events-auto max-w-lg">
+                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-5 border border-[#E4DFD3] space-y-3 z-30 animate-fadeIn pointer-events-auto max-w-lg">
                   <div className="flex items-center gap-2">
                     <span className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${
                       selectedStore.type === 'Official Store'
-                        ? 'bg-primary-green text-white'
-                        : 'bg-gold-accent text-white'
+                        ? 'bg-[#616F3E] text-white'
+                        : 'bg-[#A5492B] text-white'
                     }`}>
                       {selectedStore.type}
                     </span>
-                    <span className="text-[10px] text-charcoal/60 font-mono">Verified Outpost</span>
+                    <span className="text-[10px] text-[#203348]/60 font-mono">Verified Outpost</span>
                   </div>
 
                   <div>
-                    <h4 className="font-serif text-xl font-bold text-charcoal">
+                    <h4 className="font-serif text-xl font-bold text-[#203348]">
                       {selectedStore.name}
                     </h4>
-                    <p className="text-charcoal/70 text-xs mt-1 leading-relaxed">
+                    <p className="text-[#203348]/70 text-xs mt-1 leading-relaxed">
                       {selectedStore.address}, {selectedStore.city}, {selectedStore.state} - {selectedStore.postal_code}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-cream-dark/40">
+                  <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-[#E4DFD3]">
                     {selectedStore.phone && (
-                      <div className="text-xs text-charcoal/80 flex items-center gap-2">
-                        <span className="text-sage">Phone:</span>
+                      <div className="text-xs text-[#203348]/80 flex items-center gap-2">
+                        <span className="text-[#616F3E] font-semibold">Phone:</span>
                         <a href={`tel:${selectedStore.phone}`} className="font-bold hover:underline">{selectedStore.phone}</a>
                       </div>
                     )}
@@ -289,7 +293,7 @@ export default function StoreLocator({ setCurrentSection }) {
                       href={selectedStore.map_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-primary-green text-white hover:bg-sage text-xs font-bold tracking-widest uppercase py-2.5 px-6 rounded-xl transition-all duration-300 shadow-md flex items-center gap-2"
+                      className="bg-[#203348] text-white hover:bg-[#A5492B] text-xs font-bold tracking-widest uppercase py-2.5 px-6 rounded-xl transition-all duration-300 shadow-md flex items-center gap-2"
                     >
                       <span>Navigate via Google Maps</span>
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -301,11 +305,11 @@ export default function StoreLocator({ setCurrentSection }) {
               </>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-white/20">
-                <svg className="w-16 h-16 text-sage/40 animate-bounce mb-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <svg className="w-16 h-16 text-[#616F3E]/40 animate-bounce mb-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
-                <h3 className="font-serif text-xl font-bold text-charcoal">Select a Location</h3>
-                <p className="text-charcoal/50 text-xs mt-1 max-w-sm">
+                <h3 className="font-serif text-xl font-bold text-[#203348]">Select a Location</h3>
+                <p className="text-[#203348]/50 text-xs mt-1 max-w-sm">
                   Click on any store listing on the left to show its exact position on the interactive map.
                 </p>
               </div>

@@ -143,8 +143,8 @@ export default function App() {
 
   if (productsLoading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F4F1EA' }}>
-        <div style={{ width: 32, height: 32, border: '2.5px solid #2E402B', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF8F5' }}>
+        <div style={{ width: 32, height: 32, border: '2.5px solid #203348', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     )
@@ -155,8 +155,12 @@ export default function App() {
       {/* Real Analytics Tracking */}
       <AnalyticsTracker currentSection={currentSection} />
 
-      {/* Premium background grid */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[linear-gradient(to_right,#E6E3D5_1px,transparent_1px),linear-gradient(to_bottom,#E6E3D5_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+      {/* Premium background botanical pattern texture & subtle grid */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-0 opacity-[0.045] bg-repeat mix-blend-multiply"
+        style={{ backgroundImage: "url('/patterns/pattern-green.jpg')", backgroundSize: '420px auto' }}
+      />
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[linear-gradient(to_right,#E6E3D5_1px,transparent_1px),linear-gradient(to_bottom,#E6E3D5_1px,transparent_1px)] bg-[size:4rem_4rem]" />
       
       <Navbar 
         currentSection={currentSection} 

@@ -167,44 +167,44 @@ export default function TrackOrder() {
       
       {/* Header */}
       <div className="text-center max-w-md mx-auto space-y-3">
-        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">
+        <span className="text-[#616F3E] font-mono uppercase tracking-wider text-xs font-semibold">
           Delivery Status
         </span>
-        <h1 className="text-4xl font-serif text-primary-green">
+        <h1 className="text-4xl font-serif text-[#203348]">
           Track Your Order
         </h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
 
       <BackButton className='mb-6' />
-        <p className="text-charcoal/70 text-sm leading-relaxed">
+        <p className="text-[#203348]/70 text-sm leading-relaxed">
           Enter your 8-digit Order ID and email/phone to check the delivery progress.
         </p>
       </div>
 
       {/* TRACKING FORM */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/60 shadow-lg bg-white/40">
+      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#E4DFD3] shadow-lg">
         <form onSubmit={handleTrack} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1.5">Order ID</label>
+              <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1.5">Order ID</label>
               <input 
                 type="text" 
                 required
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
                 placeholder="e.g. KW-QNZWO2"
-                className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30 font-mono"
+                className="w-full bg-[#FAF8F5] border border-[#E4DFD3] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 font-mono text-[#203348]"
               />
             </div>
             <div>
-              <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1.5">Email or Phone Number</label>
+              <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1.5">Email or Phone Number</label>
               <input 
                 type="text" 
                 required
                 value={contactInfo}
                 onChange={(e) => setContactInfo(e.target.value)}
                 placeholder="e.g. 8879092007 or name@example.com"
-                className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30"
+                className="w-full bg-[#FAF8F5] border border-[#E4DFD3] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 text-[#203348]"
               />
             </div>
           </div>
@@ -212,7 +212,7 @@ export default function TrackOrder() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-primary-green hover:bg-sage text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md hover:shadow-lg text-center flex justify-center items-center gap-2"
+            className="w-full py-3.5 bg-[#A5492B] hover:bg-[#203348] text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md hover:shadow-lg text-center flex justify-center items-center gap-2"
           >
             {loading ? 'Searching...' : 'Track Formulation Delivery'}
           </button>
@@ -231,9 +231,9 @@ export default function TrackOrder() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
           
           {/* Visual Stepper */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/60 shadow-md bg-white/70">
-            <h3 className="font-serif text-lg font-bold text-primary-green mb-6 border-b border-cream-dark/30 pb-2">
-              Order Status: <span className="text-sage font-mono">{order.status}</span>
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#E4DFD3] shadow-md">
+            <h3 className="font-serif text-lg font-bold text-[#203348] mb-6 border-b border-[#E4DFD3] pb-2">
+              Order Status: <span className="text-[#616F3E] font-mono">{order.status}</span>
             </h3>
             
             {step === -1 ? (
@@ -252,9 +252,9 @@ export default function TrackOrder() {
               <div className="relative pt-4 pb-2">
                 
                 {/* Connector Line */}
-                <div className="absolute top-[34px] left-8 right-8 h-[3px] bg-cream-dark/45 -z-10 rounded-full">
+                <div className="absolute top-[34px] left-8 right-8 h-[3px] bg-[#E4DFD3] -z-10 rounded-full">
                   <div 
-                    className="h-full bg-sage transition-all duration-1000 rounded-full"
+                    className="h-full bg-[#616F3E] transition-all duration-1000 rounded-full"
                     style={{ width: step === 1 ? '0%' : step === 2 ? '50%' : '100%' }}
                   />
                 </div>
@@ -265,45 +265,45 @@ export default function TrackOrder() {
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                       step >= 1 
-                        ? 'bg-sage border-sage text-white font-bold shadow-md shadow-sage/20' 
-                        : 'bg-white border-cream-dark/50 text-charcoal/30'
+                        ? 'bg-[#616F3E] border-[#616F3E] text-white font-bold shadow-md shadow-[#616F3E]/20' 
+                        : 'bg-white border-[#E4DFD3] text-[#203348]/30'
                     }`}>
                       {step >= 1 ? '✓' : '1'}
                     </div>
-                    <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 1 ? 'text-primary-green' : 'text-charcoal/40'}`}>
+                    <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 1 ? 'text-[#203348]' : 'text-[#203348]/40'}`}>
                       Paid
                     </span>
-                    <span className="text-[9px] text-charcoal/40 mt-0.5">Payment Confirmed</span>
+                    <span className="text-[9px] text-[#203348]/40 mt-0.5">Payment Confirmed</span>
                   </div>
 
                   {/* Step 2: Shipped */}
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                       step >= 2 
-                        ? 'bg-sage border-sage text-white font-bold shadow-md shadow-sage/20' 
-                        : 'bg-white border-cream-dark/50 text-charcoal/30'
+                        ? 'bg-[#616F3E] border-[#616F3E] text-white font-bold shadow-md shadow-[#616F3E]/20' 
+                        : 'bg-white border-[#E4DFD3] text-[#203348]/30'
                     }`}>
                       {step >= 2 ? '✓' : '2'}
                     </div>
-                    <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 2 ? 'text-primary-green' : 'text-charcoal/40'}`}>
+                    <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 2 ? 'text-[#203348]' : 'text-[#203348]/40'}`}>
                       Shipped
                     </span>
-                    <span className="text-[9px] text-charcoal/40 mt-0.5">In Transit</span>
+                    <span className="text-[9px] text-[#203348]/40 mt-0.5">In Transit</span>
                   </div>
 
                   {/* Step 3: Delivered */}
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                       step >= 3 
-                        ? 'bg-sage border-sage text-white font-bold shadow-md shadow-sage/20' 
-                        : 'bg-white border-cream-dark/50 text-charcoal/30'
+                        ? 'bg-[#616F3E] border-[#616F3E] text-white font-bold shadow-md shadow-[#616F3E]/20' 
+                        : 'bg-white border-[#E4DFD3] text-[#203348]/30'
                     }`}>
                       {step >= 3 ? '✓' : '3'}
                     </div>
-                    <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 3 ? 'text-primary-green' : 'text-charcoal/40'}`}>
+                    <span className={`text-[11px] font-mono uppercase tracking-wider mt-3 font-semibold ${step >= 3 ? 'text-[#203348]' : 'text-[#203348]/40'}`}>
                       Delivered
                     </span>
-                    <span className="text-[9px] text-charcoal/40 mt-0.5">To Destination</span>
+                    <span className="text-[9px] text-[#203348]/40 mt-0.5">To Destination</span>
                   </div>
 
                 </div>
@@ -316,37 +316,37 @@ export default function TrackOrder() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Left: Shipping Info */}
-            <div className="bg-white/60 border border-white/80 rounded-3xl p-6 space-y-4 shadow-sm">
-              <h4 className="font-serif text-lg font-bold text-primary-green border-b border-cream-dark/30 pb-2">
+            <div className="bg-white border border-[#E4DFD3] rounded-3xl p-6 space-y-4 shadow-sm">
+              <h4 className="font-serif text-lg font-bold text-[#203348] border-b border-[#E4DFD3] pb-2">
                 Shipping Address
               </h4>
-              <div className="text-xs text-charcoal/70 space-y-1.5 font-mono">
-                <p><span className="text-charcoal/40 uppercase">Recipient:</span> {order.customer_name}</p>
-                <p><span className="text-charcoal/40 uppercase">Contact:</span> {order.customer_phone}</p>
-                <p><span className="text-charcoal/40 uppercase">Email:</span> {order.customer_email}</p>
-                <p><span className="text-charcoal/40 uppercase">Address:</span> {order.shipping_address}</p>
-                <p><span className="text-charcoal/40 uppercase">Location:</span> {order.city} - {order.postal_code}</p>
+              <div className="text-xs text-[#203348]/70 space-y-1.5 font-mono">
+                <p><span className="text-[#203348]/40 uppercase">Recipient:</span> {order.customer_name}</p>
+                <p><span className="text-[#203348]/40 uppercase">Contact:</span> {order.customer_phone}</p>
+                <p><span className="text-[#203348]/40 uppercase">Email:</span> {order.customer_email}</p>
+                <p><span className="text-[#203348]/40 uppercase">Address:</span> {order.shipping_address}</p>
+                <p><span className="text-[#203348]/40 uppercase">Location:</span> {order.city} - {order.postal_code}</p>
               </div>
             </div>
 
             {/* Right: Items Info */}
-            <div className="bg-white/60 border border-white/80 rounded-3xl p-6 space-y-4 shadow-sm">
-              <h4 className="font-serif text-lg font-bold text-primary-green border-b border-cream-dark/30 pb-2">
+            <div className="bg-white border border-[#E4DFD3] rounded-3xl p-6 space-y-4 shadow-sm">
+              <h4 className="font-serif text-lg font-bold text-[#203348] border-b border-[#E4DFD3] pb-2">
                 Formulations Stack
               </h4>
               <div className="space-y-3 max-h-[160px] overflow-y-auto pr-1">
                 {order.items && order.items.map((item, idx) => (
                   <div key={idx} className="flex justify-between items-center text-xs">
-                    <span className="font-serif text-primary-green font-bold truncate max-w-[70%]">
-                      {item.name} <span className="text-charcoal/45 font-mono text-[10px]">x{item.quantity}</span>
+                    <span className="font-serif text-[#203348] font-bold truncate max-w-[70%]">
+                      {item.name} <span className="text-[#203348]/45 font-mono text-[10px]">x{item.quantity}</span>
                     </span>
-                    <span className="font-mono text-charcoal/80 font-semibold">₹{item.price * item.quantity}</span>
+                    <span className="font-mono text-[#203348]/80 font-semibold">₹{item.price * item.quantity}</span>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-cream-dark/40 pt-3 flex justify-between items-center">
-                <span className="font-serif text-sm font-bold text-primary-green">Total Paid</span>
-                <span className="font-mono text-base font-bold text-sage">₹{order.amount}</span>
+              <div className="border-t border-[#E4DFD3] pt-3 flex justify-between items-center">
+                <span className="font-serif text-sm font-bold text-[#203348]">Total Paid</span>
+                <span className="font-mono text-base font-bold text-[#616F3E]">₹{order.amount}</span>
               </div>
             </div>
 

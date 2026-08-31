@@ -121,7 +121,7 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
         address: `${address}, ${city} - ${postalCode}`,
       },
       theme: {
-        color: '#2E402B',
+        color: '#203348',
       },
       modal: {
         ondismiss: function () {
@@ -155,18 +155,18 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
     <div 
       id="checkout-backdrop"
       onClick={handleBackdropClick}
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-charcoal/40 backdrop-blur-sm transition-all duration-300"
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-[#203348]/50 backdrop-blur-sm transition-all duration-300"
     >
-      <div className="w-full max-w-2xl bg-[#F4F1EA] rounded-3xl overflow-hidden shadow-2xl border border-white/60 flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-2xl bg-[#FAF8F5] rounded-3xl overflow-hidden shadow-2xl border border-[#E4DFD3] flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="p-6 border-b border-cream-dark/40 flex justify-between items-center bg-white/50">
-          <h2 className="font-serif text-2xl font-bold text-primary-green">
+        <div className="p-6 border-b border-[#E4DFD3] flex justify-between items-center bg-white">
+          <h2 className="font-serif text-2xl font-bold text-[#203348]">
             {successData ? 'Order Confirmed' : 'Checkout Details'}
           </h2>
           <button 
             onClick={onClose}
-            className="text-charcoal/40 hover:text-charcoal transition-colors p-1 cursor-pointer text-xl"
+            className="text-[#203348]/40 hover:text-[#203348] transition-colors p-1 cursor-pointer text-xl"
           >
             ✕
           </button>
@@ -178,48 +178,48 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
           {successData ? (
             /* SUCCESS SCREEN */
             <div className="text-center space-y-6 py-6">
-              <div className="w-16 h-16 bg-sage/20 border-2 border-sage/40 rounded-full flex items-center justify-center mx-auto shadow-inner">
-                <svg className="w-8 h-8 text-sage" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-[#616F3E]/20 border-2 border-[#616F3E]/40 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                <svg className="w-8 h-8 text-[#616F3E]" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               
               <div className="space-y-2">
-                <h3 className="font-serif text-3xl font-extrabold text-primary-green">Thank you for your order!</h3>
-                <p className="text-sm text-charcoal/60">We've received your order and are preparing your formulations.</p>
-                <div className="inline-block bg-white/80 border border-cream-dark/50 px-4 py-2 rounded-xl mt-3 font-mono text-sm text-charcoal/80 font-bold">
-                  Order ID: <span className="text-sage">{successData.friendly_id}</span>
+                <h3 className="font-serif text-3xl font-extrabold text-[#203348]">Thank you for your order!</h3>
+                <p className="text-sm text-[#203348]/60">We've received your order and are preparing your formulations.</p>
+                <div className="inline-block bg-white border border-[#E4DFD3] px-4 py-2 rounded-xl mt-3 font-mono text-sm text-[#203348]/80 font-bold">
+                  Order ID: <span className="text-[#616F3E]">{successData.friendly_id}</span>
                 </div>
               </div>
 
-              <div className="border-t border-cream-dark/40 my-6"></div>
+              <div className="border-t border-[#E4DFD3] my-6"></div>
 
               {/* Order summary breakdown */}
-              <div className="bg-white/60 rounded-2xl border border-white/80 p-5 space-y-4">
-                <h4 className="font-serif text-base font-bold text-primary-green">Shipment Details</h4>
-                <div className="text-xs text-charcoal/70 space-y-1 font-mono">
-                  <p><span className="text-charcoal/40 uppercase">Deliver To:</span> {successData.customer_name}</p>
-                  <p><span className="text-charcoal/40 uppercase">Address:</span> {successData.shipping_address}, {successData.city} - {successData.postal_code}</p>
-                  <p><span className="text-charcoal/40 uppercase">Phone:</span> {successData.customer_phone}</p>
+              <div className="bg-white rounded-2xl border border-[#E4DFD3] p-5 space-y-4 shadow-sm">
+                <h4 className="font-serif text-base font-bold text-[#203348]">Shipment Details</h4>
+                <div className="text-xs text-[#203348]/70 space-y-1 font-mono">
+                  <p><span className="text-[#203348]/40 uppercase">Deliver To:</span> {successData.customer_name}</p>
+                  <p><span className="text-[#203348]/40 uppercase">Address:</span> {successData.shipping_address}, {successData.city} - {successData.postal_code}</p>
+                  <p><span className="text-[#203348]/40 uppercase">Phone:</span> {successData.customer_phone}</p>
                 </div>
 
-                <div className="border-t border-cream-dark/40 pt-3">
-                  <span className="block text-[10px] uppercase text-charcoal/40 mb-2 font-mono">Items Ordered</span>
+                <div className="border-t border-[#E4DFD3] pt-3">
+                  <span className="block text-[10px] uppercase text-[#203348]/40 mb-2 font-mono">Items Ordered</span>
                   <div className="space-y-2">
                     {successData.items.map((item, idx) => (
                       <div key={idx} className="flex justify-between items-center text-xs">
-                        <span className="font-serif text-primary-green font-bold truncate max-w-[70%]">
-                          {item.name} <span className="text-charcoal/45 font-mono font-medium text-[10px]">x{item.quantity}</span>
+                        <span className="font-serif text-[#203348] font-bold truncate max-w-[70%]">
+                          {item.name} <span className="text-[#203348]/45 font-mono font-medium text-[10px]">x{item.quantity}</span>
                         </span>
-                        <span className="font-mono text-charcoal/80 font-semibold">₹{item.price * item.quantity}</span>
+                        <span className="font-mono text-[#203348]/80 font-semibold">₹{item.price * item.quantity}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="border-t border-cream-dark/40 pt-3 flex justify-between items-center">
-                  <span className="font-serif text-sm font-bold text-primary-green">Total Investment</span>
-                  <span className="font-mono text-base font-bold text-sage">₹{successData.amount}</span>
+                <div className="border-t border-[#E4DFD3] pt-3 flex justify-between items-center">
+                  <span className="font-serif text-sm font-bold text-[#203348]">Total Investment</span>
+                  <span className="font-mono text-base font-bold text-[#203348]">₹{successData.amount}</span>
                 </div>
               </div>
 
@@ -235,13 +235,13 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
                       setCurrentSection('track')
                     }
                   }}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-sage hover:bg-primary-green text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md text-center inline-block"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-[#A5492B] hover:bg-[#203348] text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md text-center inline-block"
                 >
                   Track Order
                 </button>
                 <button
                   onClick={onClose}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-white border border-cream-dark/60 hover:bg-cream/40 text-charcoal rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-sm text-center inline-block"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-[#FAF8F5] border border-[#E4DFD3] hover:bg-[#E4DFD3]/40 text-[#203348] rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-sm text-center inline-block"
                 >
                   Continue Shopping
                 </button>
@@ -261,81 +261,81 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
                 
                 {/* Shipping Details */}
                 <div className="space-y-4">
-                  <h3 className="font-serif text-lg font-bold text-primary-green border-b border-cream-dark/40 pb-2">
+                  <h3 className="font-serif text-lg font-bold text-[#203348] border-b border-[#E4DFD3] pb-2">
                     1. Shipping Information
                   </h3>
                   
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1">Full Name</label>
+                      <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1">Full Name</label>
                       <input 
                         type="text" 
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
-                        className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30"
+                        className="w-full bg-white border border-[#E4DFD3] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 text-[#203348]"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1">Email</label>
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1">Email</label>
                         <input 
                           type="email" 
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="john@example.com"
-                          className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30"
+                          className="w-full bg-white border border-[#E4DFD3] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 text-[#203348]"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1">Phone</label>
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1">Phone</label>
                         <input 
                           type="tel" 
                           required
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="9876543210"
-                          className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30"
+                          className="w-full bg-white border border-[#E4DFD3] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 font-mono text-[#203348]"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1">Shipping Address</label>
+                      <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1">Shipping Address</label>
                       <textarea 
                         required
                         rows="2"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         placeholder="House No, Apartment Name, Street Name"
-                        className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30 resize-none"
+                        className="w-full bg-white border border-[#E4DFD3] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 text-[#203348] resize-none"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1">City</label>
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1">City</label>
                         <input 
                           type="text" 
                           required
                           value={city}
                           onChange={(e) => setCity(e.target.value)}
                           placeholder="Mumbai"
-                          className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30"
+                          className="w-full bg-white border border-[#E4DFD3] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 text-[#203348]"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-charcoal/50 mb-1">Postal Code</label>
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-[#203348]/50 mb-1">Postal Code</label>
                         <input 
                           type="text" 
                           required
                           value={postalCode}
                           onChange={(e) => setPostalCode(e.target.value)}
                           placeholder="400001"
-                          className="w-full bg-white border border-cream-dark/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sage transition-colors placeholder-charcoal/30"
+                          className="w-full bg-white border border-[#E4DFD3] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#616F3E] transition-colors placeholder-[#203348]/30 font-mono text-[#203348]"
                         />
                       </div>
                     </div>
@@ -344,46 +344,46 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
 
                 {/* Order Summary Column */}
                 <div className="space-y-4">
-                  <h3 className="font-serif text-lg font-bold text-primary-green border-b border-cream-dark/40 pb-2">
+                  <h3 className="font-serif text-lg font-bold text-[#203348] border-b border-[#E4DFD3] pb-2">
                     2. Order Summary
                   </h3>
                   
-                  <div className="bg-white/60 border border-white/85 rounded-2xl p-4 space-y-4 max-h-[300px] overflow-y-auto">
+                  <div className="bg-white border border-[#E4DFD3] rounded-2xl p-4 space-y-4 max-h-[300px] overflow-y-auto shadow-sm">
                     <div className="space-y-3">
                       {cartItems.map((item) => (
                         <div key={item.id} className="flex gap-3 items-center">
-                          <div className="w-12 h-12 rounded-lg bg-bg-primary overflow-hidden border border-cream-dark/30 flex items-center justify-center shrink-0">
+                          <div className="w-12 h-12 rounded-lg bg-[#FAF8F5] overflow-hidden border border-[#E4DFD3] flex items-center justify-center shrink-0">
                             <img src={item.image} alt={item.name} className="w-10 h-10 object-contain" />
                           </div>
                           <div className="flex-grow min-w-0">
-                            <h4 className="font-serif text-xs font-bold text-primary-green truncate">{item.name}</h4>
-                            <span className="text-[10px] font-mono text-charcoal/50">Qty: {item.quantity} · ₹{item.price} each</span>
+                            <h4 className="font-serif text-xs font-bold text-[#203348] truncate">{item.name}</h4>
+                            <span className="text-[10px] font-mono text-[#203348]/50">Qty: {item.quantity} · ₹{item.price} each</span>
                           </div>
-                          <span className="font-mono text-xs font-semibold text-charcoal/80 shrink-0">₹{item.price * item.quantity}</span>
+                          <span className="font-mono text-xs font-semibold text-[#203348]/80 shrink-0">₹{item.price * item.quantity}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="bg-white/80 border border-cream-dark/40 rounded-xl p-4 space-y-2">
-                    <div className="flex justify-between text-xs font-mono text-charcoal/50">
+                  <div className="bg-white border border-[#E4DFD3] rounded-xl p-4 space-y-2 shadow-sm">
+                    <div className="flex justify-between text-xs font-mono text-[#203348]/50">
                       <span>Subtotal</span>
                       <span>₹{totalAmount}</span>
                     </div>
-                    <div className="flex justify-between text-xs font-mono text-charcoal/50">
+                    <div className="flex justify-between text-xs font-mono text-[#203348]/50">
                       <span>Shipping</span>
-                      <span className="text-sage font-bold uppercase text-[10px]">Free</span>
+                      <span className="text-[#616F3E] font-bold uppercase text-[10px]">Free</span>
                     </div>
-                    <div className="border-t border-cream-dark/30 pt-2 flex justify-between items-center">
-                      <span className="font-serif text-sm font-bold text-primary-green">Total Investment</span>
-                      <span className="font-mono text-base font-bold text-sage">₹{totalAmount}</span>
+                    <div className="border-t border-[#E4DFD3] pt-2 flex justify-between items-center">
+                      <span className="font-serif text-sm font-bold text-[#203348]">Total Investment</span>
+                      <span className="font-mono text-base font-bold text-[#203348]">₹{totalAmount}</span>
                     </div>
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-primary-green hover:bg-sage text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md hover:shadow-lg text-center flex justify-center items-center gap-2"
+                    className="w-full py-4 bg-[#A5492B] hover:bg-[#203348] text-white rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer shadow-md hover:shadow-lg text-center flex justify-center items-center gap-2"
                   >
                     {loading ? (
                       <>

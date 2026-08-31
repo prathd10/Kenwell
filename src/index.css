@@ -1,21 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #F4F1EA;
-  --color-bg-secondary: #EAE5D9;
-  --color-charcoal: #1C2D1A;
-  --color-primary-green: #2E402B;
-  --color-sage: #7A8C5A;
-  --color-champagne: #C9B99A;
-  --color-slate-teal: #4A8B8C;
-  --color-cream-dark: #DDD8CA;
-  --color-gold-accent: #B89F70;
+  --color-bg-primary: #FAF8F5;
+  --color-bg-secondary: #F2EEE5;
+  --color-charcoal: #203348;
+  --color-primary-green: #203348;
+  --color-brand-blue: #203348;
+  --color-brand-green: #616F3E;
+  --color-brand-rust: #A5492B;
+  --color-sage: #616F3E;
+  --color-rust: #A5492B;
+  --color-champagne: #C98A5A;
+  --color-slate-teal: #203348;
+  --color-cream-dark: #E4DFD3;
+  --color-gold-accent: #A5492B;
   
-  --font-serif: "Fredoka One", cursive;
+  --font-serif: "Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif;
   --font-body: "Jost", sans-serif;
-  --font-title: "Fredoka One", cursive;
+  --font-title: "Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif;
   --font-mono: "Jost", sans-serif;
-  --font-brand: "Fredoka One", cursive;
+  --font-brand: "Marker Felt", "Patrick Hand", "Fredoka", cursive;
   
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
@@ -73,14 +77,14 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #EAE5D9;
+  background: #F2EEE5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C9B99A;
+  background: #D5CEBF;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7A8C5A;
+  background: #616F3E;
 }
 
 /* Base custom styles */
@@ -102,12 +106,12 @@ body {
 /* ── Custom Dropdowns & Selects (Kenwell Theme) ────────────────── */
 select {
   background-color: #FFFFFF;
-  color: #1C2D1A;
-  border: 1.5px solid #DDD8CA;
+  color: #203348;
+  border: 1.5px solid #E4DFD3;
   border-radius: 9px;
   font-family: inherit;
   cursor: pointer;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E402B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23203348' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 0.85rem 0.85rem;
@@ -116,32 +120,50 @@ select {
 }
 
 select:focus {
-  border-color: #2E402B !important;
+  border-color: #203348 !important;
   outline: none !important;
-  box-shadow: 0 0 0 2px rgba(122, 140, 90, 0.25) !important;
+  box-shadow: 0 0 0 2px rgba(97, 111, 62, 0.25) !important;
 }
 
 select option {
-  background-color: #FBF9F5 !important;
-  color: #1C2D1A !important;
+  background-color: #FAF8F5 !important;
+  color: #203348 !important;
   font-family: inherit;
   padding: 8px 12px;
 }
 
 select option:checked {
-  background-color: #2E402B !important;
+  background-color: #203348 !important;
   color: #FFFFFF !important;
 }
 
 select option:hover {
-  background-color: #EAE5D9 !important;
-  color: #1C2D1A !important;
+  background-color: #F2EEE5 !important;
+  color: #203348 !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Fredoka One", cursive;
-  font-weight: 400; /* Fredoka One only has one weight */
+  font-family: var(--font-serif);
+  font-weight: 600;
   letter-spacing: 0.02em;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+  font-weight: 600;
+}
+
+/* Ensure bold headings and hooklines have strong, confident marker weight */
+.font-serif.font-bold,
+.font-serif.font-extrabold,
+h1.font-bold, h2.font-bold, h3.font-bold, h4.font-bold, h5.font-bold, h6.font-bold,
+h1.font-extrabold, h2.font-extrabold, h3.font-extrabold, h4.font-extrabold {
+  font-weight: 700;
+}
+
+.font-serif.font-semibold,
+h1.font-semibold, h2.font-semibold, h3.font-semibold, h4.font-semibold {
+  font-weight: 600;
 }
 
 /* Glassmorphism utility classes */
@@ -209,3 +231,45 @@ h1, h2, h3, h4, h5, h6 {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* ── Brand Botanical Pattern Backgrounds ────────────────────────── */
+.bg-pattern-green {
+  background-image: url('/patterns/pattern-green.jpg');
+  background-size: 320px auto;
+  background-repeat: repeat;
+}
+
+.bg-pattern-blue {
+  background-image: url('/patterns/pattern-blue.jpg');
+  background-size: 320px auto;
+  background-repeat: repeat;
+}
+
+.bg-pattern-rust {
+  background-image: url('/patterns/pattern-rust.jpg');
+  background-size: 320px auto;
+  background-repeat: repeat;
+}
+
+.pattern-overlay-dark {
+  position: relative;
+}
+.pattern-overlay-dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(32, 51, 72, 0.88);
+  pointer-events: none;
+}
+
+.pattern-overlay-light {
+  position: relative;
+}
+.pattern-overlay-light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(250, 248, 245, 0.92);
+  pointer-events: none;
+}
+

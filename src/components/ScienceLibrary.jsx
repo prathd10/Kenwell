@@ -62,15 +62,8 @@ export default function ScienceLibrary() {
     const sortedTerms = Object.keys(SCIENTIFIC_GLOSSARY).sort((a, b) => b.length - a.length)
     
     sortedTerms.forEach((term) => {
-      // Find term matches that are not already part of an HTML tag
-      // Use a regex that matches terms surrounded by word boundaries, but not inside tags
-      // Since simple regex replacements in HTML can break if we aren't careful, we will match exact strings
       const regex = new RegExp(`\\b(${term})\\b`, 'gi')
-      
-      // Replace matches with a custom span containing interactive data
-      // We use a specific attribute to trace them later during rendering or just rely on react-html parsing
-      // For safety in this frontend mock, we can parse it simple.
-      modifiedHtml = modifiedHtml.replace(regex, `<span class="border-b border-dashed border-sage text-primary-green cursor-help font-semibold" data-glossary="${term}">$1</span>`)
+      modifiedHtml = modifiedHtml.replace(regex, `<span class="border-b border-dashed border-[#616F3E] text-[#616F3E] cursor-help font-semibold" data-glossary="${term}">$1</span>`)
     })
 
     return { __html: modifiedHtml }
@@ -108,10 +101,10 @@ export default function ScienceLibrary() {
       
       {/* Page Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4">
-        <span className="text-sage font-mono uppercase tracking-wider text-xs font-semibold">Health Articles</span>
-        <h1 className="text-4xl md:text-5xl font-serif text-primary-green">Wellness Library</h1>
+        <span className="text-[#616F3E] font-mono uppercase tracking-wider text-xs font-semibold">Health Articles</span>
+        <h1 className="text-4xl md:text-5xl font-serif text-[#203348]">Wellness Library</h1>
         <div className="gold-divider max-w-xs mx-auto"></div>
-        <p className="text-charcoal/70 text-sm leading-relaxed">
+        <p className="text-[#203348]/70 text-sm leading-relaxed">
           Learn the science behind our supplements. Read easy-to-understand articles about how our products help your body.
         </p>
       </div>
@@ -119,11 +112,11 @@ export default function ScienceLibrary() {
       <BackButton />
 
       {/* Search & Filter Bar */}
-      <div className="glass-panel p-6 rounded-2xl border border-white/50 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="bg-white p-6 rounded-2xl border border-[#E4DFD3] shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Search */}
         <div className="relative w-full md:max-w-md">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <svg className="w-4 h-4 text-charcoal/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-[#203348]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -132,7 +125,7 @@ export default function ScienceLibrary() {
             placeholder="Search for topics or health benefits..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-bg-primary border border-cream-dark px-10 py-3 rounded-full text-sm focus:outline-none focus:border-sage placeholder-charcoal/40"
+            className="w-full bg-[#FAF8F5] border border-[#E4DFD3] px-10 py-3 rounded-full text-sm focus:outline-none focus:border-[#616F3E] placeholder-[#203348]/40 text-[#203348]"
           />
         </div>
 
@@ -144,8 +137,8 @@ export default function ScienceLibrary() {
               onClick={() => setSelectedTopic(topic)}
               className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 selectedTopic === topic
-                  ? 'bg-primary-green text-bg-primary shadow-sm'
-                  : 'bg-bg-primary hover:bg-cream-dark/30 text-charcoal/80 border border-cream-dark/50'
+                  ? 'bg-[#203348] text-white shadow-sm'
+                  : 'bg-[#FAF8F5] hover:bg-[#E4DFD3]/40 text-[#203348]/80 border border-[#E4DFD3]'
               }`}
             >
               {topic}
@@ -160,28 +153,28 @@ export default function ScienceLibrary() {
           <article 
             key={article.id}
             onClick={() => setSelectedArticle(article)}
-            className="group cursor-pointer rounded-2xl glass-panel p-6 border border-white/40 hover:border-sage/30 hover:bg-white/80 transition-all duration-300 flex flex-col justify-between h-full"
+            className="group cursor-pointer rounded-2xl bg-white p-6 border border-[#E4DFD3] hover:border-[#616F3E]/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full"
           >
             <div className="space-y-4">
-              <div className="flex justify-between items-center text-xs font-mono text-charcoal/50">
-                <span className="bg-sage/10 text-sage px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">
+              <div className="flex justify-between items-center text-xs font-mono text-[#203348]/50">
+                <span className="bg-[#616F3E]/10 text-[#616F3E] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">
                   {article.topic}
                 </span>
                 <span>{article.readTime}</span>
               </div>
 
-              <h3 className="font-serif text-2xl font-bold text-primary-green group-hover:text-sage transition-colors leading-tight">
+              <h3 className="font-serif text-2xl font-bold text-[#203348] group-hover:text-[#616F3E] transition-colors leading-tight">
                 {article.title}
               </h3>
               
-              <p className="text-xs text-charcoal/60 leading-relaxed line-clamp-3">
+              <p className="text-xs text-[#203348]/60 leading-relaxed line-clamp-3">
                 {article.summary}
               </p>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-cream-dark/30 flex justify-between items-center">
-              <span className="text-[10px] font-mono text-charcoal/40 uppercase">{article.date}</span>
-              <span className="text-xs font-semibold text-sage group-hover:translate-x-1.5 transition-transform">
+            <div className="mt-6 pt-4 border-t border-[#E4DFD3] flex justify-between items-center">
+              <span className="text-[10px] font-mono text-[#203348]/40 uppercase">{article.date}</span>
+              <span className="text-xs font-semibold text-[#A5492B] group-hover:translate-x-1.5 transition-transform">
                 Read Article →
               </span>
             </div>
@@ -191,7 +184,7 @@ export default function ScienceLibrary() {
 
       {/* ARTICLE READER DRAWER */}
       {selectedArticle && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-charcoal/40 backdrop-blur-sm animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-50 flex justify-end bg-[#203348]/40 backdrop-blur-sm animate-in fade-in duration-300">
           
           <div 
             onClick={() => setSelectedArticle(null)}
@@ -199,16 +192,21 @@ export default function ScienceLibrary() {
           ></div>
           
           <div 
-            className="w-full md:max-w-2xl bg-bg-primary h-full overflow-y-auto shadow-2xl p-8 border-l border-cream-dark flex flex-col justify-between text-left animate-in slide-in-from-right duration-300"
+            className="relative overflow-hidden w-full md:max-w-2xl bg-[#FAF8F5] h-full overflow-y-auto shadow-2xl p-8 border-l border-[#E4DFD3] flex flex-col justify-between text-left animate-in slide-in-from-right duration-300"
             onClick={handleContentInteraction}
             onMouseLeave={handleClearGlossary}
           >
+            {/* Botanical Pattern Watermark */}
+            <div 
+              className="absolute inset-0 pointer-events-none opacity-[0.035] bg-repeat"
+              style={{ backgroundImage: "url('/patterns/pattern-green.jpg')", backgroundSize: '320px auto' }}
+            />
             
             {/* Reader Header */}
-            <div>
+            <div className="relative z-10">
               <div className="flex justify-between items-start mb-6">
-                <div className="flex space-x-3 text-xs font-mono text-charcoal/50">
-                  <span className="bg-sage/10 text-sage px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">{selectedArticle.topic}</span>
+                <div className="flex space-x-3 text-xs font-mono text-[#203348]/50">
+                  <span className="bg-[#616F3E]/10 text-[#616F3E] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">{selectedArticle.topic}</span>
                   <span className="py-0.5">{selectedArticle.date}</span>
                   <span className="py-0.5">•</span>
                   <span className="py-0.5">{selectedArticle.readTime}</span>
@@ -216,13 +214,13 @@ export default function ScienceLibrary() {
                 
                 <button 
                   onClick={() => setSelectedArticle(null)}
-                  className="text-charcoal/40 hover:text-charcoal text-xl p-1 -mt-2 cursor-pointer"
+                  className="text-[#203348]/40 hover:text-[#203348] text-xl p-1 -mt-2 cursor-pointer"
                 >
                   ✕
                 </button>
               </div>
 
-              <h2 className="font-serif text-3xl md:text-4xl font-extrabold text-primary-green mb-8 leading-tight">
+              <h2 className="font-serif text-3xl md:text-4xl font-extrabold text-[#203348] mb-8 leading-tight">
                 {selectedArticle.title}
               </h2>
               
@@ -230,19 +228,19 @@ export default function ScienceLibrary() {
 
               {/* Interactive Editorial Text Body */}
               <div 
-                className="prose prose-sm font-serif text-base text-charcoal/80 leading-relaxed space-y-6 max-w-none"
+                className="prose prose-sm font-serif text-base text-[#203348]/80 leading-relaxed space-y-6 max-w-none"
                 dangerouslySetInnerHTML={renderInteractiveContent(selectedArticle.content)}
               />
 
               <div className="gold-divider my-10"></div>
 
               {/* Informative bottom banner explaining how to interact */}
-              <div className="bg-bg-secondary/40 border border-cream-dark/50 rounded-2xl p-4 text-[10px] text-charcoal/60 leading-relaxed font-mono flex items-start gap-2.5">
-                <svg className="w-4 h-4 text-sage flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#F2EEE5] border border-[#E4DFD3] rounded-2xl p-4 text-[10px] text-[#203348]/70 leading-relaxed font-mono flex items-start gap-2.5">
+                <svg className="w-4 h-4 text-[#616F3E] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <strong>Science Dictionary:</strong> Hover over or click dashed underlined words (like <span className="border-b border-dashed border-sage text-primary-green font-semibold">HPA axis</span>) in the article to see a simple explanation.
+                  <strong>Science Dictionary:</strong> Hover over or click dashed underlined words (like <span className="border-b border-dashed border-[#616F3E] text-[#616F3E] font-semibold">HPA axis</span>) in the article to see a simple explanation.
                 </div>
               </div>
             </div>
@@ -250,7 +248,7 @@ export default function ScienceLibrary() {
             <div className="pt-10 flex justify-end">
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="bg-primary-green text-bg-primary hover:bg-sage hover:text-white px-8 py-3 rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer text-center"
+                className="bg-[#203348] text-white hover:bg-[#A5492B] px-8 py-3 rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer text-center"
               >
                 Close Article
               </button>
@@ -263,16 +261,16 @@ export default function ScienceLibrary() {
       {/* DYNAMIC BIOCHEMICAL TOOLTIP CARD */}
       {hoveredTerm && (
         <div 
-          className="absolute z-65 glass-panel p-4 rounded-xl shadow-lg border border-sage/30 bg-white max-w-[240px] text-left animate-in fade-in duration-200"
+          className="absolute z-65 bg-white p-4 rounded-xl shadow-lg border border-[#616F3E]/30 max-w-[240px] text-left animate-in fade-in duration-200"
           style={{ 
             left: `${tooltipPos.x}px`, 
             top: `${tooltipPos.y - 120}px`,
             transform: 'translateX(-50%)'
           }}
         >
-          <span className="block text-[8px] font-mono uppercase tracking-wider text-sage font-bold">Science Term</span>
-          <span className="block text-xs font-bold text-primary-green mt-0.5">{hoveredTerm.term}</span>
-          <p className="text-[10px] text-charcoal/80 mt-1 leading-relaxed">{hoveredTerm.definition}</p>
+          <span className="block text-[8px] font-mono uppercase tracking-wider text-[#616F3E] font-bold">Science Term</span>
+          <span className="block text-xs font-bold text-[#203348] mt-0.5">{hoveredTerm.term}</span>
+          <p className="text-[10px] text-[#203348]/80 mt-1 leading-relaxed">{hoveredTerm.definition}</p>
         </div>
       )}
 
