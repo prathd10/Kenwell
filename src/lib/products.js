@@ -1,6 +1,7 @@
 import { supabase } from './supabase'
 
 export function normalizeProduct(row) {
+  const localImage = `/bottle_${row.slug}.png`
   return {
     id: row.id,
     name: row.name,
@@ -13,7 +14,8 @@ export function normalizeProduct(row) {
     description: row.description,
     healthGoals: row.health_goals || [],
     benefits: row.benefits || [],
-    image: row.images?.[0] || '',
+    image: localImage,
+    images: [localImage, ...(row.images || [])],
     accentColor: row.accent_color,
     howToUse: row.how_to_use || {},
     nutritionalFacts: row.nutritional_facts || {},

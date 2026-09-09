@@ -6,60 +6,81 @@ import ProductCard from './ProductCard'
 
 /* ── Image map ─────────────────────────────────────────────────── */
 const LOCAL_BOTTLE_MAP = {
-  'multivitamin-with-probiotics': '/bottle_multivitamin.png',
-  'chelated-magnesium-glycinate': '/bottle_magnesium.png',
-  'vitamin-d3-k2-calcium': '/bottle_vitamin_d3.png',
-  'zinc-picolonate-magnesium': '/bottle_zinc_magnesium.png',
-  'single-strength-fish-oil': '/bottle_fish_oil.png',
-  'triple-strength-fish-oil': '/bottle_fish_oil.png',
-  'vegetarian-omega': '/bottle_fish_oil.png',
-  'joint-support': '/bottle_joint_support.png',
-  'milk-thistle': '/bottle_milk_thistle.png',
+  'multivitamin-with-probiotics': '/bottle_multivitamin-with-probiotics.png',
+  'chelated-magnesium-glycinate': '/bottle_chelated-magnesium-glycinate.png',
+  'vitamin-d3-k2-calcium': '/bottle_vitamin-d3-k2-calcium.png',
+  'zinc-picolonate-magnesium': '/bottle_zinc-picolonate-magnesium.png',
+  'single-strength-fish-oil': '/bottle_single-strength-fish-oil.png',
+  'triple-strength-fish-oil': '/bottle_triple-strength-fish-oil.png',
+  'vegetarian-omega': '/bottle_vegetarian-omega.png',
+  'joint-support': '/bottle_joint-support.png',
+  'milk-thistle': '/bottle_milk-thistle.png',
   'nac': '/bottle_nac.png',
   'tudca': '/bottle_tudca.png',
   'nad': '/bottle_nad.png',
-  'liver-support-blend': '/bottle_milk_thistle.png',
-  'vitamin-c': '/bottle_vitamin_c.png',
-  'glutathione-reduced': '/bottle_glutathione.png',
-  'vitamin-b12': '/bottle_vitamin_d3.png',
-  'coq10-ubiquinone': '/bottle_coq10.png',
-  'melatonin-sleep-support': '/bottle_melatonin.png',
-  'ksm-66-ashwagandha': '/bottle_ashwagandha.png',
-  'dht-blocker': '/bottle_berberine.png',
-  'prebiotics-probiotics': '/bottle_probiotics.png',
+  'fat-burner': '/bottle_fat-burner.png',
+  'liver-support-blend': '/bottle_liver-support-blend.png',
+  'berberine-hcl': '/bottle_berberine-hcl.png',
+  'vitamin-c': '/bottle_vitamin-c.png',
+  'glutathione-reduced': '/bottle_glutathione-reduced.png',
+  'vitamin-b12': '/bottle_vitamin-b12.png',
+  'coq10-ubiquinone': '/bottle_coq10-ubiquinone.png',
+  'melatonin-sleep-support': '/bottle_melatonin-sleep-support.png',
+  'ksm-66-ashwagandha': '/bottle_ksm-66-ashwagandha.png',
+  'dht-blocker': '/bottle_dht-blocker.png',
+  'prebiotics-probiotics': '/bottle_prebiotics-probiotics.png',
 }
 
-/* ── Constants ─────────────────────────────────────────────────── */
-const HERO_SLIDES = [
+const SPOTLIGHT_PRODUCTS = [
   {
     slug: 'ksm-66-ashwagandha',
-    headline: 'Proven Stress Relief',
-    sub: 'Ashwagandha · Naturally lowers stress levels',
+    name: 'KSM-66® Ashwagandha',
+    subtitle: 'Full-Spectrum Organic Root Extract',
+    dose: '600mg Clinical Dose',
+    metric: '27% Cortisol Drop',
+    tag: 'Stress & Cortisol',
+    accent: '#1C355E',
     badge: 'Core Series',
-    cta: 'Shop Ashwagandha',
-    accent: '#616F3E',
-    bg: 'from-[#616F3E]/10 via-[#E4DFD3]/40 to-[#FAF8F5]',
-    bgImage: 'https://images.unsplash.com/photo-1618220179428-22790b46a014?q=80&w=2000&auto=format&fit=crop',
+  },
+  {
+    slug: 'chelated-magnesium-glycinate',
+    name: 'Chelated Magnesium Glycinate',
+    subtitle: 'High-Bioavailability Dipeptide Delivery',
+    dose: '400mg Pure Chelated',
+    metric: 'Zero GI Distress',
+    tag: 'Deep REM Sleep',
+    accent: '#D47A3B',
+    badge: 'Core Series',
   },
   {
     slug: 'nad',
-    headline: 'More Energy & Healthy Aging',
-    sub: 'NAD+ · Boosts your natural body energy',
+    name: 'NAD+ Cellular Complex',
+    subtitle: 'Liposomal Mitochondrial Coenzyme',
+    dose: 'Sub-Cellular Fuel',
+    metric: 'Sirtuin Activation',
+    tag: 'Longevity & Focus',
+    accent: '#1C355E',
     badge: 'Liposomal Series',
-    cta: 'Shop NAD+',
-    accent: '#203348',
-    bg: 'from-[#203348]/10 via-[#E4DFD3]/40 to-[#FAF8F5]',
-    bgImage: 'https://images.unsplash.com/photo-1600170311833-c2cf5280ce49?q=80&w=2000&auto=format&fit=crop',
+  },
+  {
+    slug: 'triple-strength-fish-oil',
+    name: 'Triple Strength Fish Oil',
+    subtitle: 'Pure Triglyceride Molecular Distillation',
+    dose: 'Ultra-Pure EPA & DHA',
+    metric: '70% Higher Uptake',
+    tag: 'Heart & Joint Vitality',
+    accent: '#1C355E',
+    badge: 'Core Series',
   },
   {
     slug: 'glutathione-reduced',
-    headline: 'The Ultimate Detox',
-    sub: 'Glutathione · Clears toxins & brightens skin',
+    name: 'Liposomal Glutathione',
+    subtitle: 'Active Reduced L-Glutathione Tripeptide',
+    dose: '500mg Phospholipid',
+    metric: 'Master Cellular Detox',
+    tag: 'Detox & Radiant Skin',
+    accent: '#D47A3B',
     badge: 'Liposomal Series',
-    cta: 'Shop Glutathione',
-    accent: '#A5492B',
-    bg: 'from-[#A5492B]/8 via-[#E4DFD3]/30 to-[#FAF8F5]',
-    bgImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2000&auto=format&fit=crop',
   },
 ]
 
@@ -67,39 +88,39 @@ const CAT_ICON_CLS = 'w-6 h-6'
 const CATEGORIES = [
   {
     label: 'Daily Core', goal: 'Energy', desc: '7 products',
-    color: 'bg-[#616F3E]/8 border-[#616F3E]/20 hover:bg-[#616F3E]/15', text: 'text-[#616F3E]',
+    color: 'bg-[#4A6B4A]/8 border-[#4A6B4A]/20 hover:bg-[#4A6B4A]/15', text: 'text-[#4A6B4A]',
     icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
   },
   {
     label: 'Sleep & Stress', goal: 'Sleep', desc: '4 products',
-    color: 'bg-[#203348]/8 border-[#203348]/20 hover:bg-[#203348]/15', text: 'text-[#203348]',
+    color: 'bg-[#1C355E]/8 border-[#1C355E]/20 hover:bg-[#1C355E]/15', text: 'text-[#1C355E]',
     icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>,
   },
   {
     label: 'Immunity', goal: 'Immunity', desc: '6 products',
-    color: 'bg-[#616F3E]/8 border-[#616F3E]/20 hover:bg-[#616F3E]/15', text: 'text-[#616F3E]',
+    color: 'bg-[#4A6B4A]/8 border-[#4A6B4A]/20 hover:bg-[#4A6B4A]/15', text: 'text-[#4A6B4A]',
     icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
   },
   {
     label: 'Gut Health', goal: 'Gut Health', desc: '3 products',
-    color: 'bg-[#A5492B]/8 border-[#A5492B]/20 hover:bg-[#A5492B]/15', text: 'text-[#A5492B]',
+    color: 'bg-[#D47A3B]/8 border-[#D47A3B]/20 hover:bg-[#D47A3B]/15', text: 'text-[#D47A3B]',
     icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>,
   },
   {
     label: 'Detox & Liver', goal: 'Detox', desc: '5 products',
-    color: 'bg-[#203348]/8 border-[#203348]/20 hover:bg-[#203348]/15', text: 'text-[#203348]',
+    color: 'bg-[#1C355E]/8 border-[#1C355E]/20 hover:bg-[#1C355E]/15', text: 'text-[#1C355E]',
     icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>,
   },
   {
     label: 'Performance', goal: 'Performance', desc: '5 products',
-    color: 'bg-[#A5492B]/8 border-[#A5492B]/20 hover:bg-[#A5492B]/15', text: 'text-[#A5492B]',
+    color: 'bg-[#D47A3B]/8 border-[#D47A3B]/20 hover:bg-[#D47A3B]/15', text: 'text-[#D47A3B]',
     icon: <svg className={CAT_ICON_CLS} fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>,
   },
 ]
 
 const BESTSELLER_SLUGS = ['ksm-66-ashwagandha', 'chelated-magnesium-glycinate', 'nad', 'glutathione-reduced', 'triple-strength-fish-oil', 'multivitamin-with-probiotics']
 
-const TRUST_SVG_CLS = 'w-6 h-6 text-[#616F3E]'
+const TRUST_SVG_CLS = 'w-6 h-6 text-[#4A6B4A]'
 const TRUST_POINTS = [
   {
     title: 'Proper Doses',
@@ -128,7 +149,7 @@ function Stars({ n = 5 }) {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} className={`w-3.5 h-3.5 ${i < n ? 'text-[#A5492B] fill-current' : 'text-[#203348]/15 fill-current'}`} viewBox="0 0 24 24">
+        <svg key={i} className={`w-3.5 h-3.5 ${i < n ? 'text-[#D47A3B] fill-current' : 'text-[#1C355E]/15 fill-current'}`} viewBox="0 0 24 24">
           <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
         </svg>
       ))}
@@ -155,58 +176,55 @@ export default function Hero({
   stackItems
 }) {
   const { products } = useProducts()
-  const [slide, setSlide] = useState(0)
-  const [fading, setFading] = useState(false)
-  const [heroImgErr, setHeroImgErr] = useState(false)
-  const intervalRef = useRef(null)
+  const [selectedSlug, setSelectedSlug] = useState('ksm-66-ashwagandha')
+  const [imgFading, setImgFading] = useState(false)
+  const heroRef = useRef(null)
   const carouselRef = useRef(null)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
+  const handleMouseMove = (e) => {
+    if (!heroRef.current) return
+    const rect = heroRef.current.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2 // -1 to 1
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2 // -1 to 1
+    setMousePos({ 
+      x: Math.max(-1, Math.min(1, x)), 
+      y: Math.max(-1, Math.min(1, y)) 
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 })
+  }
 
   const scrollCarousel = (dir) => {
     if (carouselRef.current) {
-      const container = carouselRef.current;
-      const firstChild = container.firstElementChild;
-      const scrollAmount = firstChild ? firstChild.clientWidth + 24 : 300; // clientWidth + 24px gap (gap-6)
+      const container = carouselRef.current
+      const firstChild = container.firstElementChild
+      const scrollAmount = firstChild ? firstChild.clientWidth + 24 : 300
       if (dir === 'left') {
-        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
       } else {
-        // If at the end, wrap to start
         if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 15) {
-          container.scrollTo({ left: 0, behavior: 'smooth' });
+          container.scrollTo({ left: 0, behavior: 'smooth' })
         } else {
-          container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+          container.scrollBy({ left: scrollAmount, behavior: 'smooth' })
         }
       }
     }
   }
 
-  const goTo = useCallback((i) => {
-    setFading(true)
+  const handleSelectProduct = (slug) => {
+    if (slug === selectedSlug) return
+    setImgFading(true)
     setTimeout(() => {
-      setSlide(i)
-      setHeroImgErr(false)
-      setFading(false)
-    }, 280)
-  }, [])
+      setSelectedSlug(slug)
+      setImgFading(false)
+    }, 180)
+  }
 
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setSlide(s => {
-        const next = (s + 1) % HERO_SLIDES.length
-        goTo(next)
-        return s // actual change happens inside goTo
-      })
-    }, 4000)
-    return () => clearInterval(intervalRef.current)
-  }, [goTo])
-
-  const activeSlide = HERO_SLIDES[slide]
-  const activeProduct = products.find(p => p.slug === activeSlide.slug)
-
-  const nextSlide = HERO_SLIDES[(slide + 1) % HERO_SLIDES.length]
-  const nextProduct = products.find(p => p.slug === nextSlide.slug)
-
-  const nextNextSlide = HERO_SLIDES[(slide + 2) % HERO_SLIDES.length]
-  const nextNextProduct = products.find(p => p.slug === nextNextSlide.slug)
+  const activeSpotlight = SPOTLIGHT_PRODUCTS.find(s => s.slug === selectedSlug) || SPOTLIGHT_PRODUCTS[0]
+  const activeProduct = products.find(p => p.slug === selectedSlug) || products.find(p => p.slug === 'ksm-66-ashwagandha') || products[0]
 
   const bestsellers = BESTSELLER_SLUGS.map(slug => products.find(p => p.slug === slug)).filter(Boolean)
 
@@ -214,143 +232,247 @@ export default function Hero({
   const filterSeries = (series) => window.dispatchEvent(new CustomEvent('kenwell:filterSeries', { detail: series }))
 
   return (
-    <div className="w-full">
+    <div className="w-full font-lato">
 
       {/* Hero + Marquee Wrapper for Mobile Full Height */}
       <div className="flex flex-col min-h-[calc(100svh-70px)] lg:min-h-0 lg:block">
         {/* ══════════════════════════════════════════════
-            1. FULL-BLEED HERO BANNER
+            1. PARALLAX GLASSMORPHIC HERO BANNER
         ══════════════════════════════════════════════ */}
-        <section
-          className={`relative flex-1 lg:flex-none lg:min-h-[60vh] flex items-center bg-[#FAF8F5] overflow-hidden transition-all duration-700`}
+        <section 
+          ref={heroRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="relative w-full bg-[#FAF8F5] border-b border-[#E4DFD3]/60 overflow-hidden py-10 lg:py-16"
         >
-        {/* Full-width Lifestyle Background Image */}
-        {activeSlide.bgImage && (
-          <div className="absolute inset-0 z-0 transition-opacity duration-1000">
+          
+          {/* Delicate Japanese Botanical Pattern Trim (Top accent border) */}
+          <div 
+            className="absolute top-0 left-0 right-0 h-1.5 opacity-85 z-20"
+            style={{ 
+              backgroundImage: "url('/patterns/pattern-blue.jpg')", 
+              backgroundSize: '240px auto' 
+            }}
+          />
+
+          {/* Layer 1: Parallax Japanese Botanical Pattern Background */}
+          <div 
+            className="absolute inset-0 pointer-events-none opacity-[0.22] bg-repeat transition-transform duration-700 ease-out z-0"
+            style={{ 
+              backgroundImage: "url('/patterns/pattern-blue.jpg')", 
+              backgroundSize: '340px auto',
+              transform: `translate3d(${mousePos.x * 14}px, ${mousePos.y * 14}px, 0)`
+            }}
+          />
+
+          {/* Layer 1b: Soft Frosted White / Cream Veil over pattern for high legibility */}
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#FAF8F5]/92 via-[#FAF8F5]/84 to-[#FAF8F5]/75 backdrop-blur-[1px] z-0" />
+
+          {/* Layer 2: Oversized Artistic Kenwell Bottle in Background with Parallax */}
+          <div 
+            className="absolute right-[-4%] lg:right-[4%] top-1/2 pointer-events-none select-none z-0 transition-transform duration-500 ease-out"
+            style={{
+              transform: `translate3d(${mousePos.x * 24}px, calc(-50% + ${mousePos.y * 18}px), 0) rotate(${12 + mousePos.x * 3}deg)`
+            }}
+          >
             <img 
-              src={activeSlide.bgImage} 
-              alt="Lifestyle Background" 
-              className="w-full h-full object-cover opacity-75 mix-blend-multiply"
-              fetchpriority="high"
-              decoding="async"
+              src={`/bottle_${selectedSlug}.png`} 
+              alt="" 
+              className="w-[340px] sm:w-[500px] lg:w-[650px] h-auto object-contain opacity-[0.38] filter drop-shadow-2xl mix-blend-multiply scale-110 lg:scale-130 transition-opacity duration-500"
             />
-            {/* Gradient overlay to ensure text readability on the left */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5] via-[#FAF8F5]/90 to-transparent w-[70%]" />
           </div>
-        )}
 
-        {/* Decorative grid */}
-        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#203348_1px,transparent_1px),linear-gradient(to_bottom,#203348_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none z-0" />
-
-
-        {/* --- FULL BLEED RIGHT HALF BACKGROUND --- */}
-        <div 
-          className="absolute -right-[5%] lg:right-0 top-0 bottom-0 w-[75%] lg:w-[65%] pointer-events-none overflow-hidden"
-          style={{ maskImage: 'linear-gradient(to right, transparent 25%, black 50%)', WebkitMaskImage: 'linear-gradient(to right, transparent 25%, black 50%)' }}
-        >
-          {/* Glow disc behind bottle */}
-          <div
-            className="absolute inset-0 blur-3xl opacity-30"
-            style={{ background: `radial-gradient(circle at center, ${activeSlide.accent}, transparent 80%)` }}
+          {/* Layer 3: Ambient Radial Glow with Parallax */}
+          <div 
+            className="absolute -right-10 top-1/2 w-[650px] h-[650px] rounded-full blur-3xl opacity-45 pointer-events-none transition-transform duration-700 ease-out z-0"
+            style={{
+              background: `radial-gradient(circle, ${activeSpotlight.accent}35 0%, #D47A3B20 45%, transparent 70%)`,
+              transform: `translate3d(${mousePos.x * 36}px, calc(-50% + ${mousePos.y * 24}px), 0)`
+            }}
           />
 
-          {/* Blurred Background Product 2 — decorative, lazy load */}
-          <img
-            key={`bg2-${nextNextSlide.id}`}
-            src={nextNextProduct?.image || getLocalSrc(nextNextProduct)}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center translate-x-[16%] lg:translate-x-[16%] scale-[1.15] opacity-[0.15] blur-[12px] -z-20 transition-all duration-700"
-            loading="lazy"
-            decoding="async"
-          />
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
-          {/* Blurred Background Product 1 — decorative, lazy load */}
-          <img
-            key={`bg1-${nextSlide.id}`}
-            src={nextProduct?.image || getLocalSrc(nextProduct)}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center translate-x-[12%] lg:translate-x-[12%] scale-[1.1] opacity-[0.35] blur-[6px] -z-10 transition-all duration-700"
-            loading="lazy"
-            decoding="async"
-          />
+              {/* ── Left Column: Editorial Store Brand Intro & Glass Stats ── */}
+              <div className="lg:col-span-7 space-y-6 text-left">
+                {/* Main Headline */}
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-playfair text-[#1C355E] leading-[1.12] tracking-tight">
+                  Formulated for Vitality.<br />
+                  <span className="text-[#1C355E]">Rooted in </span>
+                  <span className="italic font-light text-[#D47A3B]">Purity &amp; Science.</span>
+                </h1>
 
-          {/* Front Active Product — eager but non-blocking decode */}
-          <img
-            key={slide}
-            src={heroImgErr ? getLocalSrc(activeProduct) : (activeProduct?.image || getLocalSrc(activeProduct))}
-            alt=""
-            onError={() => setHeroImgErr(true)}
-            className="absolute inset-0 w-full h-full object-cover object-center translate-x-[8%] lg:translate-x-[8%] scale-[1.05] drop-shadow-2xl z-10 transition-all duration-700"
-            decoding="async"
-          />
-        </div>
+                {/* Subtitle description */}
+                <p className="text-[#1C355E]/80 text-sm sm:text-lg leading-relaxed max-w-xl font-light">
+                  Clinical-strength nutraceuticals formulated with bioactive, high-absorption ingredients. 
+                  Zero synthetic fillers, zero proprietary blends—verified by third-party testing with scannable batch reports.
+                </p>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 lg:py-16 z-10">
-          <div className="w-[50%] sm:w-[55%] lg:w-1/2">
+                {/* CTA Action Buttons */}
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <button
+                    onClick={() => setCurrentSection('shop')}
+                    className="bg-[#1C355E] hover:bg-[#D47A3B] text-white px-7 py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold transition-all duration-300 shadow-md hover:shadow-xl cursor-pointer flex items-center gap-2"
+                  >
+                    <span>Shop All Products</span>
+                    <span>→</span>
+                  </button>
+                  <button
+                    onClick={() => setCurrentSection('quiz')}
+                    className="border-2 border-[#1C355E]/25 hover:border-[#1C355E] text-[#1C355E] glass-pill px-6 py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold transition-all cursor-pointer shadow-sm hover:shadow-md"
+                  >
+                    Take 60s Health Quiz
+                  </button>
+                  <button
+                    onClick={() => setCurrentSection('lab')}
+                    className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#4A6B4A] hover:text-[#1C355E] px-3 py-2 transition-colors cursor-pointer"
+                  >
+                    <span>Scan Lab Report</span>
+                    <span>↗</span>
+                  </button>
+                </div>
 
-            {/* ── Left text ── */}
-            <div
-              className="space-y-3 sm:space-y-5 text-left"
-              style={{ opacity: fading ? 0 : 1, transform: fading ? 'translateY(12px)' : 'translateY(0)', transition: 'opacity 0.28s ease, transform 0.28s ease' }}
-            >
-              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-serif text-[#203348] leading-[1.1] tracking-tight">
-                {activeSlide.headline.split(' ').slice(0, -1).join(' ')}{' '}
-                <span className="italic font-light text-[#616F3E]">{activeSlide.headline.split(' ').slice(-1)}</span>
-              </h1>
+                {/* Frosted Glass Proof Points Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-[#E4DFD3]/80">
+                  {[
+                    { val: '23+', lbl: 'Formulations', col: 'text-[#1C355E]' },
+                    { val: '100%', lbl: 'Open Label', col: 'text-[#4A6B4A]' },
+                    { val: '4.8★', lbl: '10,000+ Reviews', col: 'text-[#D47A3B]' },
+                    { val: 'GMP', lbl: 'Lab Verified', col: 'text-[#1C355E]' },
+                  ].map((st, i) => (
+                    <div 
+                      key={i} 
+                      className="glass-pill rounded-2xl p-3.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md text-left"
+                    >
+                      <span className={`block font-playfair text-xl sm:text-2xl font-bold ${st.col}`}>{st.val}</span>
+                      <span className="text-[10px] text-[#1C355E]/60 uppercase tracking-wider font-mono">{st.lbl}</span>
+                    </div>
+                  ))}
+                </div>
 
-              <p className="text-[#203348]/75 text-xs sm:text-lg leading-relaxed max-w-lg pr-2">{activeSlide.sub}</p>
-
-              <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 pt-1">
-                <Link
-                  to={`/products/${activeSlide.slug}`}
-                  className="bg-[#A5492B] hover:bg-[#203348] text-white px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer text-center flex items-center justify-center"
-                >
-                  {activeSlide.cta}
-                </Link>
-                <button
-                  onClick={() => setCurrentSection('shop')}
-                  className="border-2 border-[#203348]/25 hover:border-[#203348] text-[#203348] bg-white/60 backdrop-blur-sm hover:bg-white/80 px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-widest font-semibold transition-all cursor-pointer text-center"
-                >
-                  View All →
-                </button>
               </div>
 
-              {/* Mini stats */}
-              <div className="hidden sm:flex items-center gap-8 pt-4 border-t border-[#E4DFD3] max-w-sm">
-                {[['23+', 'Formulations'], ['4.8★', 'Avg Rating'], ['GMP', 'Certified']].map(([v, l]) => (
-                  <div key={l}>
-                    <span className="block font-serif text-2xl font-bold text-[#203348]">{v}</span>
-                    <span className="text-[10px] text-[#203348]/60 uppercase tracking-wider">{l}</span>
+              {/* ── Right Column: Interactive Parallax 3D Glass Card Showcase ── */}
+              <div className="lg:col-span-5 flex flex-col items-center">
+                
+                {/* Product Pill Switcher Tabs in Frosted Glass */}
+                <div className="w-full flex items-center justify-start lg:justify-center gap-1.5 overflow-x-auto pb-2 scrollbar-none mb-4">
+                  {SPOTLIGHT_PRODUCTS.map((s) => {
+                    const isSelected = s.slug === selectedSlug
+                    return (
+                      <button
+                        key={s.slug}
+                        onClick={() => handleSelectProduct(s.slug)}
+                        className={`px-3.5 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-wider whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#1C355E] text-white border border-[#1C355E] shadow-md font-bold'
+                            : 'glass-pill text-[#1C355E]/75 hover:text-[#1C355E]'
+                        }`}
+                      >
+                        {s.name.split(' ')[0]}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* 3D Parallax Glass Card Wrapper */}
+                <div 
+                  className="relative w-full max-w-md transition-transform duration-300 ease-out"
+                  style={{
+                    transform: `perspective(1000px) rotateX(${-mousePos.y * 5}deg) rotateY(${mousePos.x * 5}deg) translate3d(${mousePos.x * -14}px, ${mousePos.y * -14}px, 0)`
+                  }}
+                >
+                  {/* Main Frosted Glass Showcase Card */}
+                  <div className="glass-card-hero rounded-3xl p-5 sm:p-7 relative overflow-hidden flex flex-col items-center">
+                    
+                    {/* Glowing color accent strip */}
+                    <div 
+                      className="absolute top-0 left-0 right-0 h-1.5 shadow-sm"
+                      style={{ backgroundColor: activeSpotlight.accent }}
+                    />
+
+                    {/* Authentic Genuine Kenwell Bottle Image with Parallax Shift */}
+                    <div className="relative w-full h-[280px] sm:h-[320px] flex items-center justify-center my-1 z-10">
+                      {/* Bottle Glass Ground Shadow */}
+                      <div className="absolute bottom-3 w-40 h-5 bg-[#1C355E]/10 rounded-full blur-md" />
+                      
+                      <img 
+                        src={`/bottle_${selectedSlug}.png`} 
+                        alt={activeSpotlight.name}
+                        onError={(e) => {
+                          e.currentTarget.src = getLocalSrc({ slug: selectedSlug })
+                        }}
+                        className={`h-full w-auto max-w-full object-contain drop-shadow-2xl transition-all duration-300 ${
+                          imgFading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                        }`}
+                      />
+                    </div>
+
+                    {/* Product Details Panel */}
+                    <div className="w-full text-center mt-2 pt-3 border-t border-[#E4DFD3]/70 z-10">
+                      <span className="text-[10px] font-mono text-[#D47A3B] uppercase tracking-wider font-semibold block mb-0.5">
+                        {activeSpotlight.tag} · {activeSpotlight.metric}
+                      </span>
+                      <h3 className="font-playfair text-xl sm:text-2xl font-bold text-[#1C355E] leading-tight">
+                        {activeSpotlight.name}
+                      </h3>
+                      <p className="text-[#1C355E]/60 text-xs mt-1">
+                        {activeSpotlight.subtitle}
+                      </p>
+
+                      {/* Price & Action Row */}
+                      <div className="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-[#E4DFD3]/50">
+                        <div className="text-left">
+                          <span className="text-[10px] text-[#1C355E]/50 uppercase font-mono block">Price</span>
+                          <span className="font-playfair text-xl font-bold text-[#1C355E]">
+                            ₹{activeProduct?.price || 899}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {onQuickView && activeProduct && (
+                            <button
+                              onClick={() => onQuickView(activeProduct)}
+                              className="px-3.5 py-2 rounded-full glass-pill hover:bg-white text-[#1C355E] text-[11px] font-mono uppercase tracking-wider transition-colors cursor-pointer"
+                            >
+                              Quick View
+                            </button>
+                          )}
+                          {onAddToCart && activeProduct && (
+                            <button
+                              onClick={() => onAddToCart(activeProduct)}
+                              className="bg-[#D47A3B] hover:bg-[#1C355E] text-white px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-wider font-semibold transition-colors shadow-sm hover:shadow-md cursor-pointer flex items-center gap-1.5"
+                            >
+                              <span>Add</span>
+                              <span>+</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                    </div>
+
                   </div>
-                ))}
+
+                </div>
+
               </div>
+
             </div>
           </div>
-        </div>
-
-        {/* Slide dots */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-          {HERO_SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i === slide ? 'w-7 bg-[#A5492B]' : 'w-1.5 bg-[#203348]/20 hover:bg-[#203348]/40'}`}
-            />
-          ))}
-        </div>
-      </section>
+        </section>
 
       {/* ══════════════════════════════════════════════
           2. MARQUEE TRUST STRIP
       ══════════════════════════════════════════════ */}
-      <div className="bg-[#203348] overflow-hidden py-3 flex shrink-0">
+      <div className="bg-[#1C355E] overflow-hidden py-3 flex shrink-0">
         <div className="flex animate-marquee whitespace-nowrap w-max hover:[animation-play-state:paused]">
           {[...Array(2)].map((_, groupIndex) => (
             <div key={groupIndex} className="flex items-center px-3 md:px-5">
               {['23 Premium Health Products', 'Top Quality Made', '100% Transparent Labels', '4.8★ Average Rating', 'Free Shipping ₹999+', 'No Artificial Fillers', 'Proper Health Doses'].map((item, i) => (
                 <span key={i} className="flex items-center gap-6 md:gap-10 px-3 md:px-5 text-[11px] font-mono uppercase tracking-wider text-white/90 whitespace-nowrap">
                   {item}
-                  <span className="w-1 h-1 rounded-full bg-[#A5492B]" />
+                  <span className="w-1 h-1 rounded-full bg-[#D47A3B]" />
                 </span>
               ))}
             </div>
@@ -366,10 +488,10 @@ export default function Hero({
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <span className="text-[#616F3E] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Find Your Goal</span>
-            <h2 className="text-3xl md:text-4xl font-serif text-[#203348]">Shop by Category</h2>
+            <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Find Your Goal</span>
+            <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E]">Shop by Category</h2>
           </div>
-          <button onClick={() => setCurrentSection('shop')} className="hidden sm:block text-xs font-semibold text-[#203348] hover:text-[#616F3E] border border-[#203348]/20 hover:border-[#616F3E]/50 px-5 py-2 rounded-full transition-all cursor-pointer uppercase tracking-wider">
+          <button onClick={() => setCurrentSection('shop')} className="hidden sm:block text-xs font-semibold text-[#1C355E] hover:text-[#4A6B4A] border border-[#1C355E]/20 hover:border-[#4A6B4A]/50 px-5 py-2 rounded-full transition-all cursor-pointer uppercase tracking-wider">
             All Products →
           </button>
         </div>
@@ -383,7 +505,7 @@ export default function Hero({
             >
               <span className={cat.text}>{cat.icon}</span>
               <span className={`font-semibold text-sm ${cat.text}`}>{cat.label}</span>
-              <span className="text-[10px] text-[#203348]/50 font-mono">{cat.desc}</span>
+              <span className="text-[10px] text-[#1C355E]/50 font-mono">{cat.desc}</span>
             </button>
           ))}
         </div>
@@ -392,18 +514,18 @@ export default function Hero({
       {/* ══════════════════════════════════════════════
           4. BESTSELLERS SHELF (Carousel)
       ══════════════════════════════════════════════ */}
-      <section className="py-12 bg-[#F2EEE5]/40 relative">
+      <section className="py-12 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <span className="text-[#616F3E] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Customer Favorites</span>
-              <h2 className="text-3xl md:text-4xl font-serif text-[#203348]">Bestsellers</h2>
+              <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Customer Favorites</span>
+              <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E]">Bestsellers</h2>
             </div>
             <div className="hidden sm:flex items-center gap-3">
-              <button onClick={() => scrollCarousel('left')} className="p-2 rounded-full border border-[#203348]/20 hover:bg-white text-[#203348] transition-all cursor-pointer">
+              <button onClick={() => scrollCarousel('left')} className="p-2 rounded-full border border-[#1C355E]/20 hover:bg-white text-[#1C355E] transition-all cursor-pointer">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
               </button>
-              <button onClick={() => scrollCarousel('right')} className="p-2 rounded-full border border-[#203348]/20 hover:bg-white text-[#203348] transition-all cursor-pointer">
+              <button onClick={() => scrollCarousel('right')} className="p-2 rounded-full border border-[#1C355E]/20 hover:bg-white text-[#1C355E] transition-all cursor-pointer">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
               </button>
             </div>
@@ -435,16 +557,16 @@ export default function Hero({
           </div>
 
           <div className="flex sm:hidden justify-center items-center mt-2 gap-4">
-            <button onClick={() => scrollCarousel('left')} className="p-2 rounded-full border border-[#203348]/20 text-[#203348] active:bg-[#203348]/10">
+            <button onClick={() => scrollCarousel('left')} className="p-2 rounded-full border border-[#1C355E]/20 text-[#1C355E] active:bg-[#1C355E]/10">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <button onClick={() => scrollCarousel('right')} className="p-2 rounded-full border border-[#203348]/20 text-[#203348] active:bg-[#203348]/10">
+            <button onClick={() => scrollCarousel('right')} className="p-2 rounded-full border border-[#1C355E]/20 text-[#1C355E] active:bg-[#1C355E]/10">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
           
           <div className="text-center mt-10">
-            <button onClick={() => setCurrentSection('shop')} className="text-xs font-semibold text-[#203348] hover:text-[#616F3E] border border-[#203348]/20 hover:border-[#616F3E]/50 px-6 py-2.5 rounded-full uppercase tracking-wider cursor-pointer transition-all">
+            <button onClick={() => setCurrentSection('shop')} className="text-xs font-semibold text-[#1C355E] hover:text-[#4A6B4A] border border-[#1C355E]/20 hover:border-[#4A6B4A]/50 px-6 py-2.5 rounded-full uppercase tracking-wider cursor-pointer transition-all">
               View All Bestsellers →
             </button>
           </div>
@@ -456,8 +578,8 @@ export default function Hero({
       ══════════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <span className="text-[#616F3E] font-mono uppercase tracking-wider text-[11px] font-semibold">Product Lines</span>
-          <h2 className="text-3xl md:text-4xl font-serif text-[#203348] mt-2">Shop by Series</h2>
+          <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold">Product Lines</span>
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mt-2">Shop by Series</h2>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
@@ -467,9 +589,9 @@ export default function Hero({
               badge: 'Daily Basics',
               count: '7 products',
               desc: 'Everyday nutrients to keep you healthy — easy-to-absorb minerals, fish oil, and daily vitamins.',
-              accent: 'border-[#616F3E]/30 bg-gradient-to-br from-[#616F3E]/5 to-[#616F3E]/12',
-              btnColor: 'text-[#616F3E] border-[#616F3E]/30 hover:bg-[#616F3E] hover:text-white',
-              dotColor: 'bg-[#616F3E]',
+              accent: 'border-[#4A6B4A]/30 bg-gradient-to-br from-[#4A6B4A]/5 to-[#4A6B4A]/12',
+              btnColor: 'text-[#4A6B4A] border-[#4A6B4A]/30 hover:bg-[#4A6B4A] hover:text-white',
+              dotColor: 'bg-[#4A6B4A]',
               pattern: "url('/patterns/pattern-green.jpg')",
             },
             {
@@ -477,9 +599,9 @@ export default function Hero({
               badge: 'Targeted Health',
               count: '12 products',
               desc: 'Specific products for your joints, liver, gut, sleep, and keeping your hormones balanced.',
-              accent: 'border-[#A5492B]/30 bg-gradient-to-br from-[#A5492B]/5 to-[#A5492B]/12',
-              btnColor: 'text-[#A5492B] border-[#A5492B]/30 hover:bg-[#A5492B] hover:text-white',
-              dotColor: 'bg-[#A5492B]',
+              accent: 'border-[#D47A3B]/30 bg-gradient-to-br from-[#D47A3B]/5 to-[#D47A3B]/12',
+              btnColor: 'text-[#D47A3B] border-[#D47A3B]/30 hover:bg-[#D47A3B] hover:text-white',
+              dotColor: 'bg-[#D47A3B]',
               pattern: "url('/patterns/pattern-rust.jpg')",
             },
             {
@@ -487,9 +609,9 @@ export default function Hero({
               badge: 'Healthy Aging',
               count: '4 products',
               desc: 'Products like NAD+ and Vitamin C made with special technology so your body absorbs them perfectly.',
-              accent: 'border-[#203348]/30 bg-gradient-to-br from-[#203348]/5 to-[#203348]/12',
-              btnColor: 'text-[#203348] border-[#203348]/30 hover:bg-[#203348] hover:text-white',
-              dotColor: 'bg-[#203348]',
+              accent: 'border-[#1C355E]/30 bg-gradient-to-br from-[#1C355E]/5 to-[#1C355E]/12',
+              btnColor: 'text-[#1C355E] border-[#1C355E]/30 hover:bg-[#1C355E] hover:text-white',
+              dotColor: 'bg-[#1C355E]',
               pattern: "url('/patterns/pattern-blue.jpg')",
             },
             {
@@ -497,9 +619,9 @@ export default function Hero({
               badge: 'Fitness & Energy',
               count: '5 products',
               desc: 'Powerful formulas to help you work out harder, recover faster, and stay focused.',
-              accent: 'border-[#203348]/20 bg-gradient-to-br from-[#203348]/5 to-[#203348]/10',
-              btnColor: 'text-[#203348] border-[#203348]/30 hover:bg-[#203348] hover:text-white',
-              dotColor: 'bg-[#203348]',
+              accent: 'border-[#1C355E]/20 bg-gradient-to-br from-[#1C355E]/5 to-[#1C355E]/10',
+              btnColor: 'text-[#1C355E] border-[#1C355E]/30 hover:bg-[#1C355E] hover:text-white',
+              dotColor: 'bg-[#1C355E]',
               pattern: "url('/patterns/pattern-blue.jpg')",
             },
           ].map((s) => (
@@ -520,10 +642,10 @@ export default function Hero({
                     <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${s.dotColor}`} />
                     {s.badge}
                   </span>
-                  <span className="text-[9px] sm:text-[10px] text-[#203348]/40 font-mono">{s.count}</span>
+                  <span className="text-[9px] sm:text-[10px] text-[#1C355E]/40 font-mono">{s.count}</span>
                 </div>
-                <h3 className="font-serif text-lg sm:text-2xl text-[#203348] mb-2 sm:mb-3 group-hover:text-inherit transition-colors">{s.series}</h3>
-                <p className="text-[11px] sm:text-sm text-[#203348]/65 leading-relaxed flex-grow">{s.desc}</p>
+                <h3 className="font-playfair text-lg sm:text-2xl text-[#1C355E] mb-2 sm:mb-3 group-hover:text-inherit transition-colors">{s.series}</h3>
+                <p className="text-[11px] sm:text-sm text-[#1C355E]/65 leading-relaxed flex-grow">{s.desc}</p>
                 <button className={`mt-4 sm:mt-6 w-full border rounded-full py-2 sm:py-2.5 text-[9px] sm:text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${s.btnColor}`}>
                   Explore <span className="hidden sm:inline">{s.series} </span>→
                 </button>
@@ -536,24 +658,24 @@ export default function Hero({
       {/* ══════════════════════════════════════════════
           6. INTERACTIVE STACK BUILDER & QUIZ PROMO
       ══════════════════════════════════════════════ */}
-      <section className="py-20 bg-[#203348] relative overflow-hidden">
+      <section className="py-20 bg-[#1C355E] relative overflow-hidden">
         {/* Botanical pattern backdrop */}
         <div 
           className="absolute inset-0 pointer-events-none opacity-20 bg-repeat"
           style={{ backgroundImage: "url('/patterns/pattern-blue.jpg')", backgroundSize: '360px auto' }}
         />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#203348]/60 via-transparent to-[#203348]/80" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#1C355E]/60 via-transparent to-[#1C355E]/80" />
 
         {/* Large decorative BG text */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-          <span className="font-serif text-[18vw] font-bold text-white/[0.03] leading-none">QUIZ</span>
+          <span className="font-playfair text-[18vw] font-bold text-white/[0.03] leading-none">QUIZ</span>
         </div>
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <span className="text-[#A5492B] font-mono uppercase tracking-widest text-xs font-bold mb-4 block">
+          <span className="text-[#D47A3B] font-mono uppercase tracking-widest text-xs font-bold mb-4 block">
             Don't Know What To Buy?
           </span>
-          <h2 className="font-serif text-4xl sm:text-5xl mb-5 leading-tight">
+          <h2 className="font-playfair text-4xl sm:text-5xl mb-5 leading-tight">
             Take the 60-Second Quiz<br />
             <span className="italic font-light text-[#E4DFD3]">&amp; Find Exactly What You Need</span>
           </h2>
@@ -563,7 +685,7 @@ export default function Hero({
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => setCurrentSection('quiz')}
-              className="bg-[#A5492B] hover:bg-[#616F3E] text-white px-8 py-4 rounded-full text-sm uppercase tracking-widest font-bold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
+              className="bg-[#D47A3B] hover:bg-[#4A6B4A] text-white px-8 py-4 rounded-full text-sm uppercase tracking-widest font-bold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
             >
               Take the Quiz →
             </button>
@@ -582,18 +704,18 @@ export default function Hero({
       ══════════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <span className="text-[#616F3E] font-mono uppercase tracking-wider text-[11px] font-semibold">The Kenwell Standard</span>
-          <h2 className="text-3xl md:text-4xl font-serif text-[#203348] mt-2">Why We're Different</h2>
+          <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold">The Kenwell Standard</span>
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mt-2">Why We're Different</h2>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {TRUST_POINTS.map((t) => (
-            <div key={t.title} className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#E4DFD3] p-4 sm:p-6 hover:shadow-lg hover:border-[#616F3E]/40 transition-all duration-300 text-left">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#616F3E]/10 border border-[#616F3E]/20 flex items-center justify-center mb-3 sm:mb-4">
+            <div key={t.title} className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#E4DFD3] p-4 sm:p-6 hover:shadow-lg hover:border-[#4A6B4A]/40 transition-all duration-300 text-left">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#4A6B4A]/10 border border-[#4A6B4A]/20 flex items-center justify-center mb-3 sm:mb-4">
                 <div className="scale-75 sm:scale-100">{t.icon}</div>
               </div>
-              <h3 className="font-serif text-sm sm:text-lg font-bold text-[#203348] mb-1.5 sm:mb-2">{t.title}</h3>
-              <p className="text-[10px] sm:text-sm text-[#203348]/65 leading-relaxed">{t.body}</p>
+              <h3 className="font-playfair text-sm sm:text-lg font-bold text-[#1C355E] mb-1.5 sm:mb-2">{t.title}</h3>
+              <p className="text-[10px] sm:text-sm text-[#1C355E]/65 leading-relaxed">{t.body}</p>
             </div>
           ))}
         </div>
@@ -602,11 +724,11 @@ export default function Hero({
       {/* ══════════════════════════════════════════════
           8. REVIEWS — Customer Testimonials
       ══════════════════════════════════════════════ */}
-      <section className="py-16 bg-[#F2EEE5]/40">
+      <section className="py-16 bg-white border-t border-[#EAEAEA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <span className="text-[#616F3E] font-mono uppercase tracking-wider text-[11px] font-semibold">Verified Reviews</span>
-            <h2 className="text-3xl md:text-4xl font-serif text-[#203348] mt-2">What Customers Say</h2>
+            <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold">Verified Reviews</span>
+            <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mt-2">What Customers Say</h2>
           </div>
 
           <div className="relative overflow-hidden group py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
@@ -622,17 +744,17 @@ export default function Hero({
                 <div key={i} className="w-[300px] sm:w-[380px] flex-shrink-0 bg-white/85 backdrop-blur-sm rounded-2xl border border-[#E4DFD3] p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow mr-4 sm:mr-5 whitespace-normal">
                   <div className="space-y-3">
                     <Stars n={r.stars} />
-                    <h4 className="font-serif text-lg font-bold text-[#203348]">{r.quote}</h4>
-                    <p className="text-sm text-[#203348]/70 leading-relaxed">{r.body}</p>
+                    <h4 className="font-playfair text-lg font-bold text-[#1C355E]">{r.quote}</h4>
+                    <p className="text-sm text-[#1C355E]/70 leading-relaxed">{r.body}</p>
                   </div>
                   <div className="mt-5 pt-4 border-t border-[#E4DFD3] flex items-end justify-between">
                     <div>
-                      <span className="block text-sm font-bold text-[#203348]">{r.name}</span>
-                      <span className="text-[10px] text-[#203348]/50">{r.role}</span>
+                      <span className="block text-sm font-bold text-[#1C355E]">{r.name}</span>
+                      <span className="text-[10px] text-[#1C355E]/50">{r.role}</span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[9px] text-[#203348]/40 uppercase tracking-wider block">Using</span>
-                      <span className="text-[10px] font-semibold text-[#616F3E]">{r.product}</span>
+                      <span className="text-[9px] text-[#1C355E]/40 uppercase tracking-wider block">Using</span>
+                      <span className="text-[10px] font-semibold text-[#4A6B4A]">{r.product}</span>
                     </div>
                   </div>
                 </div>
@@ -650,17 +772,17 @@ export default function Hero({
       {/* ══════════════════════════════════════════════
           9. FINAL CTA BANNER
       ══════════════════════════════════════════════ */}
-      <section className="py-20 px-4 text-center bg-gradient-to-b from-[#FAF8F5] via-[#E4DFD3]/20 to-[#FAF8F5]">
-        <span className="text-[#616F3E] font-mono uppercase tracking-wider text-[11px] font-semibold">The Full Collection</span>
-        <h2 className="text-3xl md:text-4xl font-serif text-[#203348] mt-3 mb-4">
+      <section className="py-20 px-4 text-center bg-white border-t border-[#EAEAEA]">
+        <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold">The Full Collection</span>
+        <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mt-3 mb-4">
           23 Premium Health Products
         </h2>
-        <p className="text-[#203348]/60 text-sm max-w-md mx-auto mb-8 leading-relaxed">
+        <p className="text-[#1C355E]/60 text-sm max-w-md mx-auto mb-8 leading-relaxed">
           Transparent labels · Proper doses · Easy to absorb · No artificial junk
         </p>
         <button
           onClick={() => setCurrentSection('shop')}
-          className="bg-[#203348] hover:bg-[#A5492B] text-white px-10 py-4 rounded-full text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
+          className="bg-[#1C355E] hover:bg-[#D47A3B] text-white px-10 py-4 rounded-full text-sm uppercase tracking-widest font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
         >
           Browse the Full Shop →
         </button>
