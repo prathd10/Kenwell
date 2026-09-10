@@ -88,213 +88,27 @@ export default function Navbar({
             className="flex items-center space-x-2 cursor-pointer group flex-1"
           >
             <img src="/kenwell-mark.png" alt="" className="h-7 w-auto" />
-            <span style={{ fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '0.05em', color: '#203348', textTransform: 'uppercase', lineHeight: 1 }}>
-              Kenwell
+            <span className="text-xl sm:text-2xl font-body font-bold uppercase tracking-[0.15em] text-[#1C355E] leading-none ml-1.5 pt-0.5">
+              KENWELL
             </span>
           </div>
 
-          {/* Desktop Nav - 5 Exact Links with Shop Dropdown */}
-          <div className="hidden md:flex space-x-6 items-center">
-            {navItems.map((item) => {
-              if (item.id === 'shop') {
-                return (
-                  <div key={item.id} className="relative group py-2">
-                    <button
-                      onClick={() => handleNavClick('shop')}
-                      className={`transition-all duration-300 hover:text-[#616F3E] cursor-pointer flex items-center gap-1.5`}
-                      style={{
-                        fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif',
-                        fontSize: '0.84rem',
-                        fontWeight: 600,
-                        letterSpacing: '0.04em',
-                        textTransform: 'uppercase',
-                        color: (currentSection === 'shop' || currentSection === 'bestsellers' || currentSection === 'men' || currentSection === 'women') ? '#203348' : 'rgba(32,51,72,0.8)'
-                      }}
-                    >
-                      <span>Shop</span>
-                      <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
-                    
-                    {/* Hover Dropdown Menu - Glassmorphic and elegant */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[480px] bg-white/95 backdrop-blur-md border border-[#E4DFD3] rounded-2xl shadow-xl p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 flex gap-8">
-                      {/* Column 1: By Goal */}
-                      <div className="w-1/2 flex flex-col text-left">
-                        <span 
-                          style={{ fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.06em' }}
-                          className="text-[#616F3E] border-b border-[#E4DFD3] pb-2 mb-3 block uppercase"
-                        >
-                          By Goal
-                        </span>
-                        <div className="space-y-2">
-                          {[
-                            'Immunity',
-                            'Energy',
-                            'Sleep',
-                            'Stress',
-                            'Longevity',
-                            'Gut Health',
-                            'Heart',
-                            'Joints'
-                          ].map((goal) => (
-                            <button
-                              key={goal}
-                              onClick={() => {
-                                onSelectFilter('goal', goal)
-                              }}
-                              className="block text-[11px] font-semibold text-[#203348]/75 hover:text-[#616F3E] tracking-wider uppercase transition-all duration-200 text-left w-full cursor-pointer hover:translate-x-0.5 transform"
-                            >
-                              {goal}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      {/* Column Divider */}
-                      <div className="w-[1px] bg-[#E4DFD3] self-stretch"></div>
-                      
-                      {/* Column 2: By Category */}
-                      <div className="w-1/2 flex flex-col text-left">
-                        <span 
-                          style={{ fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.06em' }}
-                          className="text-[#616F3E] border-b border-[#E4DFD3] pb-2 mb-3 block uppercase"
-                        >
-                          Shop By Category
-                        </span>
-                        <div className="space-y-2">
-                          {[
-                            { name: 'Core Series', type: 'series', val: 'Core Series' },
-                            { name: 'Wellness Series', type: 'series', val: 'Wellness Series' },
-                            { name: 'Liposomal Series', type: 'series', val: 'Liposomal Series' },
-                            { name: 'Bestsellers', type: 'collection', val: 'bestsellers' },
-                            { name: 'For Men', type: 'collection', val: 'men' },
-                            { name: 'For Women', type: 'collection', val: 'women' },
-                            { name: 'See All Products →', type: 'all', val: 'all' }
-                          ].map((cat) => (
-                            <button
-                              key={cat.name}
-                              onClick={() => {
-                                onSelectFilter(cat.type, cat.val)
-                              }}
-                              className={`block text-[11px] font-semibold tracking-wider uppercase transition-all duration-200 text-left w-full cursor-pointer hover:translate-x-0.5 transform ${
-                                cat.name.includes('→') ? 'text-[#A5492B] hover:text-[#616F3E] mt-1 font-bold' : 'text-[#203348]/75 hover:text-[#616F3E]'
-                              }`}
-                            >
-                              {cat.name}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              }
-              
-              // Standard nav items
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`relative transition-all duration-300 py-2 hover:text-[#616F3E] cursor-pointer`}
-                  style={{
-                    fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif',
-                    fontSize: '0.84rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    color: currentSection === item.id ? '#203348' : 'rgba(32,51,72,0.8)'
-                  }}
-                >
-                  {item.name}
-                  {item.badge && (
-                    <span className="absolute -top-1.5 -right-6 bg-[#A5492B] text-white text-[9px] font-mono px-1.5 py-0.5 rounded-full animate-bounce shadow-md uppercase tracking-wider font-bold">
-                      {item.badge}
-                    </span>
-                  )}
-                  {currentSection === item.id && (
-                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#A5492B] rounded-full"></span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
+          {/* Desktop Nav Removed */}
 
-          {/* Header Action Icons: Search, Wishlist & Cart */}
-          <div className="hidden md:flex items-center justify-end space-x-2 flex-1">
-
-            {/* Search Button */}
-            <button
-              onClick={openSearch}
-              className="relative p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E]"
-              title="Search products"
-            >
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" d="M21 21l-4.35-4.35"/>
-              </svg>
-            </button>
+          {/* Header Action Icons: Wishlist, Cart & Menu */}
+          <div className="flex items-center justify-end space-x-2 sm:space-x-4 flex-1">
 
             {/* Wishlist Button */}
             <button
               onClick={() => setWishlistOpen(true)}
-              className="relative p-2 transition-colors cursor-pointer"
-              style={{color:'rgba(58,32,16,0.65)'}}
+              className="relative p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E]"
               title="Open Wishlist"
-            >
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              {wishlistItems.length > 0 && (
-                <span className="absolute top-0 right-0 bg-sage text-white text-[9px] font-mono w-4 h-4 rounded-full flex items-center justify-center -mt-0.5 -mr-0.5 shadow-sm">
-                  {wishlistItems.length}
-                </span>
-              )}
-            </button>
-            
-            {/* Cart Button */}
-            <button
-              onClick={() => setCartOpen(true)}
-              className="relative p-2 transition-colors cursor-pointer"
-              style={{color:'rgba(58,32,16,0.65)'}}
-              title="Open Cart"
-            >
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              {cartItems.length > 0 && (
-                <span className="absolute top-0 right-0 bg-primary-green text-bg-primary text-[9px] font-mono w-4 h-4 rounded-full flex items-center justify-center -mt-0.5 -mr-0.5 shadow-sm">
-                  {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
-                </span>
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Actions & Menu Trigger */}
-          <div className="flex md:hidden items-center space-x-2">
-            {/* Search Button */}
-            <button
-              onClick={openSearch}
-              className="relative p-2 transition-colors"
-              style={{color:'rgba(58,32,16,0.65)'}}
-              title="Search"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/><path strokeLinecap="round" d="M21 21l-4.35-4.35"/>
-              </svg>
-            </button>
-
-            {/* Wishlist Button */}
-            <button
-              onClick={() => setWishlistOpen(true)}
-              className="relative p-2 transition-colors"
-              style={{color:'rgba(58,32,16,0.65)'}}
-              title="Open Wishlist"
-            >
-              <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
               {wishlistItems.length > 0 && (
-                <span className="absolute top-0.5 right-0.5 bg-sage text-white text-[8px] font-mono w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-sm">
+                <span className="absolute top-0 right-0 bg-[#A5492B] text-white text-[9px] font-mono w-4 h-4 rounded-full flex items-center justify-center -mt-0.5 -mr-0.5 shadow-sm">
                   {wishlistItems.length}
                 </span>
               )}
@@ -303,24 +117,23 @@ export default function Navbar({
             {/* Cart Button */}
             <button
               onClick={() => setCartOpen(true)}
-              className="relative p-2 transition-colors"
-              style={{color:'rgba(58,32,16,0.65)'}}
+              className="relative p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E]"
               title="Open Cart"
             >
-              <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
               {cartItems.length > 0 && (
-                <span className="absolute top-0.5 right-0.5 bg-primary-green text-bg-primary text-[8px] font-mono w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-sm">
+                <span className="absolute top-0 right-0 bg-[#4A6B4A] text-white text-[9px] font-mono w-4 h-4 rounded-full flex items-center justify-center -mt-0.5 -mr-0.5 shadow-sm">
                   {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
                 </span>
               )}
             </button>
 
+            {/* Hamburger Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 focus:outline-none"
-              style={{color:'#3A2010'}}
+              className="p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E] focus:outline-none ml-1 sm:ml-2"
               aria-label="Toggle menu"
             >
               <svg 

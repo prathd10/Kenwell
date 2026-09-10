@@ -11,13 +11,13 @@
   --color-rust: #D47A3B;
   --color-cream-dark: #EAEAEA;
   
-  --font-serif: "Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif;
-  --font-body: "Jost", sans-serif;
-  --font-title: "Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif;
-  --font-mono: "Jost", sans-serif;
-  --font-brand: "Marker Felt", "Patrick Hand", "Fredoka", cursive;
-  --font-playfair: "Playfair Display", serif;
-  --font-lato: "Lato", sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-title: "Cormorant Garamond", serif;
+  --font-mono: "Plus Jakarta Sans", monospace;
+  --font-brand: "Cormorant Garamond", serif;
+  --font-playfair: "Cormorant Garamond", serif;
+  --font-lato: "Plus Jakarta Sans", sans-serif;
   
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
@@ -94,7 +94,7 @@ html {
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-charcoal);
-  font-family: "Jost", sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   overflow-x: hidden;
   overflow-y: auto;

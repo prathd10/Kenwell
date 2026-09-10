@@ -239,224 +239,52 @@ export default function Hero({
         {/* ══════════════════════════════════════════════
             1. PARALLAX GLASSMORPHIC HERO BANNER
         ══════════════════════════════════════════════ */}
-        <section 
-          ref={heroRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          className="relative w-full bg-[#FAF8F5] border-b border-[#E4DFD3]/60 overflow-hidden py-10 lg:py-16"
-        >
-          
-          {/* Delicate Japanese Botanical Pattern Trim (Top accent border) */}
+        <section className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
+          {/* Background Image */}
           <div 
-            className="absolute top-0 left-0 right-0 h-1.5 opacity-85 z-20"
+            className="absolute inset-0 bg-cover bg-[position:80%_center] md:bg-right bg-no-repeat transition-transform duration-[20s] ease-out hover:scale-105"
             style={{ 
-              backgroundImage: "url('/patterns/pattern-blue.jpg')", 
-              backgroundSize: '240px auto' 
+              backgroundImage: "url('/hero_bg_new.jpg')" 
             }}
           />
+          {/* Subtle overlay to ensure text legibility */}
+          <div className="absolute inset-0 bg-[#FAF8F5]/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5]/60 to-transparent" />
 
-          {/* Layer 1: Parallax Japanese Botanical Pattern Background */}
-          <div 
-            className="absolute inset-0 pointer-events-none opacity-[0.22] bg-repeat transition-transform duration-700 ease-out z-0"
-            style={{ 
-              backgroundImage: "url('/patterns/pattern-blue.jpg')", 
-              backgroundSize: '340px auto',
-              transform: `translate3d(${mousePos.x * 14}px, ${mousePos.y * 14}px, 0)`
-            }}
-          />
+          {/* Content Container */}
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 flex flex-col items-center text-center">
+            <div className="max-w-2xl space-y-6 mt-10 md:mt-0">
+              
+              {/* Headline */}
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-serif text-[#1C355E] leading-[1.05] tracking-tight">
+                Feel Good.<br />
+                <span className="italic font-light text-[#4A6B4A]">Live Well.</span>
+              </h1>
 
-          {/* Layer 1b: Soft Frosted White / Cream Veil over pattern for high legibility */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#FAF8F5]/92 via-[#FAF8F5]/84 to-[#FAF8F5]/75 backdrop-blur-[1px] z-0" />
+              {/* Subheadline */}
+              <p className="text-[#1C355E]/90 text-[15px] sm:text-xl leading-relaxed font-body font-light mx-auto max-w-lg">
+                Clinical-strength nutraceuticals rooted in purity and science. 
+                Experience wellness without compromises.
+              </p>
 
-          {/* Layer 2: Oversized Artistic Kenwell Bottle in Background with Parallax */}
-          <div 
-            className="absolute right-[-4%] lg:right-[4%] top-1/2 pointer-events-none select-none z-0 transition-transform duration-500 ease-out"
-            style={{
-              transform: `translate3d(${mousePos.x * 24}px, calc(-50% + ${mousePos.y * 18}px), 0) rotate(${12 + mousePos.x * 3}deg)`
-            }}
-          >
-            <img 
-              src={`/bottle_${selectedSlug}.png`} 
-              alt="" 
-              className="w-[340px] sm:w-[500px] lg:w-[650px] h-auto object-contain opacity-[0.38] filter drop-shadow-2xl mix-blend-multiply scale-110 lg:scale-130 transition-opacity duration-500"
-            />
-          </div>
-
-          {/* Layer 3: Ambient Radial Glow with Parallax */}
-          <div 
-            className="absolute -right-10 top-1/2 w-[650px] h-[650px] rounded-full blur-3xl opacity-45 pointer-events-none transition-transform duration-700 ease-out z-0"
-            style={{
-              background: `radial-gradient(circle, ${activeSpotlight.accent}35 0%, #D47A3B20 45%, transparent 70%)`,
-              transform: `translate3d(${mousePos.x * 36}px, calc(-50% + ${mousePos.y * 24}px), 0)`
-            }}
-          />
-
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-
-              {/* ── Left Column: Editorial Store Brand Intro & Glass Stats ── */}
-              <div className="lg:col-span-7 space-y-6 text-left">
-                {/* Main Headline */}
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-playfair text-[#1C355E] leading-[1.12] tracking-tight">
-                  Formulated for Vitality.<br />
-                  <span className="text-[#1C355E]">Rooted in </span>
-                  <span className="italic font-light text-[#D47A3B]">Purity &amp; Science.</span>
-                </h1>
-
-                {/* Subtitle description */}
-                <p className="text-[#1C355E]/80 text-sm sm:text-lg leading-relaxed max-w-xl font-light">
-                  Clinical-strength nutraceuticals formulated with bioactive, high-absorption ingredients. 
-                  Zero synthetic fillers, zero proprietary blends—verified by third-party testing with scannable batch reports.
-                </p>
-
-                {/* CTA Action Buttons */}
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <button
-                    onClick={() => setCurrentSection('shop')}
-                    className="bg-[#1C355E] hover:bg-[#D47A3B] text-white px-7 py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold transition-all duration-300 shadow-md hover:shadow-xl cursor-pointer flex items-center gap-2"
-                  >
-                    <span>Shop All Products</span>
-                    <span>→</span>
-                  </button>
-                  <button
-                    onClick={() => setCurrentSection('quiz')}
-                    className="border-2 border-[#1C355E]/25 hover:border-[#1C355E] text-[#1C355E] glass-pill px-6 py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold transition-all cursor-pointer shadow-sm hover:shadow-md"
-                  >
-                    Take 60s Health Quiz
-                  </button>
-                  <button
-                    onClick={() => setCurrentSection('lab')}
-                    className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#4A6B4A] hover:text-[#1C355E] px-3 py-2 transition-colors cursor-pointer"
-                  >
-                    <span>Scan Lab Report</span>
-                    <span>↗</span>
-                  </button>
-                </div>
-
-                {/* Frosted Glass Proof Points Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-[#E4DFD3]/80">
-                  {[
-                    { val: '23+', lbl: 'Formulations', col: 'text-[#1C355E]' },
-                    { val: '100%', lbl: 'Open Label', col: 'text-[#4A6B4A]' },
-                    { val: '4.8★', lbl: '10,000+ Reviews', col: 'text-[#D47A3B]' },
-                    { val: 'GMP', lbl: 'Lab Verified', col: 'text-[#1C355E]' },
-                  ].map((st, i) => (
-                    <div 
-                      key={i} 
-                      className="glass-pill rounded-2xl p-3.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md text-left"
-                    >
-                      <span className={`block font-playfair text-xl sm:text-2xl font-bold ${st.col}`}>{st.val}</span>
-                      <span className="text-[10px] text-[#1C355E]/60 uppercase tracking-wider font-mono">{st.lbl}</span>
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-
-              {/* ── Right Column: Interactive Parallax 3D Glass Card Showcase ── */}
-              <div className="lg:col-span-5 flex flex-col items-center">
-                
-                {/* Product Pill Switcher Tabs in Frosted Glass */}
-                <div className="w-full flex items-center justify-start lg:justify-center gap-1.5 overflow-x-auto pb-2 scrollbar-none mb-4">
-                  {SPOTLIGHT_PRODUCTS.map((s) => {
-                    const isSelected = s.slug === selectedSlug
-                    return (
-                      <button
-                        key={s.slug}
-                        onClick={() => handleSelectProduct(s.slug)}
-                        className={`px-3.5 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-wider whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#1C355E] text-white border border-[#1C355E] shadow-md font-bold'
-                            : 'glass-pill text-[#1C355E]/75 hover:text-[#1C355E]'
-                        }`}
-                      >
-                        {s.name.split(' ')[0]}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {/* 3D Parallax Glass Card Wrapper */}
-                <div 
-                  className="relative w-full max-w-md transition-transform duration-300 ease-out"
-                  style={{
-                    transform: `perspective(1000px) rotateX(${-mousePos.y * 5}deg) rotateY(${mousePos.x * 5}deg) translate3d(${mousePos.x * -14}px, ${mousePos.y * -14}px, 0)`
-                  }}
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10 sm:pt-12">
+                <button
+                  onClick={() => setCurrentSection('shop')}
+                  className="bg-[#1C355E] hover:bg-[#4A6B4A] text-white px-8 py-4 text-xs uppercase tracking-widest font-semibold transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto shadow-sm hover:shadow-md"
                 >
-                  {/* Main Frosted Glass Showcase Card */}
-                  <div className="glass-card-hero rounded-3xl p-5 sm:p-7 relative overflow-hidden flex flex-col items-center">
-                    
-                    {/* Glowing color accent strip */}
-                    <div 
-                      className="absolute top-0 left-0 right-0 h-1.5 shadow-sm"
-                      style={{ backgroundColor: activeSpotlight.accent }}
-                    />
-
-                    {/* Authentic Genuine Kenwell Bottle Image with Parallax Shift */}
-                    <div className="relative w-full h-[280px] sm:h-[320px] flex items-center justify-center my-1 z-10">
-                      {/* Bottle Glass Ground Shadow */}
-                      <div className="absolute bottom-3 w-40 h-5 bg-[#1C355E]/10 rounded-full blur-md" />
-                      
-                      <img 
-                        src={`/bottle_${selectedSlug}.png`} 
-                        alt={activeSpotlight.name}
-                        onError={(e) => {
-                          e.currentTarget.src = getLocalSrc({ slug: selectedSlug })
-                        }}
-                        className={`h-full w-auto max-w-full object-contain drop-shadow-2xl transition-all duration-300 ${
-                          imgFading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-                        }`}
-                      />
-                    </div>
-
-                    {/* Product Details Panel */}
-                    <div className="w-full text-center mt-2 pt-3 border-t border-[#E4DFD3]/70 z-10">
-                      <span className="text-[10px] font-mono text-[#D47A3B] uppercase tracking-wider font-semibold block mb-0.5">
-                        {activeSpotlight.tag} · {activeSpotlight.metric}
-                      </span>
-                      <h3 className="font-playfair text-xl sm:text-2xl font-bold text-[#1C355E] leading-tight">
-                        {activeSpotlight.name}
-                      </h3>
-                      <p className="text-[#1C355E]/60 text-xs mt-1">
-                        {activeSpotlight.subtitle}
-                      </p>
-
-                      {/* Price & Action Row */}
-                      <div className="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-[#E4DFD3]/50">
-                        <div className="text-left">
-                          <span className="text-[10px] text-[#1C355E]/50 uppercase font-mono block">Price</span>
-                          <span className="font-playfair text-xl font-bold text-[#1C355E]">
-                            ₹{activeProduct?.price || 899}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {onQuickView && activeProduct && (
-                            <button
-                              onClick={() => onQuickView(activeProduct)}
-                              className="px-3.5 py-2 rounded-full glass-pill hover:bg-white text-[#1C355E] text-[11px] font-mono uppercase tracking-wider transition-colors cursor-pointer"
-                            >
-                              Quick View
-                            </button>
-                          )}
-                          {onAddToCart && activeProduct && (
-                            <button
-                              onClick={() => onAddToCart(activeProduct)}
-                              className="bg-[#D47A3B] hover:bg-[#1C355E] text-white px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-wider font-semibold transition-colors shadow-sm hover:shadow-md cursor-pointer flex items-center gap-1.5"
-                            >
-                              <span>Add</span>
-                              <span>+</span>
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
+                  <span>Explore Collection</span>
+                  <span>→</span>
+                </button>
+                <button
+                  onClick={() => setCurrentSection('quiz')}
+                  className="border border-[#1C355E]/20 hover:border-[#1C355E]/40 bg-white/60 hover:bg-white/80 backdrop-blur-md text-[#1C355E] px-8 py-4 text-xs uppercase tracking-widest font-semibold transition-all cursor-pointer w-full sm:w-auto"
+                >
+                  Take the Wellness Quiz
+                </button>
               </div>
+
+
 
             </div>
           </div>
@@ -486,12 +314,10 @@ export default function Hero({
           3. SHOP BY CATEGORY GRID
       ══════════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Find Your Goal</span>
-            <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E]">Shop by Category</h2>
-          </div>
-          <button onClick={() => setCurrentSection('shop')} className="hidden sm:block text-xs font-semibold text-[#1C355E] hover:text-[#4A6B4A] border border-[#1C355E]/20 hover:border-[#4A6B4A]/50 px-5 py-2 rounded-full transition-all cursor-pointer uppercase tracking-wider">
+        <div className="flex flex-col items-center text-center mb-10">
+          <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-2">Find Your Goal</span>
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mb-4">Shop by Category</h2>
+          <button onClick={() => setCurrentSection('shop')} className="text-xs font-semibold text-[#1C355E] hover:text-[#4A6B4A] border border-[#1C355E]/20 hover:border-[#4A6B4A]/50 px-6 py-2 rounded-sm transition-all cursor-pointer uppercase tracking-wider shadow-sm hover:shadow-md">
             All Products →
           </button>
         </div>
@@ -508,6 +334,50 @@ export default function Hero({
               <span className="text-[10px] text-[#1C355E]/50 font-mono">{cat.desc}</span>
             </button>
           ))}
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          QUIZ PROMO (Moved here)
+      ══════════════════════════════════════════════ */}
+      <section className="py-20 bg-[#1C355E] relative overflow-hidden">
+        {/* Botanical pattern backdrop */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-20 bg-repeat"
+          style={{ backgroundImage: "url('/patterns/pattern-blue.jpg')", backgroundSize: '360px auto' }}
+        />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#1C355E]/60 via-transparent to-[#1C355E]/80" />
+
+        {/* Large decorative BG text */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+          <span className="font-playfair text-[18vw] font-bold text-white/[0.03] leading-none">QUIZ</span>
+        </div>
+
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+          <span className="text-[#D47A3B] font-mono uppercase tracking-widest text-xs font-bold mb-4 block">
+            Don't Know What To Buy?
+          </span>
+          <h2 className="font-playfair text-4xl sm:text-5xl mb-5 leading-tight">
+            Take the 60-Second Quiz<br />
+            <span className="italic font-light text-[#E4DFD3]">&amp; Find Exactly What You Need</span>
+          </h2>
+          <p className="text-white/85 text-base max-w-xl mx-auto mb-10 leading-relaxed">
+            Answer 3 quick questions about your daily routine. We’ll analyze your goals and build the exact right supplement plan made just for your body.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => setCurrentSection('quiz')}
+              className="bg-[#D47A3B] hover:bg-[#4A6B4A] text-white px-8 py-4 rounded-sm text-sm uppercase tracking-widest font-bold transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+            >
+              Take the Quiz →
+            </button>
+            <button
+              onClick={() => setCurrentSection('builder')}
+              className="border border-white/40 hover:border-white text-white hover:bg-white/10 px-8 py-4 rounded-sm text-sm uppercase tracking-widest font-semibold transition-all cursor-pointer"
+            >
+              Custom Stack Builder
+            </button>
+          </div>
         </div>
       </section>
 
@@ -655,49 +525,7 @@ export default function Hero({
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════
-          6. INTERACTIVE STACK BUILDER & QUIZ PROMO
-      ══════════════════════════════════════════════ */}
-      <section className="py-20 bg-[#1C355E] relative overflow-hidden">
-        {/* Botanical pattern backdrop */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-20 bg-repeat"
-          style={{ backgroundImage: "url('/patterns/pattern-blue.jpg')", backgroundSize: '360px auto' }}
-        />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#1C355E]/60 via-transparent to-[#1C355E]/80" />
-
-        {/* Large decorative BG text */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-          <span className="font-playfair text-[18vw] font-bold text-white/[0.03] leading-none">QUIZ</span>
-        </div>
-
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <span className="text-[#D47A3B] font-mono uppercase tracking-widest text-xs font-bold mb-4 block">
-            Don't Know What To Buy?
-          </span>
-          <h2 className="font-playfair text-4xl sm:text-5xl mb-5 leading-tight">
-            Take the 60-Second Quiz<br />
-            <span className="italic font-light text-[#E4DFD3]">&amp; Find Exactly What You Need</span>
-          </h2>
-          <p className="text-white/85 text-base max-w-xl mx-auto mb-10 leading-relaxed">
-            Answer 3 quick questions about your daily routine. We’ll analyze your goals and build the exact right supplement plan made just for your body.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => setCurrentSection('quiz')}
-              className="bg-[#D47A3B] hover:bg-[#4A6B4A] text-white px-8 py-4 rounded-full text-sm uppercase tracking-widest font-bold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
-            >
-              Take the Quiz →
-            </button>
-            <button
-              onClick={() => setCurrentSection('builder')}
-              className="border-2 border-white/40 hover:border-white text-white hover:bg-white/10 px-8 py-4 rounded-full text-sm uppercase tracking-widest font-semibold transition-all cursor-pointer"
-            >
-              Custom Stack Builder
-            </button>
-          </div>
-        </div>
-      </section>
+      {/* Quiz section was moved up below Shop By Category */}
 
       {/* ══════════════════════════════════════════════
           7. TRUST / WHY KENWELL — 4 icon cards
