@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProducts } from '../context/ProductsContext'
 
@@ -24,6 +24,17 @@ export default function Navbar({
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchInputRef = useRef(null)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Track scroll for transparent navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initialize on mount
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Products for search
   const { products } = useProducts()
@@ -53,7 +64,7 @@ export default function Navbar({
   }
 
   // Decoupled cart opener event listener
-  React.useEffect(() => {
+  useEffect(() => {
     const handleOpenCart = () => setCartOpen(true)
     window.addEventListener('kenwell:openCart', handleOpenCart)
     return () => window.removeEventListener('kenwell:openCart', handleOpenCart)
@@ -79,7 +90,7 @@ export default function Navbar({
 
   return (
     <>
-    <nav className="sticky top-0 z-50 glass-panel backdrop-blur-md border-b border-cream-dark shadow-sm">
+    <nav className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'glass-panel backdrop-blur-md border-b border-cream-dark shadow-sm' : 'bg-transparent border-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-[68px] items-center">
           {/* Logo */}
@@ -88,7 +99,7 @@ export default function Navbar({
             className="flex items-center space-x-2 cursor-pointer group flex-1"
           >
             <img src="/kenwell-mark.png" alt="" className="h-7 w-auto" />
-            <span className="text-xl sm:text-2xl font-body font-bold uppercase tracking-[0.15em] text-[#1C355E] leading-none ml-1.5 pt-0.5">
+            <span className="text-xl sm:text-2xl font-body font-bold uppercase tracking-[0.15em] text-[#403020] leading-none ml-1.5 pt-0.5">
               KENWELL
             </span>
           </div>
@@ -567,7 +578,7 @@ export default function Navbar({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid #E4DFD3' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <img src="/kenwell-mark.png" alt="" style={{ height: 22, width: 'auto' }} />
-            <span style={{ fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif', fontSize: '1.3rem', fontWeight: 600, letterSpacing: '0.05em', color: '#203348', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: '"Marker Felt", "Patrick Hand", "Fredoka", cursive, sans-serif', fontSize: '1.3rem', fontWeight: 600, letterSpacing: '0.05em', color: '#403020', textTransform: 'uppercase' }}>
               Kenwell
             </span>
           </div>

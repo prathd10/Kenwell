@@ -177,7 +177,7 @@ export default function App() {
         clearCart={clearCart}
       />
       
-      <main className="flex-grow z-10">
+      <main className={`flex-grow z-10 ${currentSection !== 'home' ? 'pt-[68px]' : ''}`}>
         {currentSection === 'home' && (
           <Hero 
             setCurrentSection={setCurrentSection} 

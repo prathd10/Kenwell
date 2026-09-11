@@ -106,7 +106,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
               activeTab === 'pre-made' ? 'bg-[#203348] text-white shadow-sm' : 'text-[#203348]/60 hover:text-[#203348]'
             }`}
           >
-            Pre-Made Combos
+            Curated Combos
           </button>
           <button
             onClick={() => setActiveTab('build-your-own')}
@@ -186,17 +186,20 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                   </div>
                 </div>
 
-                {/* Info */}
-                <div className="flex-grow flex flex-col justify-between p-6">
-                  <div className="space-y-3">
-                    <span className="text-[9px] font-mono text-[#616F3E] uppercase tracking-widest bg-[#616F3E]/10 px-2 py-1 rounded font-bold inline-block">Perfect Match</span>
-                    <h3 className="font-serif text-2xl font-bold text-[#203348]">{customStack.name}</h3>
-                    <p className="text-sm text-[#203348]/70">{customStack.synergy}</p>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                {/* Info and action */}
+                <div className="flex-1 p-6 md:p-8 flex flex-col justify-between text-left">
+                  <div>
+                    <div className="inline-block bg-[#616F3E]/10 text-[#616F3E] text-[10px] font-mono font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                      Customized For You
+                    </div>
+                    <h4 className="font-serif text-2xl font-bold text-[#203348] mb-2">{customStack.name}</h4>
+                    <p className="text-sm text-[#203348]/70 leading-relaxed mb-6">{customStack.synergy}</p>
+
+                    <div className="space-y-3">
+                      <span className="text-[10px] text-[#203348]/40 uppercase font-mono block">Included in this bundle</span>
                       {customStack.productIds.map(id => products.find(p => p.id === id)).filter(Boolean).map(prod => (
-                        <div key={prod.id} className="flex items-center gap-2 border border-[#E4DFD3] rounded p-2 bg-[#FAF8F5]">
-                          <div className="w-8 h-8 rounded shrink-0 overflow-hidden border border-white shadow-sm">
+                        <div key={prod.id} className="flex items-center space-x-3 bg-[#FAF8F5] p-2 rounded-xl border border-[#E4DFD3]">
+                          <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-white shadow-xs">
                             <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                           </div>
                           <div className="text-xs font-semibold text-[#203348]">{prod.name}</div>
@@ -281,7 +284,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                     
                     {/* Category / Formulations count */}
                     <div className="flex items-center justify-between text-[9px] font-mono text-[#203348]/40 uppercase tracking-widest">
-                      <span>{bundle.badge}</span>
+                      <span>{bundle.badge ? bundle.badge.replace(/[—–]/g, ' ').replace(/-/g, ' ') : ''}</span>
                       <span>{bundleProducts.length} Products</span>
                     </div>
 
@@ -290,12 +293,12 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                       onClick={() => setSelectedDetailStack(bundle)}
                       className="font-serif text-lg font-bold text-[#203348] hover:text-[#616F3E] transition-colors cursor-pointer line-clamp-1"
                     >
-                      {bundle.name}
+                      {bundle.name ? bundle.name.replace(/[—–]/g, ' ').replace(/-/g, ' ') : ''}
                     </h3>
 
                     {/* Tagline */}
                     <p className="text-xs text-[#203348]/60 line-clamp-2 leading-relaxed min-h-[2rem]">
-                      {bundle.tagline}
+                      {bundle.tagline ? bundle.tagline.replace(/[—–]/g, ' ').replace(/-/g, ' ') : ''}
                     </p>
 
                     {/* Focus Area Badges */}
@@ -305,7 +308,7 @@ export default function StackBuilder({ onQuickView, onAddToCart }) {
                           key={goal} 
                           className="text-[9px] font-medium bg-[#F2EEE5] text-[#203348]/75 px-2 py-0.5 rounded"
                         >
-                          {goal}
+                          {goal ? goal.replace(/[—–]/g, ' ').replace(/-/g, ' ') : ''}
                         </span>
                       ))}
                     </div>
