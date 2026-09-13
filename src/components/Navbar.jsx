@@ -144,7 +144,7 @@ export default function Navbar({
             {/* Hamburger Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E] focus:outline-none ml-1 sm:ml-2"
+              className="p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E] focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg 

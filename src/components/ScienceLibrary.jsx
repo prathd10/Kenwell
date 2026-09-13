@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import BackButton from './BackButton'
 import { ARTICLES } from '../data'
 
@@ -63,7 +64,7 @@ export default function ScienceLibrary() {
     
     sortedTerms.forEach((term) => {
       const regex = new RegExp(`\\b(${term})\\b`, 'gi')
-      modifiedHtml = modifiedHtml.replace(regex, `<span class="border-b border-dashed border-[#616F3E] text-[#616F3E] cursor-help font-semibold" data-glossary="${term}">$1</span>`)
+      modifiedHtml = modifiedHtml.replace(regex, `<span class="border-b border-dashed border-[#616F3E] text-[#616F3E] cursor-help font-semibold transition-colors hover:bg-[#616F3E]/10" data-glossary="${term}">$1</span>`)
     })
 
     return { __html: modifiedHtml }
@@ -85,10 +86,12 @@ export default function ScienceLibrary() {
         // Position tooltip relative to cursor or element
         const rect = e.target.getBoundingClientRect()
         setTooltipPos({
-          x: rect.left + window.scrollX,
+          x: rect.left + window.scrollX + (rect.width / 2),
           y: rect.top + window.scrollY - 10
         })
       }
+    } else {
+      setHoveredTerm(null)
     }
   }
 
@@ -97,182 +100,220 @@ export default function ScienceLibrary() {
   }
 
   return (
-    <div className="py-12 px-4 md:px-8 max-w-7xl mx-auto space-y-10 relative">
+    <div className="py-16 px-6 md:px-12 lg:px-20 max-w-[1600px] mx-auto min-h-screen relative bg-[#FAF8F5]">
       
-      {/* Page Header */}
-      <div className="text-center max-w-2xl mx-auto space-y-4">
-        <span className="text-[#616F3E] font-mono uppercase tracking-wider text-xs font-semibold">Health Articles</span>
-        <h1 className="text-4xl md:text-5xl font-serif text-[#203348]">Wellness Library</h1>
-        <div className="gold-divider max-w-xs mx-auto"></div>
-        <p className="text-[#203348]/70 text-sm leading-relaxed">
-          Learn the science behind our supplements. Read easy-to-understand articles about how our products help your body.
-        </p>
+      <div className="mb-8 relative z-20">
+        <BackButton />
       </div>
 
-      <BackButton />
+      {/* Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="mt-8 mb-16 max-w-4xl mx-auto relative z-10 text-center"
+      >
+        <span className="text-[#616F3E] font-mono uppercase tracking-widest text-xs font-bold mb-6 block">
+          Editorial & Research
+        </span>
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-[#203348] leading-[1.1] tracking-tight">
+          The Science of<br/>Well-being.
+        </h1>
+        <p className="text-[#203348]/60 text-lg md:text-xl mt-8 max-w-2xl mx-auto font-light leading-relaxed">
+          Explore our library of research-backed articles, clinical insights, and the biological mechanisms behind our formulas.
+        </p>
+      </motion.div>
 
-      {/* Search & Filter Bar */}
-      <div className="bg-white p-6 rounded-2xl border border-[#E4DFD3] shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
-        {/* Search */}
-        <div className="relative w-full md:max-w-md">
-          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <svg className="w-4 h-4 text-[#203348]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <input
-            type="text"
-            placeholder="Search for topics or health benefits..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#FAF8F5] border border-[#E4DFD3] px-10 py-3 rounded-full text-sm focus:outline-none focus:border-[#616F3E] placeholder-[#203348]/40 text-[#203348]"
-          />
-        </div>
-
+      {/* Minimal Search & Filter Bar */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10 mb-16 border-b border-[#203348]/10 pb-6 relative z-10"
+      >
         {/* Topic Filters */}
-        <div className="flex flex-wrap gap-2 justify-end w-full md:w-auto">
+        <div className="flex flex-wrap gap-8 md:gap-10">
           {['All', 'Vitamins', 'Performance', 'Longevity', 'Stress', 'Gut Health'].map((topic) => (
             <button
               key={topic}
               onClick={() => setSelectedTopic(topic)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`text-xs md:text-sm font-semibold tracking-widest uppercase transition-all relative pb-3 cursor-pointer ${
                 selectedTopic === topic
-                  ? 'bg-[#203348] text-white shadow-sm'
-                  : 'bg-[#FAF8F5] hover:bg-[#E4DFD3]/40 text-[#203348]/80 border border-[#E4DFD3]'
+                  ? 'text-[#203348]'
+                  : 'text-[#203348]/40 hover:text-[#203348]/80'
               }`}
             >
               {topic}
+              {selectedTopic === topic && (
+                <motion.div 
+                  layoutId="activeTopic"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#203348]"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              )}
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Publications Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-        {filteredArticles.map((article) => (
-          <article 
-            key={article.id}
-            onClick={() => setSelectedArticle(article)}
-            className="group cursor-pointer rounded-2xl bg-white p-6 border border-[#E4DFD3] hover:border-[#616F3E]/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full"
-          >
-            <div className="space-y-4">
-              <div className="flex justify-between items-center text-xs font-mono text-[#203348]/50">
-                <span className="bg-[#616F3E]/10 text-[#616F3E] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">
-                  {article.topic}
-                </span>
+        {/* Minimal Search */}
+        <div className="relative w-full lg:w-72 group">
+          <input
+            type="text"
+            placeholder="Search topics..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-transparent border-b border-[#203348]/20 px-0 py-2 text-sm focus:outline-none focus:border-[#203348] placeholder-[#203348]/30 text-[#203348] transition-colors"
+          />
+          <svg className="w-4 h-4 text-[#203348]/30 absolute right-0 top-1/2 -translate-y-1/2 group-focus-within:text-[#203348] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </motion.div>
+
+      {/* Publications Grid - Editorial Style */}
+      <motion.div 
+        layout
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-20 pb-24 relative z-10"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredArticles.map((article, idx) => (
+            <motion.article 
+              layout
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.6, delay: idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
+              key={article.id}
+              onClick={() => setSelectedArticle(article)}
+              className="group cursor-pointer flex flex-col h-full"
+            >
+              <div className="flex items-center gap-3 text-[10px] font-mono text-[#203348]/40 uppercase tracking-widest mb-5">
+                <span className="text-[#616F3E] font-bold">{article.topic}</span>
+                <span className="w-1 h-1 rounded-full bg-[#203348]/20"></span>
                 <span>{article.readTime}</span>
               </div>
 
-              <h3 className="font-serif text-2xl font-bold text-[#203348] group-hover:text-[#616F3E] transition-colors leading-tight">
+              <h3 className="font-serif text-3xl font-medium text-[#203348] group-hover:text-[#616F3E] transition-colors leading-[1.2] mb-5">
                 {article.title}
               </h3>
               
-              <p className="text-xs text-[#203348]/60 leading-relaxed line-clamp-3">
+              <p className="text-sm text-[#203348]/60 leading-relaxed font-light line-clamp-3 mb-8 flex-grow">
                 {article.summary}
               </p>
-            </div>
 
-            <div className="mt-6 pt-4 border-t border-[#E4DFD3] flex justify-between items-center">
-              <span className="text-[10px] font-mono text-[#203348]/40 uppercase">{article.date}</span>
-              <span className="text-xs font-semibold text-[#A5492B] group-hover:translate-x-1.5 transition-transform">
-                Read Article →
-              </span>
-            </div>
-          </article>
-        ))}
-      </div>
+              <div className="flex items-center gap-3 text-xs font-semibold text-[#203348] group-hover:gap-5 transition-all uppercase tracking-widest mt-auto pt-6 border-t border-[#203348]/10">
+                <span>Read Story</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </div>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
 
       {/* ARTICLE READER DRAWER */}
-      {selectedArticle && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-[#203348]/40 backdrop-blur-sm animate-in fade-in duration-300">
-          
-          <div 
-            onClick={() => setSelectedArticle(null)}
-            className="flex-grow hidden md:block cursor-pointer"
-          ></div>
-          
-          <div 
-            className="relative overflow-hidden w-full md:max-w-2xl bg-[#FAF8F5] h-full overflow-y-auto shadow-2xl p-8 border-l border-[#E4DFD3] flex flex-col justify-between text-left animate-in slide-in-from-right duration-300"
-            onClick={handleContentInteraction}
-            onMouseLeave={handleClearGlossary}
-          >
-            {/* Botanical Pattern Watermark */}
-            <div 
-              className="absolute inset-0 pointer-events-none opacity-[0.035] bg-repeat"
-              style={{ backgroundImage: "url('/patterns/pattern-green.jpg')", backgroundSize: '320px auto' }}
+      <AnimatePresence>
+        {selectedArticle && (
+          <>
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              onClick={() => setSelectedArticle(null)}
+              className="fixed inset-0 z-[60] bg-[#203348]/30 backdrop-blur-sm cursor-pointer"
             />
             
-            {/* Reader Header */}
-            <div className="relative z-10">
-              <div className="flex justify-between items-start mb-6">
-                <div className="flex space-x-3 text-xs font-mono text-[#203348]/50">
-                  <span className="bg-[#616F3E]/10 text-[#616F3E] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">{selectedArticle.topic}</span>
-                  <span className="py-0.5">{selectedArticle.date}</span>
-                  <span className="py-0.5">•</span>
-                  <span className="py-0.5">{selectedArticle.readTime}</span>
+            {/* Drawer */}
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 200 }}
+              className="fixed inset-y-0 right-0 z-[70] w-full md:max-w-2xl bg-[#FAF8F5] shadow-2xl flex flex-col text-left overflow-hidden border-l border-[#203348]/5"
+              onClick={handleContentInteraction}
+              onMouseLeave={handleClearGlossary}
+            >
+              {/* Botanical Texture Overlay */}
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-[0.03] bg-repeat z-0"
+                style={{ backgroundImage: "url('/patterns/pattern-green.jpg')", backgroundSize: '400px auto' }}
+              />
+
+              {/* Reader Header */}
+              <div className="p-8 md:p-12 pb-6 flex justify-between items-center relative z-20">
+                <div className="flex items-center gap-3 text-[10px] font-mono text-[#203348]/50 uppercase tracking-widest">
+                  <span className="text-[#616F3E] font-bold">{selectedArticle.topic}</span>
+                  <span className="w-1 h-1 rounded-full bg-[#203348]/20"></span>
+                  <span>{selectedArticle.readTime}</span>
                 </div>
                 
                 <button 
                   onClick={() => setSelectedArticle(null)}
-                  className="text-[#203348]/40 hover:text-[#203348] text-xl p-1 -mt-2 cursor-pointer"
+                  className="w-10 h-10 rounded-full border border-[#203348]/10 flex items-center justify-center text-[#203348]/50 hover:text-[#203348] hover:bg-white transition-all cursor-pointer bg-transparent"
                 >
-                  ✕
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
 
-              <h2 className="font-serif text-3xl md:text-4xl font-extrabold text-[#203348] mb-8 leading-tight">
-                {selectedArticle.title}
-              </h2>
-              
-              <div className="gold-divider mb-8"></div>
+              {/* Reader Content */}
+              <div className="px-8 md:px-12 pb-12 overflow-y-auto relative flex-grow z-10 scroll-smooth">
+                <div className="max-w-xl mx-auto">
+                  <h2 className="font-serif text-4xl md:text-5xl font-medium text-[#203348] mb-10 leading-[1.15]">
+                    {selectedArticle.title}
+                  </h2>
+                  
+                  {/* Interactive Editorial Text Body */}
+                  <div 
+                    className="prose prose-sm md:prose-base prose-headings:font-serif prose-headings:font-medium prose-headings:text-[#203348] prose-p:font-serif prose-p:text-[#203348]/80 prose-p:leading-loose space-y-8 max-w-none marker:text-[#616F3E]"
+                    dangerouslySetInnerHTML={renderInteractiveContent(selectedArticle.content)}
+                  />
 
-              {/* Interactive Editorial Text Body */}
-              <div 
-                className="prose prose-sm font-serif text-base text-[#203348]/80 leading-relaxed space-y-6 max-w-none"
-                dangerouslySetInnerHTML={renderInteractiveContent(selectedArticle.content)}
-              />
+                  <div className="h-px w-full bg-[#203348]/10 my-16" />
 
-              <div className="gold-divider my-10"></div>
-
-              {/* Informative bottom banner explaining how to interact */}
-              <div className="bg-[#F2EEE5] border border-[#E4DFD3] rounded-2xl p-4 text-[10px] text-[#203348]/70 leading-relaxed font-mono flex items-start gap-2.5">
-                <svg className="w-4 h-4 text-[#616F3E] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div>
-                  <strong>Science Dictionary:</strong> Hover over or click dashed underlined words (like <span className="border-b border-dashed border-[#616F3E] text-[#616F3E] font-semibold">HPA axis</span>) in the article to see a simple explanation.
+                  {/* Informative bottom banner explaining how to interact */}
+                  <div className="bg-white border border-[#203348]/10 rounded-2xl p-6 text-xs text-[#203348]/60 leading-relaxed flex items-start gap-4 shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-[#616F3E]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-[#616F3E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <strong className="text-[#203348] block mb-1">Science Dictionary</strong>
+                      Hover over or click dashed underlined words (like <span className="border-b border-dashed border-[#616F3E] text-[#616F3E] font-medium">HPA axis</span>) to see clinical definitions in real-time.
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="pt-10 flex justify-end">
-              <button
-                onClick={() => setSelectedArticle(null)}
-                className="bg-[#203348] text-white hover:bg-[#A5492B] px-8 py-3 rounded-full text-xs font-semibold uppercase tracking-widest transition-all cursor-pointer text-center"
-              >
-                Close Article
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* DYNAMIC BIOCHEMICAL TOOLTIP CARD */}
-      {hoveredTerm && (
-        <div 
-          className="absolute z-65 bg-white p-4 rounded-xl shadow-lg border border-[#616F3E]/30 max-w-[240px] text-left animate-in fade-in duration-200"
-          style={{ 
-            left: `${tooltipPos.x}px`, 
-            top: `${tooltipPos.y - 120}px`,
-            transform: 'translateX(-50%)'
-          }}
-        >
-          <span className="block text-[8px] font-mono uppercase tracking-wider text-[#616F3E] font-bold">Science Term</span>
-          <span className="block text-xs font-bold text-[#203348] mt-0.5">{hoveredTerm.term}</span>
-          <p className="text-[10px] text-[#203348]/80 mt-1 leading-relaxed">{hoveredTerm.definition}</p>
-        </div>
-      )}
+      <AnimatePresence>
+        {hoveredTerm && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-[100] bg-[#203348] p-5 rounded-2xl shadow-2xl max-w-[280px] text-left pointer-events-none border border-white/10"
+            style={{ 
+              left: `${tooltipPos.x}px`, 
+              top: `${tooltipPos.y - 140}px`,
+              transform: 'translateX(-50%)'
+            }}
+          >
+            <span className="block text-[9px] font-mono uppercase tracking-widest text-white/50 font-semibold mb-2">Clinical Definition</span>
+            <span className="block text-sm font-bold text-white mb-2">{hoveredTerm.term}</span>
+            <p className="text-xs text-white/80 leading-relaxed font-light">{hoveredTerm.definition}</p>
+            
+            {/* Tooltip Triangle */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#203348] rotate-45 border-r border-b border-white/10" />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   )

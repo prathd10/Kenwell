@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useProducts } from '../context/ProductsContext'
 import UGCSection from './UGCSection'
 import ProductCard from './ProductCard'
@@ -265,23 +266,43 @@ export default function Hero({
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5]/60 to-transparent" />
 
           {/* Content Container */}
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 flex flex-col items-center text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", staggerChildren: 0.2 }}
+            className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 flex flex-col items-center text-center"
+          >
             <div className="max-w-2xl space-y-6 mt-10 md:mt-0">
               
               {/* Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-serif text-[#1C355E] leading-[1.05] tracking-tight">
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="text-4xl sm:text-5xl lg:text-7xl font-serif text-[#1C355E] leading-[1.05] tracking-tight"
+              >
                 Feel Good.<br />
                 <span className="italic font-light text-[#4A6B4A]">Live Well.</span>
-              </h1>
+              </motion.h1>
 
               {/* Subheadline */}
-              <p className="text-[#1C355E]/90 text-[15px] sm:text-xl leading-relaxed font-body font-light mx-auto max-w-lg">
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="text-[#1C355E]/90 text-[15px] sm:text-xl leading-relaxed font-body font-light mx-auto max-w-lg"
+              >
                 Clinical strength nutraceuticals rooted in purity and science. 
                 Experience wellness without compromises.
-              </p>
+              </motion.p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10 sm:pt-12">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10 sm:pt-12"
+              >
                 <button
                   onClick={() => setCurrentSection('shop')}
                   className="bg-[#1C355E] hover:bg-[#4A6B4A] text-white px-8 py-4 text-xs uppercase tracking-widest font-semibold transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto shadow-sm hover:shadow-md"
@@ -295,10 +316,10 @@ export default function Hero({
                 >
                   Take the Wellness Quiz
                 </button>
-              </div>
+              </motion.div>
 
             </div>
-          </div>
+          </motion.div>
         </section>
 
       {/* ══════════════════════════════════════════════
@@ -397,32 +418,40 @@ export default function Hero({
       ══════════════════════════════════════════════ */}
       <section className="py-12 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}
+            className="text-center mb-8"
+          >
             <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-1">Customer Favorites</span>
             <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E]">Bestsellers</h2>
-          </div>
+          </motion.div>
 
-          {/* Horizontal scroll carousel */}
-          <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div 
-              ref={carouselRef}
-              className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-            >
-              {bestsellers.map(p => (
-                <div 
-                  key={p.id}
-                  className="w-[260px] sm:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] flex-shrink-0 snap-start"
-                >
-                  <ProductCard
-                    product={p}
-                    onQuickView={onQuickView}
-                    onAddToStack={onAddToStack}
-                    isInStack={stackItems?.some(item => item.id === p.id)}
-                    onToggleWishlist={onToggleWishlist}
-                    isInWishlist={wishlistItems?.some(w => w.id === p.id)}
-                    onAddToCart={onAddToCart}
-                  />
-                </div>
+          {/* Infinite Swipe Carousel */}
+          <div className="relative -mx-4 sm:mx-0 pb-4 mt-8">
+            {/* Fade edges for smooth disappearing effect */}
+            <div className="absolute top-0 left-0 w-4 sm:w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-4 sm:w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+            
+            <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-4 sm:px-0">
+              {[0, 1, 2, 3].map(setNum => (
+                <React.Fragment key={`set-${setNum}`}>
+                  {bestsellers.map(p => (
+                    <div 
+                      key={`set${setNum}-${p.id}`}
+                      className="w-[240px] sm:w-[260px] lg:w-[280px] flex-shrink-0 snap-center"
+                    >
+                      <ProductCard
+                        product={p}
+                        onQuickView={onQuickView}
+                        onAddToStack={onAddToStack}
+                        isInStack={stackItems?.some(item => item.id === p.id)}
+                        onToggleWishlist={onToggleWishlist}
+                        isInWishlist={wishlistItems?.some(w => w.id === p.id)}
+                        onAddToCart={onAddToCart}
+                      />
+                    </div>
+                  ))}
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -527,22 +556,35 @@ export default function Hero({
           6. TRUST / WHY KENWELL — 4 icon cards
       ══════════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="text-center mb-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}
+          className="text-center mb-10"
+        >
           <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold">The Kenwell Standard</span>
           <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mt-2">Why We're Different</h2>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-50px" }} 
+          transition={{ staggerChildren: 0.15 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5"
+        >
           {TRUST_POINTS.map((t) => (
-            <div key={t.title} className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#E4DFD3] p-4 sm:p-6 hover:shadow-lg hover:border-[#4A6B4A]/40 transition-all duration-300 text-left">
+            <motion.div 
+              key={t.title}
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+              className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#E4DFD3] p-4 sm:p-6 hover:shadow-lg hover:border-[#4A6B4A]/40 transition-all duration-300 text-left"
+            >
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#4A6B4A]/10 border border-[#4A6B4A]/20 flex items-center justify-center mb-3 sm:mb-4">
                 <div className="scale-75 sm:scale-100">{t.icon}</div>
               </div>
               <h3 className="font-playfair text-sm sm:text-lg font-bold text-[#1C355E] mb-1.5 sm:mb-2">{t.title}</h3>
               <p className="text-[10px] sm:text-sm text-[#1C355E]/65 leading-relaxed">{t.body}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ══════════════════════════════════════════════
@@ -552,38 +594,43 @@ export default function Hero({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}
+            className="text-center max-w-2xl mx-auto mb-12"
+          >
             <span className="text-[#4A6B4A] font-mono uppercase tracking-widest text-[11px] font-semibold block mb-2">Curated Combinations</span>
             <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] leading-tight">Ready Made Stacks</h2>
             <p className="text-[#1C355E]/60 text-sm sm:text-base mt-2 max-w-lg mx-auto leading-relaxed">
               Expertly formulated combos to buy together and save compared to buying individually.
             </p>
-          </div>
+          </motion.div>
 
-          {/* 4 card grid */}
+          {/* Infinite Swipe Carousel for Stacks */}
           {stacks.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {stacks.slice(0, 4).map((stack) => {
-                const stackProducts = stack.productIds
-                  .map(id => products.find(p => p.id === id))
-                  .filter(Boolean)
-                const savings = stack.originalPrice - stack.comboPrice
-                const savingsPct = stack.originalPrice > 0
-                  ? Math.round((savings / stack.originalPrice) * 100)
-                  : 0
+            <div className="relative -mx-4 sm:mx-0 pb-4 mt-8">
+              {/* Fade edges for smooth disappearing effect */}
+              <div className="absolute top-0 left-0 w-4 sm:w-8 h-full bg-gradient-to-r from-[#FAF8F5] to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-4 sm:w-8 h-full bg-gradient-to-l from-[#FAF8F5] to-transparent z-10 pointer-events-none"></div>
+              
+              <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-4 sm:px-0">
+                {[0, 1, 2, 3].map(setNum => (
+                  <React.Fragment key={`set-${setNum}`}>
+                    {stacks.slice(0, 4).map((stack) => {
+                      const stackProducts = stack.productIds
+                        .map(id => products.find(p => p.id === id))
+                        .filter(Boolean)
+                      const savings = stack.originalPrice - stack.comboPrice
+                      const savingsPct = stack.originalPrice > 0
+                        ? Math.round((savings / stack.originalPrice) * 100)
+                        : 0
 
-                return (
-                  <div
-                    key={stack.id}
-                    className="group bg-white border border-[#E4DFD3] rounded-3xl overflow-hidden hover:border-[#1C355E]/30 hover:shadow-xl transition-all duration-300 flex flex-col"
-                  >
+                      return (
+                        <div
+                          key={`set${setNum}-${stack.id}`}
+                          className="w-[280px] sm:w-[320px] lg:w-[360px] flex-shrink-0 snap-center group bg-white border border-[#E4DFD3] rounded-3xl overflow-hidden hover:border-[#1C355E]/30 hover:shadow-xl transition-all duration-300 flex flex-col"
+                        >
                     {/* Big Showcase Image Area */}
-                    <div className="relative w-full h-64 sm:h-72 bg-gradient-to-b from-[#F7F4EE] via-[#EFEAE1] to-[#FAF8F5] border-b border-[#EAE5DC] flex items-center justify-center p-6 overflow-hidden">
-                      {/* Ambient Soft Glow Background */}
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.95)_0%,transparent_70%)] pointer-events-none" />
-                      <div className="absolute -top-16 -right-16 w-48 h-48 bg-[#4A6B4A]/10 rounded-full blur-2xl pointer-events-none" />
-                      <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-[#D47A3B]/10 rounded-full blur-2xl pointer-events-none" />
-
+                    <div className="relative w-full h-48 sm:h-56 bg-white border-b border-[#EAE5DC] flex overflow-hidden">
                       {/* Badges Overlay */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20 pointer-events-none">
                         {stack.badge ? (
@@ -603,21 +650,22 @@ export default function Hero({
                       </div>
 
                       {/* Staged Large Bottle Display */}
-                      <div className="relative flex items-end justify-center -space-x-8 sm:-space-x-12 w-full h-full pt-8 pb-2 z-10">
+                      <div className="relative flex w-full h-full z-10">
                         {stackProducts.map((p, idx) => (
                           <div
                             key={p.id}
-                            className="relative transition-all duration-300 group-hover:scale-105 group-hover:-translate-y-2.5 h-44 sm:h-52 w-auto flex items-end justify-center cursor-pointer"
-                            style={{ zIndex: 10 + idx }}
+                            className="relative flex-1 h-full overflow-hidden cursor-pointer"
                             onClick={() => onQuickView?.(p)}
                             title={p.name.replace(/-/g, ' ')}
                           >
                             <img
-                              src={`/bottle_${p.slug}.png`}
+                              src={p.image}
                               alt={p.name.replace(/-/g, ' ')}
-                              className="h-full w-auto object-contain drop-shadow-[0_16px_22px_rgba(28,53,94,0.22)] mix-blend-multiply"
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               loading="lazy"
                             />
+                            {/* Inner border to separate side-by-side images if there are multiple */}
+                            {idx > 0 && <div className="absolute inset-y-0 left-0 w-px bg-white/50 z-10" />}
                           </div>
                         ))}
                       </div>
@@ -688,10 +736,13 @@ export default function Hero({
                       </div>
                     </div>
                   </div>
-                )
-              })}
+                        )
+                      })}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
-          ) : (
+            ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="bg-white border border-[#E4DFD3] rounded-3xl p-6 h-80 animate-pulse" />
@@ -815,15 +866,15 @@ export default function Hero({
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#EAEAEA]">
 
             {/* Store Locator */}
-            <div className="px-8 sm:px-12 lg:px-16 py-12 flex flex-col justify-between gap-8">
+            <div className="px-8 sm:px-12 lg:px-16 py-12 flex flex-col items-center justify-between gap-8 text-center">
               <div>
                 <span className="text-[#4A6B4A] font-mono uppercase tracking-widest text-[11px] font-semibold block mb-3">Available Offline</span>
                 <h3 className="text-2xl font-playfair text-[#1C355E] mb-3">Find Kenwell Near You</h3>
-                <p className="text-[#1C355E]/55 text-sm leading-relaxed max-w-sm">
+                <p className="text-[#1C355E]/55 text-sm leading-relaxed max-w-sm mx-auto">
                   Available at select pharmacies, wellness centres, and gyms across India.
                 </p>
               </div>
-              <div className="flex gap-8">
+              <div className="flex justify-center gap-8 text-center">
                 {[['50+', 'Partner Stores'], ['12', 'Cities'], ['100%', 'Authentic Stock']].map(([num, label]) => (
                   <div key={label}>
                     <div className="text-xl font-playfair font-bold text-[#1C355E]">{num}</div>
@@ -833,22 +884,22 @@ export default function Hero({
               </div>
               <button
                 onClick={() => setCurrentSection('stores')}
-                className="self-start border border-[#1C355E]/25 hover:bg-[#1C355E] hover:text-white text-[#1C355E] px-7 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-200 cursor-pointer"
+                className="border border-[#1C355E]/25 hover:bg-[#1C355E] hover:text-white text-[#1C355E] px-7 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-200 cursor-pointer"
               >
                 Find a Store →
               </button>
             </div>
 
             {/* Partner With Us */}
-            <div className="px-8 sm:px-12 lg:px-16 py-12 flex flex-col justify-between gap-8">
+            <div className="px-8 sm:px-12 lg:px-16 py-12 flex flex-col items-center justify-between gap-8 text-center">
               <div>
                 <span className="text-[#D47A3B] font-mono uppercase tracking-widest text-[11px] font-semibold block mb-3">B2B & Retail</span>
                 <h3 className="text-2xl font-playfair text-[#1C355E] mb-3">Become a Kenwell Partner</h3>
-                <p className="text-[#1C355E]/55 text-sm leading-relaxed max-w-sm">
+                <p className="text-[#1C355E]/55 text-sm leading-relaxed max-w-sm mx-auto">
                   Pharmacy, gym, or health store? Stock Kenwell and offer customers India's most transparent supplement brand.
                 </p>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col items-center gap-2">
                 {['Competitive wholesale margins', 'Dedicated distributor support', 'QR verified authentic stock only'].map(b => (
                   <div key={b} className="flex items-center gap-2 text-[#1C355E]/65 text-xs">
                     <div className="w-1 h-1 rounded-full bg-[#4A6B4A] flex-shrink-0" />
@@ -858,7 +909,7 @@ export default function Hero({
               </div>
               <button
                 onClick={() => setCurrentSection('partner')}
-                className="self-start bg-[#1C355E] hover:bg-[#D47A3B] text-white px-7 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-200 cursor-pointer"
+                className="bg-[#1C355E] hover:bg-[#D47A3B] text-white px-7 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-200 cursor-pointer"
               >
                 Apply to Partner →
               </button>

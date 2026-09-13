@@ -123,7 +123,7 @@ export default function ProductPage() {
         clearCart={clearCart}
       />
 
-      <main className="flex-grow">
+      <main className="flex-grow pt-[68px]">
 
         {/* ── Top Navigation & Breadcrumb ── */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
@@ -146,18 +146,12 @@ export default function ProductPage() {
             {/* Product Image — sticky only on desktop */}
             <div className="md:sticky md:top-24">
               <div
-                className="relative overflow-hidden rounded-2xl flex items-center justify-center p-8 md:p-12 border border-[#E4DFD3] bg-[#FAF8F5]"
-                style={{ background: `linear-gradient(145deg, #FAF8F5 0%, ${product.accentColor || '#616F3E'}15 100%)` }}
+                className="relative overflow-hidden rounded-2xl flex items-center justify-center border border-[#E4DFD3] bg-white aspect-square"
               >
-                {/* Botanical Pattern Watermark */}
-                <div 
-                  className="absolute inset-0 pointer-events-none opacity-[0.06] bg-repeat"
-                  style={{ backgroundImage: "url('/patterns/pattern-green.jpg')", backgroundSize: '240px auto' }}
-                />
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="relative z-10 w-full max-h-[280px] md:max-h-[420px] object-contain drop-shadow-xl"
+                  className="relative z-10 w-full h-full object-cover"
                   loading="eager"
                   decoding="async"
                 />

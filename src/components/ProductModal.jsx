@@ -33,11 +33,11 @@ export default function ProductModal({ product, onClose, onAddToStack, isInStack
           style={{ background: `linear-gradient(135deg, #FAF8F5 0%, ${product.accentColor || '#616F3E'}10 100%)` }}
         >
           {/* Product Image Frame */}
-          <div className="w-full h-64 rounded-2xl overflow-hidden border border-[#E4DFD3] shadow-sm bg-white mt-4 flex items-center justify-center">
+          <div className="w-full h-64 sm:h-80 rounded-2xl overflow-hidden border border-[#E4DFD3] shadow-sm bg-white mt-4 flex items-center justify-center">
             <img 
               src={product.image} 
               alt={product.name} 
-              className="w-full h-full object-contain p-4 drop-shadow-lg"
+              className="w-full h-full object-cover"
               loading="lazy"
               decoding="async"
             />
