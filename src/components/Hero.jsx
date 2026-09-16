@@ -262,8 +262,8 @@ export default function Hero({
             }}
           />
           {/* Subtle overlay to ensure text legibility */}
-          <div className="absolute inset-0 bg-[#FAF8F5]/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5]/60 to-transparent" />
+          <div className="absolute inset-0 bg-[#FAF8F5]/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5]/40 to-transparent" />
 
           {/* Content Container */}
           <motion.div 
@@ -348,10 +348,7 @@ export default function Hero({
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col items-center text-center mb-10">
           <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-2">Find Your Goal</span>
-          <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mb-4">Shop by Category</h2>
-          <button onClick={() => setCurrentSection('shop')} className="text-xs font-semibold text-[#1C355E] hover:text-[#4A6B4A] border border-[#1C355E]/20 hover:border-[#4A6B4A]/50 px-6 py-2 rounded-sm transition-all cursor-pointer uppercase tracking-wider shadow-sm hover:shadow-md">
-            All Products →
-          </button>
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E]">Shop by Category</h2>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -367,6 +364,12 @@ export default function Hero({
             </button>
           ))}
         </div>
+
+        <div className="flex justify-center mt-10">
+          <button onClick={() => setCurrentSection('shop')} className="text-xs font-semibold text-[#1C355E] hover:text-[#4A6B4A] border border-[#1C355E]/20 hover:border-[#4A6B4A]/50 px-6 py-2 rounded-sm transition-all cursor-pointer uppercase tracking-wider shadow-sm hover:shadow-md">
+            All Products →
+          </button>
+        </div>
       </section>
 
       {/* ══════════════════════════════════════════════
@@ -375,17 +378,17 @@ export default function Hero({
       <section className="py-20 bg-[#1C355E] relative overflow-hidden">
         {/* Botanical pattern backdrop */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-20 bg-repeat"
+          className="absolute inset-0 pointer-events-none opacity-40 bg-repeat bg-fixed"
           style={{ backgroundImage: "url('/patterns/pattern-blue.jpg')", backgroundSize: '360px auto' }}
         />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#1C355E]/60 via-transparent to-[#1C355E]/80" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#1C355E]/40 via-transparent to-[#1C355E]/60" />
 
         {/* Large decorative BG text */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
           <span className="font-playfair text-[18vw] font-bold text-white/[0.03] leading-none">QUIZ</span>
         </div>
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white mt-8">
           <span className="text-[#D47A3B] font-mono uppercase tracking-widest text-xs font-bold mb-4 block">
             Don't Know What To Buy?
           </span>

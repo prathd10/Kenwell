@@ -65,17 +65,14 @@ export default function TrackOrder() {
     let foundOrder = null
 
     try {
-      // 1. Query Supabase with multiple matching formats
-      const { data, error: dbError } = await supabase
-        .from('orders')
-        .select('*')
-        .or(`friendly_id.eq.${cleanId},friendly_id.eq.#${cleanId},friendly_id.ilike.%${cleanId}%`)
+      // 1. Query Supabase using secure RPC
+      const { data, error: dbError } = await supabase.rpc('track_order_public', {
+        p_friendly_id: cleanId,
+        p_contact: contactVal
+      })
 
-      if (!dbError && data && data.length > 0) {
-        const potential = data.find(o => matchesId(o) && matchesContact(o)) || data.find(o => matchesId(o))
-        if (potential && matchesContact(potential)) {
-          foundOrder = potential
-        }
+      if (!dbError && data && data.status === 'success') {
+        foundOrder = data.order
       }
     } catch (err) {
       console.warn('Supabase query error:', err)

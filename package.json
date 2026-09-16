@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run prerender",
+    "build": "vite build && npm run prerender && npm run generate-sitemap",
     "prerender": "node scripts/prerender.mjs",
+    "generate-sitemap": "node scripts/generate-sitemap.mjs",
     "preview": "vite preview",
     "migrate:data": "node scripts/migrate-data.mjs"
   },

@@ -51,7 +51,9 @@ export async function sendOrderEmail({ order, type = 'confirmed' }) {
       return { success: false, error: `Unknown email type: ${type}` }
   }
 
-  const apiKey = import.meta.env.VITE_RESEND_API_KEY || ''
+  // Only VITE_ variables are available on the frontend.
+  // The fromEmail is not highly sensitive but better to keep it centralized or just pass it if needed.
+  // We remove VITE_RESEND_API_KEY completely from the frontend code.
   const fromEmail = import.meta.env.VITE_RESEND_FROM_EMAIL || 'Kenwell <onboarding@resend.dev>'
 
   // 2. Try Vercel Serverless Function (/api/send-email)
@@ -73,55 +75,13 @@ export async function sendOrderEmail({ order, type = 'confirmed' }) {
       const data = await vercelRes.json()
       console.log(`%c[Vercel Serverless Email Dispatched · ${type.toUpperCase()}] ID: ${data.id} to ${order.customer_email}`, 'color: #059669; font-weight: bold;')
       return { success: true, id: data.id }
+    } else {
+      const errorData = await vercelRes.json()
+      console.warn('[Vercel Serverless Email Error]:', errorData)
     }
-  } catch {
-    // If not running on Vercel or /api/send-email fails, continue to direct dispatch
+  } catch (err) {
+    console.warn('[Vercel Serverless Email Exception]:', err.message)
   }
 
-  // 3. Direct Resend REST API Fallback (if VITE_RESEND_API_KEY is available)
-  if (apiKey) {
-    try {
-      const payload = {
-        from: fromEmail,
-        to: [order.customer_email],
-        subject: emailData.subject,
-        html: emailData.html
-      }
-
-      console.log(`[Resend Sending...] Dispatching ${type} email to ${order.customer_email} via Resend...`)
-
-      let res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        console.error('[Resend API Error Details]:', data)
-        return {
-          success: false,
-          error: data.message || data.error?.message || 'Failed to dispatch email via Resend'
-        }
-      }
-
-      console.log(`%c[Resend Email Dispatched Successfully] ID: ${data.id} to ${order.customer_email}`, 'color: #059669; font-weight: bold;')
-      return {
-        success: true,
-        id: data.id
-      }
-    } catch (err) {
-      console.error('[Resend Network Error]:', err)
-      return {
-        success: false,
-        error: err.message || 'Network error communicating with Resend'
-      }
-    }
-  }
-
-  return { success: false, error: 'Email service could not reach serverless functions or API key' }
+  return { success: false, error: 'Email service could not reach serverless functions. Direct client dispatch has been disabled for security.' }
 }

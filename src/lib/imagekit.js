@@ -1,16 +1,27 @@
 export async function uploadToImageKit(file, folder = 'kenwell/products') {
-  const privateKey = import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY
-  const credentials = btoa(`${privateKey}:`)
+  // 1. Get authentication parameters securely from backend
+  const authRes = await fetch('/api/imagekit-auth')
+  if (!authRes.ok) {
+    throw new Error('Failed to fetch ImageKit authentication parameters')
+  }
+  const { token, expire, signature } = await authRes.json()
 
+  // 2. Prepare upload payload using public key and auth parameters
   const formData = new FormData()
   formData.append('file', file)
   formData.append('fileName', `${Date.now()}_${file.name.replace(/\s+/g, '_')}`)
   formData.append('folder', folder)
   formData.append('useUniqueFileName', 'false')
+  
+  // These are safe for the client
+  formData.append('publicKey', import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY)
+  formData.append('signature', signature)
+  formData.append('expire', expire)
+  formData.append('token', token)
 
+  // 3. Upload directly to ImageKit API
   const res = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
     method: 'POST',
-    headers: { Authorization: `Basic ${credentials}` },
     body: formData,
   })
 

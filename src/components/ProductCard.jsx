@@ -109,7 +109,7 @@ export default function ProductCard({ product, onQuickView, onAddToStack, isInSt
             <img 
               src={product.image} 
               alt={product.name} 
-              className={`w-full h-full object-contain p-2 transition-all duration-500 group-hover:-translate-y-1 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-full h-full object-cover transition-all duration-500 group-hover:-translate-y-1 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="lazy"
               decoding="async"
               onLoad={() => setImgLoaded(true)}

@@ -218,7 +218,7 @@ export default function CheckoutPage() {
       }
     }
 
-    const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_kenwell1234567'
+    const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || ''
     const isPlaceholderKey = !keyId || keyId.includes('kenwell1234567') || keyId.length < 15
 
     // If key is a demo placeholder, run a seamless sandbox payment simulation

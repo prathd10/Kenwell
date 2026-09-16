@@ -99,7 +99,7 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
     }
 
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_kenwell1234567', 
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID || '',
       amount: Math.round(totalAmount * 100), 
       currency: 'INR',
       name: 'Kenwell Nutrition',

@@ -92,14 +92,25 @@ export default function Navbar({
     <>
     <nav className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'glass-panel backdrop-blur-md border-b border-cream-dark shadow-sm' : 'bg-transparent border-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-[68px] items-center">
-          {/* Logo */}
+        <div className="flex justify-end h-[68px] items-center relative">
+          {/* Logo Mark (Static) */}
           <div
             onClick={() => handleNavClick('home')}
-            className="flex items-center space-x-2 cursor-pointer group flex-1"
+            className="absolute left-0 flex items-center cursor-pointer group z-10"
           >
             <img src="/kenwell-mark.png" alt="" className="h-7 w-auto" />
-            <span className="text-xl sm:text-2xl font-body font-bold uppercase tracking-[0.15em] text-[#403020] leading-none ml-1.5 pt-0.5">
+          </div>
+
+          {/* Brand Name (Animated) */}
+          <div
+            onClick={() => handleNavClick('home')}
+            className={`absolute flex items-center cursor-pointer group transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 ${
+              scrolled 
+                ? 'left-1/2 -translate-x-1/2' 
+                : 'left-[38px] translate-x-0'
+            }`}
+          >
+            <span className="text-xl sm:text-2xl font-body font-bold uppercase tracking-[0.15em] text-[#403020] leading-none pt-0.5">
               KENWELL
             </span>
           </div>
@@ -107,12 +118,12 @@ export default function Navbar({
           {/* Desktop Nav Removed */}
 
           {/* Header Action Icons: Wishlist, Cart & Menu */}
-          <div className="flex items-center justify-end space-x-2 sm:space-x-4 flex-1">
+          <div className="flex items-center justify-end space-x-0 -mr-2 sm:-mr-4">
 
             {/* Wishlist Button */}
             <button
               onClick={() => setWishlistOpen(true)}
-              className="relative p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E]"
+              className="relative p-1.5 transition-colors cursor-pointer text-[#403020]/90 hover:text-[#D47A3B]"
               title="Open Wishlist"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
@@ -128,7 +139,7 @@ export default function Navbar({
             {/* Cart Button */}
             <button
               onClick={() => setCartOpen(true)}
-              className="relative p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E]"
+              className="relative p-1.5 transition-colors cursor-pointer text-[#403020]/90 hover:text-[#D47A3B]"
               title="Open Cart"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
@@ -144,7 +155,7 @@ export default function Navbar({
             {/* Hamburger Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 transition-colors cursor-pointer text-[#203348]/80 hover:text-[#616F3E] focus:outline-none"
+              className="p-1.5 transition-colors cursor-pointer text-[#403020]/90 hover:text-[#D47A3B] focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg 

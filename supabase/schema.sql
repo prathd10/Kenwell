@@ -180,9 +180,66 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public_insert_orders"
   ON orders FOR INSERT WITH CHECK (true);
 
--- Public storefront can query their order status by matching details
-CREATE POLICY "public_select_orders"
-  ON orders FOR SELECT USING (true);
+-- ============================================================
+-- Secure Order Tracking RPC
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION track_order_public(p_friendly_id TEXT, p_contact TEXT)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_order orders%ROWTYPE;
+  v_search_contact TEXT := lower(trim(p_contact));
+  v_search_digits TEXT := regexp_replace(v_search_contact, '\D', '', 'g');
+  v_order_email TEXT;
+  v_order_phone TEXT;
+  v_phone_digits TEXT;
+  v_contact_matches BOOLEAN := false;
+BEGIN
+  -- 1. Find the order by friendly_id (ignoring # prefix and case)
+  SELECT * INTO v_order 
+  FROM orders 
+  WHERE upper(replace(friendly_id, '#', '')) = upper(replace(trim(p_friendly_id), '#', ''));
+
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('status', 'not_found');
+  END IF;
+
+  -- 2. Verify contact info (email or phone)
+  v_order_email := lower(trim(v_order.customer_email));
+  v_order_phone := lower(trim(v_order.customer_phone));
+  v_phone_digits := regexp_replace(v_order_phone, '\D', '', 'g');
+
+  IF v_order_email = v_search_contact THEN
+    v_contact_matches := true;
+  END IF;
+
+  IF NOT v_contact_matches AND length(v_search_digits) >= 6 AND length(v_phone_digits) >= 6 THEN
+    IF v_phone_digits LIKE '%' || v_search_digits || '%' OR v_search_digits LIKE '%' || v_phone_digits || '%' THEN
+      v_contact_matches := true;
+    END IF;
+  END IF;
+
+  IF NOT v_contact_matches AND v_order_phone = v_search_contact THEN
+    v_contact_matches := true;
+  END IF;
+
+  IF NOT v_contact_matches THEN
+    RETURN jsonb_build_object('status', 'unauthorized');
+  END IF;
+
+  -- 3. Return securely if authorized
+  RETURN jsonb_build_object(
+    'status', 'success',
+    'order', row_to_json(v_order)
+  );
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION track_order_public(TEXT, TEXT) TO anon, authenticated;
 
 -- Admin gets full access to read/write/update orders
 CREATE POLICY "admin_all_orders"
