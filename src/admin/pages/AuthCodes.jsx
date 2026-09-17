@@ -565,7 +565,7 @@ function StatusBadge({ status }) {
   const map = {
     pending: { bg: '#F4F1EA', color: '#7A8C5A', label: 'Pending' },
     generating: { bg: '#FEF3C7', color: '#92400E', label: 'Generating…' },
-    rendering: { bg: '#FEF3C7', color: '#92400E', label: 'Rendering QRs…' },
+    rendering: { bg: '#FEF3C7', color: '#92400E', label: 'Packaging Codes…' },
     ready: { bg: '#dcfce7', color: '#166534', label: 'Ready' },
     error: { bg: '#fef2f2', color: '#dc2626', label: 'Error' },
   }

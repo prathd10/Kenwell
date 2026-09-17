@@ -1,11 +1,10 @@
-import QRCode from 'qrcode'
 import JSZip from 'jszip'
 import { supabase } from './supabase'
 
 const CODE_ALPHABET = '23456789ABCDEFGHJKMNPQRSTUVWXYZ' // Crockford base32, no 0/O/1/I/L
 const CODE_LENGTH = 10
 const INSERT_CHUNK_SIZE = 500
-const QR_CHUNK_SIZE = 200
+const CSV_CHUNK_SIZE = 1000
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -72,7 +71,7 @@ export async function getBatchProgress(batchId) {
   return counts
 }
 
-// Builds a downloadable ZIP of QR PNGs + a manifest CSV for one SKU's codes
+// Builds a downloadable ZIP of the manifest CSV for one SKU's codes
 // within a single batch (scoped by both product and batch, since the same
 // SKU may appear across multiple future batches over time).
 export async function buildSkuZip({ product, batchId, batchLabel, onProgress }) {
@@ -87,16 +86,13 @@ export async function buildSkuZip({ product, batchId, batchLabel, onProgress }) 
   const zip = new JSZip()
   const manifestRows = ['code,verify_url,product_name,sku_slug,batch_label,generated_at']
 
-  for (let i = 0; i < codes.length; i += QR_CHUNK_SIZE) {
-    const chunk = codes.slice(i, i + QR_CHUNK_SIZE)
+  for (let i = 0; i < codes.length; i += CSV_CHUNK_SIZE) {
+    const chunk = codes.slice(i, i + CSV_CHUNK_SIZE)
     for (const { code, created_at } of chunk) {
       const url = verifyUrl(code)
-      const dataUrl = await QRCode.toDataURL(url, { width: 400, margin: 2 })
-      const base64 = dataUrl.split(',')[1]
-      zip.file(`${code}.png`, base64, { base64: true })
       manifestRows.push(`${code},${url},"${product.name}",${product.slug},"${batchLabel}",${created_at}`)
     }
-    onProgress?.(Math.min(i + QR_CHUNK_SIZE, codes.length), codes.length)
+    onProgress?.(Math.min(i + CSV_CHUNK_SIZE, codes.length), codes.length)
     await sleep(0) // yield to keep the tab responsive
   }
 
