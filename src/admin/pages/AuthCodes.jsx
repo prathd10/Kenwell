@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { insertCodesChunked, getBatchProgress, buildSkuZip, downloadBlob } from '../../lib/authCodes'
-import { Plus, ShieldCheck, ArrowLeft, Download, Loader2 } from 'lucide-react'
+import { Plus, ShieldCheck, ArrowLeft, Download, Loader2, RotateCcw } from 'lucide-react'
 
 const inputStyle = {
   width: '100%', padding: '0.75rem 1rem',
@@ -448,6 +448,16 @@ function GenerationView({ batch, products, onBack }) {
     setFinished(true)
   }
 
+  const resetBatchScans = async () => {
+    if (!window.confirm(`Are you sure you want to reset all scanned codes for batch "${batch.label}"?`)) return;
+    const { error } = await supabase.from('product_auth_codes').update({ verified_at: null, verify_count: 0 }).eq('batch_id', batch.id).neq('verify_count', 0);
+    if (error) {
+      alert("Error resetting batch codes: " + error.message);
+    } else {
+      alert("Batch scans have been successfully reset.");
+    }
+  }
+
   const totalTarget = rows.reduce((sum, r) => sum + r.target, 0)
   const totalDone = rows.reduce((sum, r) => sum + r.done, 0)
 
@@ -469,22 +479,38 @@ function GenerationView({ batch, products, onBack }) {
             {totalDone.toLocaleString('en-IN')} / {totalTarget.toLocaleString('en-IN')} codes
           </p>
         </div>
-        {!finished && (
-          <button
-            onClick={runBatch}
-            disabled={running}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7,
-              padding: '0.65rem 1.25rem', background: running ? '#7A8C5A' : '#2E402B',
-              color: 'white', border: 'none', borderRadius: 9,
-              cursor: running ? 'not-allowed' : 'pointer', fontSize: '0.875rem',
-              fontWeight: 600, fontFamily: '"DM Sans", sans-serif',
-            }}
-          >
-            {running ? <Loader2 size={15} className="animate-spin" /> : null}
-            {running ? 'Generating…' : 'Start / Resume Generation'}
-          </button>
-        )}
+        <div style={{ display: 'flex', gap: 10 }}>
+          {finished && (
+            <button
+              onClick={resetBatchScans}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 7,
+                padding: '0.65rem 1.25rem', background: '#dc2626',
+                color: 'white', border: 'none', borderRadius: 9,
+                cursor: 'pointer', fontSize: '0.875rem',
+                fontWeight: 600, fontFamily: '"DM Sans", sans-serif',
+              }}
+            >
+              <RotateCcw size={15} strokeWidth={2.5} /> Reset Scans
+            </button>
+          )}
+          {!finished && (
+            <button
+              onClick={runBatch}
+              disabled={running}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 7,
+                padding: '0.65rem 1.25rem', background: running ? '#7A8C5A' : '#2E402B',
+                color: 'white', border: 'none', borderRadius: 9,
+                cursor: running ? 'not-allowed' : 'pointer', fontSize: '0.875rem',
+                fontWeight: 600, fontFamily: '"DM Sans", sans-serif',
+              }}
+            >
+              {running ? <Loader2 size={15} className="animate-spin" /> : null}
+              {running ? 'Generating…' : 'Start / Resume Generation'}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Overall progress bar */}
