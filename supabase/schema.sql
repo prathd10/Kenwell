@@ -176,9 +176,9 @@ CREATE OR REPLACE TRIGGER trg_orders_updated_at
 
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 
--- Public storefront can place orders
+-- Public storefront CANNOT place orders directly anymore (handled securely by backend service role)
 CREATE POLICY "public_insert_orders"
-  ON orders FOR INSERT WITH CHECK (true);
+  ON orders FOR INSERT WITH CHECK (false);
 
 -- ============================================================
 -- Secure Order Tracking RPC

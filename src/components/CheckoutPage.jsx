@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { supabase } from '../lib/supabase'
-import { sendOrderEmail } from '../lib/emailService'
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -133,7 +132,13 @@ export default function CheckoutPage() {
   const saveToLocalStorage = (order) => {
     try {
       const existing = JSON.parse(localStorage.getItem('kenwell_orders') || '[]')
-      localStorage.setItem('kenwell_orders', JSON.stringify([order, ...existing]))
+      const minimalOrder = {
+        friendly_id: order.friendly_id,
+        customer_email: order.customer_email,
+        created_at: order.created_at,
+        status: order.status
+      }
+      localStorage.setItem('kenwell_orders', JSON.stringify([minimalOrder, ...existing]))
     } catch (e) {
       console.error('Failed to save order to localStorage:', e)
     }
@@ -189,23 +194,22 @@ export default function CheckoutPage() {
         created_at: new Date().toISOString(),
       }
 
-      // Send Order Confirmed & Paid Email via Resend
-      try {
-        await sendOrderEmail({ order: orderData, type: 'confirmed' })
-      } catch (emailErr) {
-        console.warn('Resend email notification non-blocking warning:', emailErr)
-      }
+      // Email dispatch is now handled securely on the server in /api/verify-payment
 
       try {
-        const { error: dbError } = await supabase
-          .from('orders')
-          .insert([orderData])
+        const response = await fetch('/api/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentDetails, orderData })
+        })
 
-        if (dbError) {
-          console.warn('Supabase insert failed, saving to localStorage:', dbError.message)
+        const result = await response.json()
+
+        if (!response.ok || !result.success) {
+          console.warn('Backend payment verification failed, saving to localStorage:', result.error || result.details)
           saveToLocalStorage(orderData)
         } else {
-          console.log('Order saved to Supabase successfully!')
+          console.log('Order verified and saved to Supabase securely!')
         }
       } catch (err) {
         console.error('Order save error:', err)

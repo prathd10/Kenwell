@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useProducts } from '../context/ProductsContext'
 import UGCSection from './UGCSection'
 import ProductCard from './ProductCard'
@@ -165,6 +165,41 @@ function getLocalSrc(product) {
 
 
 /* ══════════════════════════════════════════════════════════════
+   COMPONENTS
+═══════════════════════════════════════════════════════════════ */
+function SeriesCard({ s, filterSeries }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const y = useTransform(scrollYProgress, [0, 1], ['-20%', '20%'])
+
+  return (
+    <div
+      ref={ref}
+      className={`group relative rounded-2xl border ${s.borderColor} p-6 sm:p-8 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col justify-center items-center text-center ${s.bgColor} overflow-hidden min-h-[180px] sm:min-h-[220px]`}
+      onClick={() => filterSeries(s.series)}
+    >
+      {/* Botanical Packaging Print Backdrop */}
+      <motion.div 
+        className="absolute -inset-[50%] pointer-events-none opacity-40 bg-repeat"
+        style={{ backgroundImage: s.pattern, backgroundSize: '360px auto', y }}
+      />
+
+      <div className="relative z-10 flex flex-col items-center justify-center gap-3 w-full">
+        <h3 className="font-playfair text-2xl sm:text-3xl text-white font-semibold transition-colors drop-shadow-md">
+          {s.series}
+        </h3>
+        <p className="text-[11px] sm:text-xs text-white/80 leading-relaxed font-light mb-2 max-w-[200px] sm:max-w-[240px]">
+          {s.desc}
+        </p>
+        <button className={`px-8 border rounded-full py-2.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider transition-all duration-300 cursor-pointer ${s.btnStyle}`}>
+          Explore <span className="hidden sm:inline">{s.series} </span>→
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
    MAIN EXPORT
 ═══════════════════════════════════════════════════════════════ */
 export default function Hero({ 
@@ -181,7 +216,14 @@ export default function Hero({
   const [imgFading, setImgFading] = useState(false)
   const heroRef = useRef(null)
   const carouselRef = useRef(null)
+  const quizRef = useRef(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
+  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
+  const heroY = useTransform(heroScroll, [0, 1], ['0%', '30%'])
+
+  const { scrollYProgress: quizScroll } = useScroll({ target: quizRef, offset: ["start end", "end start"] })
+  const quizY = useTransform(quizScroll, [0, 1], ['-20%', '20%'])
 
   const handleMouseMove = (e) => {
     if (!heroRef.current) return
@@ -253,12 +295,13 @@ export default function Hero({
         {/* ══════════════════════════════════════════════
             1. PARALLAX GLASSMORPHIC HERO BANNER
         ══════════════════════════════════════════════ */}
-        <section className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
+        <section ref={heroRef} className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
           {/* Background Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-fixed bg-[position:80%_center] md:bg-right bg-no-repeat transition-transform duration-[20s] ease-out hover:scale-105"
+          <motion.div 
+            className="absolute -inset-[10%] bg-cover bg-[position:80%_center] md:bg-right bg-no-repeat transition-transform duration-[20s] ease-out hover:scale-105"
             style={{ 
-              backgroundImage: "url('/hero_bg_new.jpg')" 
+              backgroundImage: "url('/hero_bg_new.jpg')",
+              y: heroY
             }}
           />
           {/* Subtle overlay to ensure text legibility */}
@@ -346,40 +389,64 @@ export default function Hero({
           3. SHOP BY CATEGORY GRID
       ══════════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex flex-col items-center text-center mb-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}
+          className="flex flex-col items-center text-center mb-10"
+        >
           <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold block mb-2">Find Your Goal</span>
           <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E]">Shop by Category</h2>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 }
+            }
+          }}
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
+        >
           {CATEGORIES.map((cat) => (
-            <button
+            <motion.button
               key={cat.label}
+              variants={{
+                hidden: { opacity: 0, scale: 0.9, y: 20 },
+                visible: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 200, damping: 15 } }
+              }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => filterGoal(cat.goal)}
-              className={`group flex flex-col items-center gap-3 p-5 rounded-2xl border ${cat.color} transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer text-center`}
+              className={`group flex flex-col items-center gap-3 p-5 rounded-2xl border ${cat.color} transition-colors duration-300 hover:shadow-md cursor-pointer text-center`}
             >
               <span className={cat.text}>{cat.icon}</span>
               <span className={`font-semibold text-sm ${cat.text}`}>{cat.label}</span>
               <span className="text-[10px] text-[#1C355E]/50 font-mono">{cat.desc}</span>
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="flex justify-center mt-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex justify-center mt-10"
+        >
           <button onClick={() => setCurrentSection('shop')} className="text-xs font-semibold text-[#1C355E] hover:text-[#4A6B4A] border border-[#1C355E]/20 hover:border-[#4A6B4A]/50 px-6 py-2 rounded-sm transition-all cursor-pointer uppercase tracking-wider shadow-sm hover:shadow-md">
             All Products →
           </button>
-        </div>
+        </motion.div>
       </section>
 
       {/* ══════════════════════════════════════════════
           QUIZ PROMO
       ══════════════════════════════════════════════ */}
-      <section className="py-20 bg-[#1C355E] relative overflow-hidden">
+      <section ref={quizRef} className="py-20 bg-[#1C355E] relative overflow-hidden">
         {/* Botanical pattern backdrop */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-40 bg-repeat bg-fixed"
-          style={{ backgroundImage: "url('/patterns/pattern-blue.jpg')", backgroundSize: '360px auto' }}
+        <motion.div 
+          className="absolute -inset-[50%] pointer-events-none opacity-40 bg-repeat"
+          style={{ backgroundImage: "url('/patterns/pattern-blue.jpg')", backgroundSize: '360px auto', y: quizY }}
         />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#1C355E]/40 via-transparent to-[#1C355E]/60" />
 
@@ -480,114 +547,40 @@ export default function Hero({
           {[
             {
               series: 'Core Series',
-              count: '7 Products',
-              desc: 'Everyday nutrients to keep you healthy, with easy to absorb minerals, fish oil, and daily vitamins.',
-              accentBorder: 'border-[#4A6B4A]/50 hover:border-[#8EE08E] hover:shadow-[0_12px_32px_rgba(74,107,74,0.35)]',
-              glowGradient: 'from-[#4A6B4A]/35 via-transparent to-black/50',
-              titleHover: 'group-hover:text-[#A8E6A8]',
-              btnStyle: 'border-[#8EE08E]/50 text-white bg-[#4A6B4A]/30 hover:bg-[#4A6B4A] hover:border-[#8EE08E] hover:shadow-[0_0_15px_rgba(74,107,74,0.5)]',
+              desc: 'Daily essentials for foundational health.',
+              bgColor: 'bg-[#4A6B4A]',
+              borderColor: 'border-[#4A6B4A] hover:border-white/50 hover:shadow-[0_12px_32px_rgba(74,107,74,0.35)]',
+              btnStyle: 'border-white/30 text-white bg-black/10 hover:bg-white hover:text-[#4A6B4A]',
               pattern: "url('/patterns/pattern-blue.jpg')",
             },
             {
               series: 'Wellness Series',
-              count: '12 Products',
-              desc: 'Specific products for your joints, liver, gut, sleep, and keeping your hormones balanced.',
-              accentBorder: 'border-[#D47A3B]/50 hover:border-[#FDBA74] hover:shadow-[0_12px_32px_rgba(212,122,59,0.35)]',
-              glowGradient: 'from-[#D47A3B]/35 via-transparent to-black/50',
-              titleHover: 'group-hover:text-[#FDBA74]',
-              btnStyle: 'border-[#FDBA74]/50 text-white bg-[#D47A3B]/30 hover:bg-[#D47A3B] hover:border-[#FDBA74] hover:shadow-[0_0_15px_rgba(212,122,59,0.5)]',
+              desc: 'Targeted support for holistic balance.',
+              bgColor: 'bg-[#D47A3B]',
+              borderColor: 'border-[#D47A3B] hover:border-white/50 hover:shadow-[0_12px_32px_rgba(212,122,59,0.35)]',
+              btnStyle: 'border-white/30 text-white bg-black/10 hover:bg-white hover:text-[#D47A3B]',
               pattern: "url('/patterns/pattern-blue.jpg')",
             },
             {
               series: 'Liposomal Series',
-              count: '4 Products',
-              desc: 'Products like NAD+ and Vitamin C made with special technology so your body absorbs them perfectly.',
-              accentBorder: 'border-[#3B82F6]/50 hover:border-[#93C5FD] hover:shadow-[0_12px_32px_rgba(59,130,246,0.35)]',
-              glowGradient: 'from-[#2563EB]/35 via-transparent to-black/50',
-              titleHover: 'group-hover:text-[#93C5FD]',
-              btnStyle: 'border-[#93C5FD]/50 text-white bg-[#2563EB]/30 hover:bg-[#2563EB] hover:border-[#93C5FD] hover:shadow-[0_0_15px_rgba(37,99,235,0.5)]',
+              desc: 'High-absorption cellular nutrients.',
+              bgColor: 'bg-[#1C355E]',
+              borderColor: 'border-[#1C355E] hover:border-white/50 hover:shadow-[0_12px_32px_rgba(28,53,94,0.35)]',
+              btnStyle: 'border-white/30 text-white bg-black/10 hover:bg-white hover:text-[#1C355E]',
               pattern: "url('/patterns/pattern-blue.jpg')",
             },
             {
               series: 'Performance Series',
-              count: '5 Products',
-              desc: 'Powerful formulas to help you work out harder, recover faster, and stay focused.',
-              accentBorder: 'border-white/30 hover:border-white hover:shadow-[0_12px_32px_rgba(255,255,255,0.25)]',
-              glowGradient: 'from-[#6366F1]/30 via-transparent to-black/50',
-              titleHover: 'group-hover:text-white',
-              btnStyle: 'border-white/40 text-white bg-white/10 hover:bg-white hover:text-[#131E2B] hover:border-white hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]',
+              desc: 'Potent formulas for peak performance.',
+              bgColor: 'bg-[#131E2B]',
+              borderColor: 'border-[#131E2B] hover:border-white/50 hover:shadow-[0_12px_32px_rgba(19,30,43,0.35)]',
+              btnStyle: 'border-white/30 text-white bg-black/10 hover:bg-white hover:text-[#131E2B]',
               pattern: "url('/patterns/pattern-blue.jpg')",
             },
           ].map((s) => (
-            <div
-              key={s.series}
-              className={`group relative rounded-2xl border ${s.accentBorder} p-4 sm:p-7 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col bg-[#131E2B] overflow-hidden`}
-              onClick={() => filterSeries(s.series)}
-            >
-              {/* Botanical Packaging Print Backdrop */}
-              <div 
-                className="absolute inset-0 pointer-events-none opacity-30 group-hover:opacity-45 transition-opacity duration-300 bg-repeat"
-                style={{ backgroundImage: s.pattern, backgroundSize: '240px auto' }}
-              />
-
-              {/* Ambient Series Color Glow & Gradient Vignette */}
-              <div className={`absolute inset-0 pointer-events-none bg-gradient-to-br ${s.glowGradient}`} />
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2 sm:mb-3">
-                  <h3 className={`font-playfair text-lg sm:text-2xl text-white font-semibold ${s.titleHover} transition-colors drop-shadow-sm`}>
-                    {s.series}
-                  </h3>
-                  <span className="text-[10px] sm:text-xs text-white/55 font-mono tracking-wider shrink-0">
-                    {s.count}
-                  </span>
-                </div>
-                <p className="text-[11px] sm:text-sm text-white/85 leading-relaxed flex-grow font-light mb-4 sm:mb-6">
-                  {s.desc}
-                </p>
-                <button className={`w-full border rounded-full py-2 sm:py-2.5 text-[9px] sm:text-xs font-semibold uppercase tracking-wider transition-all duration-300 cursor-pointer ${s.btnStyle}`}>
-                  Explore <span className="hidden sm:inline">{s.series} </span>→
-                </button>
-              </div>
-            </div>
+            <SeriesCard key={s.series} s={s} filterSeries={filterSeries} />
           ))}
         </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════
-          6. TRUST / WHY KENWELL — 4 icon cards
-      ══════════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}
-          className="text-center mb-10"
-        >
-          <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold">The Kenwell Standard</span>
-          <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mt-2">Why We're Different</h2>
-        </motion.div>
-
-        <motion.div 
-          initial="hidden" 
-          whileInView="visible" 
-          viewport={{ once: true, margin: "-50px" }} 
-          transition={{ staggerChildren: 0.15 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5"
-        >
-          {TRUST_POINTS.map((t) => (
-            <motion.div 
-              key={t.title}
-              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#E4DFD3] p-4 sm:p-6 hover:shadow-lg hover:border-[#4A6B4A]/40 transition-all duration-300 text-left"
-            >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#4A6B4A]/10 border border-[#4A6B4A]/20 flex items-center justify-center mb-3 sm:mb-4">
-                <div className="scale-75 sm:scale-100">{t.icon}</div>
-              </div>
-              <h3 className="font-playfair text-sm sm:text-lg font-bold text-[#1C355E] mb-1.5 sm:mb-2">{t.title}</h3>
-              <p className="text-[10px] sm:text-sm text-[#1C355E]/65 leading-relaxed">{t.body}</p>
-            </motion.div>
-          ))}
-        </motion.div>
       </section>
 
       {/* ══════════════════════════════════════════════
@@ -728,7 +721,7 @@ export default function Hero({
                           onClick={() => handleAddStackToCart(stack)}
                           className="w-full bg-[#1C355E] hover:bg-[#D47A3B] text-white py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md flex items-center justify-center gap-1.5"
                         >
-                          <span>Add Stack to Cart</span>
+                          <span>Add to Cart</span>
                         </button>
                         <button
                           onClick={() => setCurrentSection('builder')}
@@ -770,6 +763,41 @@ export default function Hero({
           </div>
 
         </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          6. TRUST / WHY KENWELL — 4 icon cards
+      ══════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}
+          className="text-center mb-10"
+        >
+          <span className="text-[#4A6B4A] font-mono uppercase tracking-wider text-[11px] font-semibold">The Kenwell Standard</span>
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#1C355E] mt-2">Why We're Different</h2>
+        </motion.div>
+
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-50px" }} 
+          transition={{ staggerChildren: 0.15 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5"
+        >
+          {TRUST_POINTS.map((t) => (
+            <motion.div 
+              key={t.title}
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+              className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#E4DFD3] p-4 sm:p-6 hover:shadow-lg hover:border-[#4A6B4A]/40 transition-all duration-300 text-left"
+            >
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#4A6B4A]/10 border border-[#4A6B4A]/20 flex items-center justify-center mb-3 sm:mb-4">
+                <div className="scale-75 sm:scale-100">{t.icon}</div>
+              </div>
+              <h3 className="font-playfair text-sm sm:text-lg font-bold text-[#1C355E] mb-1.5 sm:mb-2">{t.title}</h3>
+              <p className="text-[10px] sm:text-sm text-[#1C355E]/65 leading-relaxed">{t.body}</p>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       {/* ══════════════════════════════════════════════

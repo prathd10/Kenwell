@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import DOMPurify from 'dompurify'
 import BackButton from './BackButton'
 import { ARTICLES } from '../data'
 
@@ -67,7 +68,7 @@ export default function ScienceLibrary() {
       modifiedHtml = modifiedHtml.replace(regex, `<span class="border-b border-dashed border-[#616F3E] text-[#616F3E] cursor-help font-semibold transition-colors hover:bg-[#616F3E]/10" data-glossary="${term}">$1</span>`)
     })
 
-    return { __html: modifiedHtml }
+    return { __html: DOMPurify.sanitize(modifiedHtml) }
   }
 
   const handleContentInteraction = (e) => {

@@ -52,15 +52,19 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
       }
 
       try {
-        const { error: dbError } = await supabase
-          .from('orders')
-          .insert([orderData])
+        const response = await fetch('/api/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentDetails, orderData })
+        })
 
-        if (dbError) {
-          console.warn('Supabase insert failed, falling back to localStorage:', dbError.message)
+        const result = await response.json()
+
+        if (!response.ok || !result.success) {
+          console.warn('Backend payment verification failed, saving to localStorage:', result.error || result.details)
           saveToLocalStorage(orderData)
         } else {
-          console.log('Order saved to Supabase successfully!')
+          console.log('Order verified and saved to Supabase securely!')
         }
         
         setSuccessData(orderData)
@@ -141,7 +145,13 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
 
   const saveToLocalStorage = (order) => {
     const existing = JSON.parse(localStorage.getItem('kenwell_orders') || '[]')
-    localStorage.setItem('kenwell_orders', JSON.stringify([order, ...existing]))
+    const minimalOrder = {
+      friendly_id: order.friendly_id,
+      customer_email: order.customer_email,
+      created_at: order.created_at,
+      status: order.status
+    }
+    localStorage.setItem('kenwell_orders', JSON.stringify([minimalOrder, ...existing]))
   }
 
   // Handle click outside to close

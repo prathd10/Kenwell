@@ -58,16 +58,18 @@ export async function sendOrderEmail({ order, type = 'confirmed' }) {
 
   // 2. Try Vercel Serverless Function (/api/send-email)
   try {
-    const payload = {
-      from: fromEmail,
-      to: [order.customer_email],
-      subject: emailData.subject,
-      html: emailData.html
+    const payload = { order, type }
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    
+    const headers = { 'Content-Type': 'application/json' }
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
     }
 
     const vercelRes = await fetch('/api/send-email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload)
     })
 

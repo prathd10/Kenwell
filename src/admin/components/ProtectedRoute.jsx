@@ -23,5 +23,18 @@ export default function ProtectedRoute({ children }) {
     )
   }
 
-  return session ? children : <Navigate to="/admin/login" replace />
+  // Admin UI Protection: Whitelist specific email or domain
+  if (session) {
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'admin@kenwell.in'
+    if (session.user.email !== adminEmail) {
+      console.warn(`Unauthorized access attempt by ${session.user.email}. Logging out.`)
+      supabase.auth.signOut().then(() => {
+        window.location.href = '/admin/login'
+      })
+      return null
+    }
+    return children
+  }
+
+  return <Navigate to="/admin/login" replace />
 }

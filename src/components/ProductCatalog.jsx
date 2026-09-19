@@ -37,9 +37,9 @@ export default function ProductCatalog({
   // Curated lists based on competitor benchmarks
   const collectionIds = useMemo(() => {
     return {
-      bestsellers: ['multivitamin-with-probiotics', 'chelated-magnesium-glycinate', 'triple-strength-fish-oil', 'nad', 'ksm-66-ashwagandha', 'prebiotics-probiotics'],
-      men: ['chelated-magnesium-glycinate', 'zinc-picolonate-magnesium', 'triple-strength-fish-oil', 'nad', 'ksm-66-ashwagandha', 'dht-blocker', 'berberine-hcl'],
-      women: ['multivitamin-with-probiotics', 'chelated-magnesium-glycinate', 'vitamin-d3-k2-calcium', 'joint-support', 'vitamin-c', 'glutathione-reduced', 'vitamin-b12']
+      bestsellers: ['multivitamins-tablet', 'magnesium-glycinate-caps', '3x-strength-fish-oil-caps', 'ashwagandha-capsule', 'liposomal-berberine-caps', 'liposomal-glutathione-tabs'],
+      men: ['magnesium-glycinate-caps', '3x-strength-fish-oil-caps', 'ashwagandha-capsule', 'zma-capsule', 'vasopump-tablet', 'hair-health-tablet'],
+      women: ['multivitamins-tablet', 'magnesium-glycinate-caps', 'haddjod-tablet', 'liposomal-vitamin-c-tablet', 'liposomal-glutathione-tabs', 'liposomal-vitamin-b12-caps', 'hair-health-tablet']
     }
   }, [])
 

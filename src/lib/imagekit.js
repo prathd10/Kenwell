@@ -1,10 +1,25 @@
+import { supabase } from './supabase'
+
 export async function uploadToImageKit(file, folder = 'kenwell/products') {
   // 1. Get authentication parameters securely from backend
-  const authRes = await fetch('/api/imagekit-auth')
+  const { data: { session } } = await supabase.auth.getSession()
+  
+  const authRes = await fetch('/api/imagekit-auth', {
+    headers: {
+      'Authorization': `Bearer ${session?.access_token}`
+    }
+  })
+  
   if (!authRes.ok) {
     throw new Error('Failed to fetch ImageKit authentication parameters')
   }
   const { token, expire, signature } = await authRes.json()
+
+  // 1.5 Strict MIME type validation
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error(`Invalid file type: ${file.type}. Only JPEG, PNG, and WEBP images are allowed.`)
+  }
 
   // 2. Prepare upload payload using public key and auth parameters
   const formData = new FormData()
